@@ -1,0 +1,52 @@
+package com.farmacia.entidades;
+
+public class Detalle {
+    private  int codCarrito ;
+    private  int cantidad ;
+    private int codProducto ;
+    private  double v_total;
+    private  int  codFactura;
+	public Detalle() {
+		super();
+	}
+	public Detalle(int codCarrito, int cantidad, int codProducto, double v_total, int codFactura) {
+		super();
+		this.codCarrito = codCarrito;
+		this.cantidad = cantidad;
+		this.codProducto = codProducto;
+		this.v_total = v_total;
+		this.codFactura = codFactura;
+	}
+	public int getCodCarrito() {
+		return codCarrito;
+	}
+	public void setCodCarrito(int codCarrito) {
+		this.codCarrito = codCarrito;
+	}
+	public int getCantidad() {
+		return cantidad;
+	}
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+	public int getCodProducto() {
+		return codProducto;
+	}
+	public void setCodProducto(int codProducto) {
+		this.codProducto = codProducto;
+	}
+	public double getV_total() {
+		return v_total;
+	}
+	public void setV_total(double v_total) {
+		this.v_total = v_total;
+	}
+	public int getCodFactura() {
+		return codFactura;
+	}
+	public void setCodFactura(int codFactura) {
+		this.codFactura = codFactura;
+	}
+    
+    
+}
