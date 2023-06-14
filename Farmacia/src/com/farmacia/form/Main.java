@@ -12,6 +12,16 @@ import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.JLayeredPane;
 import javax.swing.JDesktopPane;
+import javax.swing.JList;
+import javax.swing.AbstractListModel;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
+import javax.swing.BoxLayout;
+import java.awt.Dimension;
+import java.awt.BorderLayout;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 public class Main extends JFrame {
 
@@ -55,6 +65,41 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new CardLayout(0, 0));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		JPanel middlePanel = new JPanel();
+		middlePanel.setLayout(new FlowLayout(4,4,4));
+		
+		JPanel gridPanel=new JPanel();
+		gridPanel.setLayout(new GridLayout(4,1,5,5));
+		
+		middlePanel.add(gridPanel);
+		
+		JButton btnNewButton = new JButton("New button");
+		gridPanel.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("New button");
+		gridPanel.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("New button");
+		gridPanel.add(btnNewButton_2);
+		
+		JButton btnNewButton_3 = new JButton("New button");
+		gridPanel.add(btnNewButton_3);
+		contentPane.add(middlePanel, BorderLayout.WEST);
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		panel.add(tabbedPane);
+		
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_1, null);
+		
+		JPanel panel_2 = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_2, null);
+		
 	}
 }
