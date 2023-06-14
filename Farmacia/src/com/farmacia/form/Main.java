@@ -12,6 +12,9 @@ import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.JLayeredPane;
 import javax.swing.JDesktopPane;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import java.awt.Dimension;
 
 public class Main extends JFrame {
 
@@ -55,6 +58,15 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new CardLayout(0, 0));
+		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(200, 400));
+		panel.setMinimumSize(new Dimension(200, 400));
+		contentPane.add(panel);
+		panel.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1);
 	}
 }
