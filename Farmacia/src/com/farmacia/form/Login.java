@@ -27,6 +27,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
+import javax.swing.JPasswordField;
 
 public class Login {
 
@@ -151,7 +152,8 @@ public class Login {
 		gbc_lblpassword.gridy = 2;
 		panel_body.add(lblpassword, gbc_lblpassword);
 		
-		textPassword = new JTextField();
+		textPassword = new JPasswordField();
+		textUsuario.setPreferredSize(new Dimension(30, 26));
 		textPassword.setMinimumSize(new Dimension(50, 26));
 		GridBagConstraints gbc_textPassword = new GridBagConstraints();
 		gbc_textPassword.fill = GridBagConstraints.HORIZONTAL;
