@@ -71,7 +71,7 @@ public class Main extends JFrame {
 		middlePanel.setLayout(new FlowLayout(4,4,4));
 		
 		JPanel gridPanel=new JPanel();
-		gridPanel.setBorder(new EmptyBorder(6, 0, 0, 0));
+		gridPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 		gridPanel.setLayout(new GridLayout(4,1,5,5));
 		
 		middlePanel.add(gridPanel);
