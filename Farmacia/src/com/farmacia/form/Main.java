@@ -28,6 +28,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import java.awt.Cursor;
 import javax.swing.border.EtchedBorder;
@@ -35,6 +36,8 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class Main extends JFrame {
@@ -91,6 +94,7 @@ public class Main extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel middlePanel = new JPanel();
+		middlePanel.setOpaque(false);
 		middlePanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		middlePanel.setLayout(new FlowLayout(4,4,4));
 		
@@ -101,8 +105,20 @@ public class Main extends JFrame {
 		middlePanel.add(gridPanel);
 		
 		JButton btnProducto = new JButton("Producto");
+		btnProducto.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btnProducto.setBorderPainted(false);
+		btnProducto.setBackground(new Color(192, 192, 192));
+		btnProducto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnProducto.setBackground(Color.BLUE);
+			}
+			
+			public void mouseExited(MouseEvent e) {
+				btnProducto.setBackground(Color.gray);
+			}
+		});
 		btnProducto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnProducto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		gridPanel.add(btnProducto);
 		
 		JButton btnUsuario = new JButton("Usuarios");
