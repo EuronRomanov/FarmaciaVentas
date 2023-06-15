@@ -38,6 +38,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 
 
 public class Main extends JFrame {
@@ -105,6 +106,8 @@ public class Main extends JFrame {
 		middlePanel.add(gridPanel);
 		
 		JButton btnProducto = new JButton("Producto");
+		btnProducto.setContentAreaFilled(false);
+		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-pastilla.png")));
 		btnProducto.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btnProducto.setBorderPainted(false);
 		btnProducto.setBackground(new Color(192, 192, 192));
