@@ -76,6 +76,7 @@ public class Main extends JFrame {
 		menuBar.add(mnUsuario);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
+		mntmNewMenuItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mntmNewMenuItem.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
 		mnUsuario.add(mntmNewMenuItem);
 		contentPane = new JPanel();
@@ -108,18 +109,17 @@ public class Main extends JFrame {
 		middlePanel.add(gridPanel);
 		
 		JButton btnProducto = new JButton("Producto");
-		btnProducto.setContentAreaFilled(false);
 		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		btnProducto.setBorder(new LineBorder(new Color(238, 238, 238)));
-		btnProducto.setBackground(new Color(192, 192, 192));
+		btnProducto.setBackground(new Color(233, 233, 233));
 		btnProducto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnProducto.setBackground(Color.BLUE);
+				btnProducto.setBackground(new Color(174,214, 241));
 			}
 			
 			public void mouseExited(MouseEvent e) {
-				btnProducto.setBackground(Color.gray);
+				btnProducto.setBackground(new Color(240, 240, 240));
 			}
 		});
 		btnProducto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -129,24 +129,72 @@ public class Main extends JFrame {
 		btnUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnUsuario.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-32.png")));
 		btnUsuario.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-48.png")));
+		btnUsuario.setBorder(new LineBorder(new Color(238, 238, 238)));
+		btnUsuario.setBackground(new Color(233, 233, 233));
+		btnUsuario.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUsuario.setBackground(new Color(174,214, 241));
+			}
+			
+			public void mouseExited(MouseEvent e) {
+				btnUsuario.setBackground(new Color(240, 240, 240));
+			}
+		});
 		gridPanel.add(btnUsuario);
 		
 		JButton btnFactura = new JButton("Facturas");
 		btnFactura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnFactura.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
 		btnFactura.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
+		btnFactura.setBorder(new LineBorder(new Color(238, 238, 238)));
+		btnFactura.setBackground(new Color(233, 233, 233));
+		btnFactura.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnFactura.setBackground(new Color(174,214, 241));
+			}
+			
+			public void mouseExited(MouseEvent e) {
+				btnFactura.setBackground(new Color(240, 240, 240));
+			}
+		});
 		gridPanel.add(btnFactura);
 		
 		JButton btnCaja = new JButton("Caja");
 		btnCaja.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
 		btnCaja.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
 		btnCaja.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnCaja.setBorder(new LineBorder(new Color(238, 238, 238)));
+		btnCaja.setBackground(new Color(233, 233, 233));
+		btnCaja.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnCaja.setBackground(new Color(174,214, 241));
+			}
+			
+			public void mouseExited(MouseEvent e) {
+				btnCaja.setBackground(new Color(240, 240, 240));
+			}
+		});
 		gridPanel.add(btnCaja);
 		
 		JButton btnVentas = new JButton("Ventas");
 		btnVentas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnVentas.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-34.png")));
 		btnVentas.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-48.png")));
+		btnVentas.setBorder(new LineBorder(new Color(238, 238, 238)));
+		btnVentas.setBackground(new Color(233, 233, 233));
+		btnVentas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnVentas.setBackground(new Color(174,214, 241));
+			}
+			
+			public void mouseExited(MouseEvent e) {
+				btnVentas.setBackground(new Color(240, 240, 240));
+			}
+		});
 		gridPanel.add(btnVentas);
 		contentPane.add(middlePanel, BorderLayout.WEST);
 		
