@@ -27,6 +27,14 @@ import java.awt.Dimension;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import java.awt.Cursor;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.SoftBevelBorder;
 
 
 public class Main extends JFrame {
@@ -54,19 +62,16 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 529, 326);
+		setBounds(100, 100, 997, 394);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("New menu");
-		menuBar.add(mnNewMenu);
+		JMenu mnUsuario = new JMenu("Usuario");
+		menuBar.add(mnUsuario);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("New menu item");
-		mnNewMenu.add(mntmNewMenuItem);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
-		mnNewMenu.add(mntmNewMenuItem_1);
+		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
+		mnUsuario.add(mntmNewMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -86,25 +91,31 @@ public class Main extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel middlePanel = new JPanel();
+		middlePanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		middlePanel.setLayout(new FlowLayout(4,4,4));
 		
 		JPanel gridPanel=new JPanel();
-		gridPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
-		gridPanel.setLayout(new GridLayout(4,1,5,5));
+		gridPanel.setBorder(new EmptyBorder(40, 0, 0, 0));
+		gridPanel.setLayout(new GridLayout(5,1,5,5));
 		
 		middlePanel.add(gridPanel);
 		
-		JButton btnNewButton = new JButton("New button");
-		gridPanel.add(btnNewButton);
+		JButton btnProducto = new JButton("Producto");
+		btnProducto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnProducto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		gridPanel.add(btnProducto);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		gridPanel.add(btnNewButton_1);
+		JButton btnUsuario = new JButton("Usuarios");
+		gridPanel.add(btnUsuario);
 		
-		JButton btnNewButton_2 = new JButton("New button");
-		gridPanel.add(btnNewButton_2);
+		JButton btnFactura = new JButton("Facturas");
+		gridPanel.add(btnFactura);
 		
-		JButton btnNewButton_3 = new JButton("New button");
-		gridPanel.add(btnNewButton_3);
+		JButton btnCaja = new JButton("Caja");
+		gridPanel.add(btnCaja);
+		
+		JButton btnVentas = new JButton("Ventas");
+		gridPanel.add(btnVentas);
 		contentPane.add(middlePanel, BorderLayout.WEST);
 		
 		JPanel panel1 = new JPanel();
@@ -114,15 +125,32 @@ public class Main extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel1.add(tabbedPane);
 		
-		JPanel panel_11 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_11, null);
+		JPanel pnl_producto = new JPanel();
+		tabbedPane.addTab("Producto", null, pnl_producto, null);
 		
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_2, null);
+		JPanel pnl_categoria = new JPanel();
+		tabbedPane.addTab("Categoria", null, pnl_categoria, null);
 		
-		JPanel panel_3 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_3, null);
+		JPanel pnl_vendedores = new JPanel();
+		tabbedPane.addTab("Vendedores", null, pnl_vendedores, null);
 		
+		JPanel pnl_proveedor = new JPanel();
+		tabbedPane.addTab("Proveedor", null, pnl_proveedor, null);
+		
+		JPanel pnl_factura = new JPanel();
+		tabbedPane.addTab("Factura", null, pnl_factura, null);
+		
+		JPanel pnl_consultas = new JPanel();
+		tabbedPane.addTab("Consultas", null, pnl_consultas, null);
+		
+		JPanel pnl_ventas = new JPanel();
+		tabbedPane.addTab("Ventas", null, pnl_ventas, null);
+		
+		JPanel pnl_caja = new JPanel();
+		tabbedPane.addTab("Caja", null, pnl_caja, null);
+		
+		/*JPanel pnl_factura = new JPanel();
+		tabbedPane.addTab("Facturas", null, pnl_factura, null);*/
 
 	}
 }
