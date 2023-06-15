@@ -46,7 +46,8 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
+	 * Launch the application. 
+	 * author : 
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -66,7 +67,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 997, 394);
+		setBounds(100, 100, 997, 441);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -75,6 +76,7 @@ public class Main extends JFrame {
 		menuBar.add(mnUsuario);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
+		mntmNewMenuItem.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
 		mnUsuario.add(mntmNewMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -107,9 +109,8 @@ public class Main extends JFrame {
 		
 		JButton btnProducto = new JButton("Producto");
 		btnProducto.setContentAreaFilled(false);
-		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-pastilla.png")));
-		btnProducto.setBorder(new EmptyBorder(0, 0, 0, 0));
-		btnProducto.setBorderPainted(false);
+		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
+		btnProducto.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnProducto.setBackground(new Color(192, 192, 192));
 		btnProducto.addMouseListener(new MouseAdapter() {
 			@Override
@@ -125,15 +126,27 @@ public class Main extends JFrame {
 		gridPanel.add(btnProducto);
 		
 		JButton btnUsuario = new JButton("Usuarios");
+		btnUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnUsuario.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-32.png")));
+		btnUsuario.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-48.png")));
 		gridPanel.add(btnUsuario);
 		
 		JButton btnFactura = new JButton("Facturas");
+		btnFactura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnFactura.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
+		btnFactura.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
 		gridPanel.add(btnFactura);
 		
 		JButton btnCaja = new JButton("Caja");
+		btnCaja.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
+		btnCaja.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
+		btnCaja.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gridPanel.add(btnCaja);
 		
 		JButton btnVentas = new JButton("Ventas");
+		btnVentas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnVentas.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-34.png")));
+		btnVentas.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-48.png")));
 		gridPanel.add(btnVentas);
 		contentPane.add(middlePanel, BorderLayout.WEST);
 		
@@ -168,8 +181,7 @@ public class Main extends JFrame {
 		JPanel pnl_caja = new JPanel();
 		tabbedPane.addTab("Caja", null, pnl_caja, null);
 		
-		/*JPanel pnl_factura = new JPanel();
-		tabbedPane.addTab("Facturas", null, pnl_factura, null);*/
+		
 
 	}
 }
