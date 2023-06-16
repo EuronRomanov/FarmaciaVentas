@@ -54,7 +54,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.farmacia.controlador.*;
 
-public class Main1 extends JFrame {
+public class Main extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textBuscarCategoria;
@@ -70,7 +70,7 @@ public class Main1 extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main1 frame = new Main1();
+					Main frame = new Main();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -82,7 +82,7 @@ public class Main1 extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Main1() {
+	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1049, 461);
 		
@@ -94,7 +94,7 @@ public class Main1 extends JFrame {
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
 		mntmNewMenuItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mntmNewMenuItem.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
+		mntmNewMenuItem.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
 		mnUsuario.add(mntmNewMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -131,7 +131,7 @@ public class Main1 extends JFrame {
 				categoriaDao.ListarCategoriaTable(tblCategoria);
 			}
 		});
-		btnProducto.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/icon-producto.png")));
+		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		btnProducto.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnProducto.setBackground(new Color(233, 233, 233));
 		btnProducto.addMouseListener(new MouseAdapter() {
@@ -154,8 +154,8 @@ public class Main1 extends JFrame {
 			}
 		});
 		btnUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnUsuario.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/users_icon-32.png")));
-		btnUsuario.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/users_icon-48.png")));
+		btnUsuario.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-32.png")));
+		btnUsuario.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-48.png")));
 		btnUsuario.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnUsuario.setBackground(new Color(233, 233, 233));
 		btnUsuario.addMouseListener(new MouseAdapter() {
@@ -172,8 +172,8 @@ public class Main1 extends JFrame {
 		
 		JButton btnFactura = new JButton("Facturas");
 		btnFactura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnFactura.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
-		btnFactura.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
+		btnFactura.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
+		btnFactura.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
 		btnFactura.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnFactura.setBackground(new Color(233, 233, 233));
 		btnFactura.addMouseListener(new MouseAdapter() {
@@ -189,8 +189,8 @@ public class Main1 extends JFrame {
 		gridPanel.add(btnFactura);
 		
 		JButton btnCaja = new JButton("Caja");
-		btnCaja.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
-		btnCaja.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
+		btnCaja.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
+		btnCaja.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
 		btnCaja.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnCaja.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnCaja.setBackground(new Color(233, 233, 233));
@@ -208,8 +208,8 @@ public class Main1 extends JFrame {
 		
 		JButton btnVentas = new JButton("Ventas");
 		btnVentas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnVentas.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/compra-icon-34.png")));
-		btnVentas.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/compra-icon-48.png")));
+		btnVentas.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-34.png")));
+		btnVentas.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-48.png")));
 		btnVentas.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnVentas.setBackground(new Color(233, 233, 233));
 		btnVentas.addMouseListener(new MouseAdapter() {
