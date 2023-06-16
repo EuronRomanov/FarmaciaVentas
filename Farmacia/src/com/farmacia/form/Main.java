@@ -36,15 +36,32 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.table.DefaultTableModel;
+
+import com.farmacia.entidades.Categoria;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JTextField;
+import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import com.farmacia.controlador.*;
 
-
-public class Main extends JFrame {
+public class Main1 extends JFrame {
 
 	private JPanel contentPane;
-
+	private JTextField textBuscarCategoria;
+	private JTable tblCategoria;
+	private JTabbedPane tabPane_Vistas;
+    private ArrayList<JButton> listEdit, listDelete;
+    private CategoriaDao categoriaDao=new CategoriaDao();
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -53,7 +70,7 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main frame = new Main();
+					Main1 frame = new Main1();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,9 +82,9 @@ public class Main extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Main() {
+	public Main1() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 997, 441);
+		setBounds(100, 100, 1049, 461);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -77,7 +94,7 @@ public class Main extends JFrame {
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
 		mntmNewMenuItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mntmNewMenuItem.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
+		mntmNewMenuItem.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
 		mnUsuario.add(mntmNewMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -109,7 +126,12 @@ public class Main extends JFrame {
 		middlePanel.add(gridPanel);
 		
 		JButton btnProducto = new JButton("Producto");
-		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
+		btnProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				categoriaDao.ListarCategoriaTable(tblCategoria);
+			}
+		});
+		btnProducto.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		btnProducto.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnProducto.setBackground(new Color(233, 233, 233));
 		btnProducto.addMouseListener(new MouseAdapter() {
@@ -126,9 +148,14 @@ public class Main extends JFrame {
 		gridPanel.add(btnProducto);
 		
 		JButton btnUsuario = new JButton("Usuarios");
+		btnUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tabPane_Vistas.setSelectedIndex(2);
+			}
+		});
 		btnUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnUsuario.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-32.png")));
-		btnUsuario.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/users_icon-48.png")));
+		btnUsuario.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/users_icon-32.png")));
+		btnUsuario.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/users_icon-48.png")));
 		btnUsuario.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnUsuario.setBackground(new Color(233, 233, 233));
 		btnUsuario.addMouseListener(new MouseAdapter() {
@@ -145,8 +172,8 @@ public class Main extends JFrame {
 		
 		JButton btnFactura = new JButton("Facturas");
 		btnFactura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnFactura.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
-		btnFactura.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
+		btnFactura.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
+		btnFactura.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
 		btnFactura.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnFactura.setBackground(new Color(233, 233, 233));
 		btnFactura.addMouseListener(new MouseAdapter() {
@@ -162,8 +189,8 @@ public class Main extends JFrame {
 		gridPanel.add(btnFactura);
 		
 		JButton btnCaja = new JButton("Caja");
-		btnCaja.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
-		btnCaja.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
+		btnCaja.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
+		btnCaja.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
 		btnCaja.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnCaja.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnCaja.setBackground(new Color(233, 233, 233));
@@ -181,8 +208,8 @@ public class Main extends JFrame {
 		
 		JButton btnVentas = new JButton("Ventas");
 		btnVentas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnVentas.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-34.png")));
-		btnVentas.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/compra-icon-48.png")));
+		btnVentas.setSelectedIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/compra-icon-34.png")));
+		btnVentas.setIcon(new ImageIcon(Main1.class.getResource("/com/farmacia/icon/compra-icon-48.png")));
 		btnVentas.setBorder(new LineBorder(new Color(238, 238, 238)));
 		btnVentas.setBackground(new Color(233, 233, 233));
 		btnVentas.addMouseListener(new MouseAdapter() {
@@ -202,34 +229,98 @@ public class Main extends JFrame {
 		contentPane.add(panel1, BorderLayout.CENTER);
 		panel1.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		panel1.add(tabbedPane);
+		 tabPane_Vistas = new JTabbedPane(JTabbedPane.TOP);
+		panel1.add(tabPane_Vistas);
 		
 		JPanel pnl_producto = new JPanel();
-		tabbedPane.addTab("Producto", null, pnl_producto, null);
+		tabPane_Vistas.addTab("Producto", null, pnl_producto, null);
 		
+		JButton btnNewButton = new JButton("New button");
+		pnl_producto.add(btnNewButton);
+		
+		
+		/*
+		 * Categoria
+		 */
+		
+		
+       
+        
+        
 		JPanel pnl_categoria = new JPanel();
-		tabbedPane.addTab("Categoria", null, pnl_categoria, null);
+		tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+		GridBagLayout gbl_pnl_categoria = new GridBagLayout();
+		gbl_pnl_categoria.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_pnl_categoria.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_pnl_categoria.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_pnl_categoria.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+		pnl_categoria.setLayout(gbl_pnl_categoria);
 		
+		textBuscarCategoria = new JTextField();
+		textBuscarCategoria.setPreferredSize(new Dimension(400, 40));
+		GridBagConstraints gbc_textBuscarCategoria = new GridBagConstraints();
+		gbc_textBuscarCategoria.gridwidth = 19;
+		gbc_textBuscarCategoria.insets = new Insets(0, 0, 5, 5);
+		gbc_textBuscarCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textBuscarCategoria.gridx = 1;
+		gbc_textBuscarCategoria.gridy = 0;
+		pnl_categoria.add(textBuscarCategoria, gbc_textBuscarCategoria);
+		textBuscarCategoria.setColumns(10);
+		
+		JButton btnBuscarCaatgoria = new JButton("Buscar");
+		btnBuscarCaatgoria.setPreferredSize(new Dimension(117, 40));
+		GridBagConstraints gbc_btnBuscarCaatgoria = new GridBagConstraints();
+		gbc_btnBuscarCaatgoria.gridwidth = 2;
+		gbc_btnBuscarCaatgoria.insets = new Insets(0, 0, 5, 5);
+		gbc_btnBuscarCaatgoria.gridx = 21;
+		gbc_btnBuscarCaatgoria.gridy = 0;
+		pnl_categoria.add(btnBuscarCaatgoria, gbc_btnBuscarCaatgoria);
+		
+		JButton btnAgregarCategoria = new JButton("Agregar");
+		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
+		GridBagConstraints gbc_btnAgregarCategoria = new GridBagConstraints();
+		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAgregarCategoria.gridx = 24;
+		gbc_btnAgregarCategoria.gridy = 0;
+		pnl_categoria.add(btnAgregarCategoria, gbc_btnAgregarCategoria);
+		
+		tblCategoria = new JTable();
+		GridBagConstraints gbc_tblCategoria = new GridBagConstraints();
+		gbc_tblCategoria.gridwidth = 25;
+		gbc_tblCategoria.insets = new Insets(0, 0, 0, 5);
+		gbc_tblCategoria.fill = GridBagConstraints.BOTH;
+		gbc_tblCategoria.gridx = 0;
+		gbc_tblCategoria.gridy = 2;
+		pnl_categoria.add(tblCategoria, gbc_tblCategoria);
+		
+		
+		
+		/*
+		 * ---------------categorias------------
+		 */
 		JPanel pnl_vendedores = new JPanel();
-		tabbedPane.addTab("Vendedores", null, pnl_vendedores, null);
+		tabPane_Vistas.addTab("Vendedores", null, pnl_vendedores, null);
 		
 		JPanel pnl_proveedor = new JPanel();
-		tabbedPane.addTab("Proveedor", null, pnl_proveedor, null);
+		tabPane_Vistas.addTab("Proveedor", null, pnl_proveedor, null);
 		
 		JPanel pnl_factura = new JPanel();
-		tabbedPane.addTab("Factura", null, pnl_factura, null);
+		tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 		
 		JPanel pnl_consultas = new JPanel();
-		tabbedPane.addTab("Consultas", null, pnl_consultas, null);
+		tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
 		
 		JPanel pnl_ventas = new JPanel();
-		tabbedPane.addTab("Ventas", null, pnl_ventas, null);
+		tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 		
 		JPanel pnl_caja = new JPanel();
-		tabbedPane.addTab("Caja", null, pnl_caja, null);
+		tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 		
 		
 
 	}
+	
+	
+	
+	
 }
