@@ -6,6 +6,11 @@ public class Categoria {
 	public Categoria() {
 		super();
 	}
+	public Categoria( String nombreCategoria) {
+		super();
+		
+		this.nombreCategoria = nombreCategoria;
+	}
 	public Categoria(int codCategoria, String nombreCategoria) {
 		super();
 		this.codCategoria = codCategoria;
