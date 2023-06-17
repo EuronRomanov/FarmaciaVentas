@@ -307,51 +307,72 @@ public class Main extends JFrame {
 		gbc_panel_2.gridx = 22;
 		gbc_panel_2.gridy = 2;
 		pnl_categoria.add(panel_2, gbc_panel_2);
-		panel_2.setLayout(new FormLayout(new ColumnSpec[] {
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
-			new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
+		GridBagLayout gbl_panel_2 = new GridBagLayout();
+		gbl_panel_2.columnWidths = new int[]{172, 0};
+		gbl_panel_2.rowHeights = new int[]{20, 30, 56, 40, 40, 40, 40, 0};
+		gbl_panel_2.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_2.setLayout(gbl_panel_2);
 		
 		textCodCategoria = new JTextField();
 		textCodCategoria.setVisible(false);
-		panel_2.add(textCodCategoria, "2, 2, fill, default");
+		GridBagConstraints gbc_textCodCategoria = new GridBagConstraints();
+		gbc_textCodCategoria.anchor = GridBagConstraints.NORTH;
+		gbc_textCodCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textCodCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_textCodCategoria.gridx = 0;
+		gbc_textCodCategoria.gridy = 0;
+		panel_2.add(textCodCategoria, gbc_textCodCategoria);
 		textCodCategoria.setColumns(10);
 		
 		textNombreCategoria = new JTextField();
 		textNombreCategoria.setPreferredSize(new Dimension(7, 30));
-		panel_2.add(textNombreCategoria, "2, 4, fill, default");
+		GridBagConstraints gbc_textNombreCategoria = new GridBagConstraints();
+		gbc_textNombreCategoria.anchor = GridBagConstraints.NORTH;
+		gbc_textNombreCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textNombreCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_textNombreCategoria.gridx = 0;
+		gbc_textNombreCategoria.gridy = 1;
+		panel_2.add(textNombreCategoria, gbc_textNombreCategoria);
 		textNombreCategoria.setColumns(10);
 		
 		JButton btnAgregarCategoria = new JButton("Agregar");
-		panel_2.add(btnAgregarCategoria, "2, 10");
+		GridBagConstraints gbc_btnAgregarCategoria = new GridBagConstraints();
+		gbc_btnAgregarCategoria.anchor = GridBagConstraints.NORTH;
+		gbc_btnAgregarCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAgregarCategoria.gridx = 0;
+		gbc_btnAgregarCategoria.gridy = 3;
+		panel_2.add(btnAgregarCategoria, gbc_btnAgregarCategoria);
 		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
 		
 		JButton btnAgregarCategoria_1 = new JButton("Agregar");
-		panel_2.add(btnAgregarCategoria_1, "2, 12");
+		GridBagConstraints gbc_btnAgregarCategoria_1 = new GridBagConstraints();
+		gbc_btnAgregarCategoria_1.anchor = GridBagConstraints.NORTH;
+		gbc_btnAgregarCategoria_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnAgregarCategoria_1.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAgregarCategoria_1.gridx = 0;
+		gbc_btnAgregarCategoria_1.gridy = 4;
+		panel_2.add(btnAgregarCategoria_1, gbc_btnAgregarCategoria_1);
 		btnAgregarCategoria_1.setPreferredSize(new Dimension(117, 40));
 		
 		JButton btnAgregarCategoria_2 = new JButton("Agregar");
-		panel_2.add(btnAgregarCategoria_2, "2, 14");
+		GridBagConstraints gbc_btnAgregarCategoria_2 = new GridBagConstraints();
+		gbc_btnAgregarCategoria_2.anchor = GridBagConstraints.NORTH;
+		gbc_btnAgregarCategoria_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnAgregarCategoria_2.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAgregarCategoria_2.gridx = 0;
+		gbc_btnAgregarCategoria_2.gridy = 5;
+		panel_2.add(btnAgregarCategoria_2, gbc_btnAgregarCategoria_2);
 		btnAgregarCategoria_2.setPreferredSize(new Dimension(117, 40));
 		
 		JButton btnAgregarCategoria_3 = new JButton("Agregar");
-		panel_2.add(btnAgregarCategoria_3, "2, 16");
+		GridBagConstraints gbc_btnAgregarCategoria_3 = new GridBagConstraints();
+		gbc_btnAgregarCategoria_3.anchor = GridBagConstraints.NORTH;
+		gbc_btnAgregarCategoria_3.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnAgregarCategoria_3.gridx = 0;
+		gbc_btnAgregarCategoria_3.gridy = 6;
+		panel_2.add(btnAgregarCategoria_3, gbc_btnAgregarCategoria_3);
 		btnAgregarCategoria_3.setPreferredSize(new Dimension(117, 40));
 		
 		
