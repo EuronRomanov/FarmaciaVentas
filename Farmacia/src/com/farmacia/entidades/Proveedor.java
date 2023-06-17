@@ -2,7 +2,7 @@ package com.farmacia.entidades;
 
 public class Proveedor {
     private int codProveedor ;
-    private String nombreEmpresa ;
+    private String nombreProveedor ;
     private String  representante ;
     private String direccion ;
     private String celular ;
@@ -10,11 +10,21 @@ public class Proveedor {
 	public Proveedor() {
 		super();
 	}
-	public Proveedor(int codProveedor, String nombreEmpresa, String representante, String direccion, String celular,
+	public Proveedor( String nombreProveedor, String representante, String direccion, String celular,
 			String telefono) {
 		super();
 		this.codProveedor = codProveedor;
-		this.nombreEmpresa = nombreEmpresa;
+		this.nombreProveedor = nombreProveedor;
+		this.representante = representante;
+		this.direccion = direccion;
+		this.celular = celular;
+		this.telefono = telefono;
+	}
+	public Proveedor(int codProveedor, String nombreProveedor, String representante, String direccion, String celular,
+			String telefono) {
+		super();
+		this.codProveedor = codProveedor;
+		this.nombreProveedor = nombreProveedor;
 		this.representante = representante;
 		this.direccion = direccion;
 		this.celular = celular;
@@ -26,12 +36,7 @@ public class Proveedor {
 	public void setCodProveedor(int codProveedor) {
 		this.codProveedor = codProveedor;
 	}
-	public String getNombreEmpresa() {
-		return nombreEmpresa;
-	}
-	public void setNombreEmpresa(String nombreEmpresa) {
-		this.nombreEmpresa = nombreEmpresa;
-	}
+	
 	public String getRepresentante() {
 		return representante;
 	}
@@ -55,6 +60,12 @@ public class Proveedor {
 	}
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	public String getNombreProveedor() {
+		return nombreProveedor;
+	}
+	public void setNombreProveedor(String nombreProveedor) {
+		this.nombreProveedor = nombreProveedor;
 	}
     
     

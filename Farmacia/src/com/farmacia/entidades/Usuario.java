@@ -7,17 +7,37 @@ package com.farmacia.entidades;
 	    private String  password ;
 	    private int estado ;
 	    private int  administrador ;
+	    private String  cedula;
 		public Usuario() {
 			super();
 		}
-		public Usuario(int codUsuario, String nombre, String password, int estado, int administrador) {
+		
+		
+		
+		
+		public Usuario(int codUsuario, String nombre, String password, int estado, int administrador, String cedula) {
 			super();
 			this.codUsuario = codUsuario;
 			this.nombre = nombre;
 			this.password = password;
 			this.estado = estado;
 			this.administrador = administrador;
+			this.cedula = cedula;
 		}
+
+
+
+
+		public Usuario(String nombre, String password, int estado, int administrador, String cedula) {
+			super();
+			this.nombre = nombre;
+			this.password = password;
+			this.estado = estado;
+			this.administrador = administrador;
+			this.cedula = cedula;
+		}
+
+
 		public int getCodUsuario() {
 			return codUsuario;
 		}
@@ -47,6 +67,20 @@ package com.farmacia.entidades;
 		}
 		public void setAdministrador(int administrador) {
 			this.administrador = administrador;
+		}
+
+
+
+
+		public String getCedula() {
+			return cedula;
+		}
+
+
+
+
+		public void setCedula(String cedula) {
+			this.cedula = cedula;
 		}
 	    
 	    
