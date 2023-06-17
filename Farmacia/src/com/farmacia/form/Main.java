@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.JLayeredPane;
@@ -43,6 +45,7 @@ import com.farmacia.entidades.Categoria;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import java.awt.GridBagLayout;
@@ -68,6 +71,9 @@ public class Main extends JFrame {
     private CategoriaDao categoriaDao=new CategoriaDao();
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
+    private DefaultTableModel modelo = new DefaultTableModel();
+    private DefaultTableModel tmp = new DefaultTableModel();
+    private JButton btnAgregarCategoria,btnCancelar;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -134,7 +140,9 @@ public class Main extends JFrame {
 		JButton btnProducto = new JButton("Producto");
 		btnProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				categoriaDao.ListarCategoriaTable(tblCategoria);
+				limpiarTableCategoria();
+				//categoriaDao.ListarCategoriaTable(tblCategoria);
+				listarCategoriaTable();
 			}
 		});
 		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
@@ -283,13 +291,43 @@ public class Main extends JFrame {
 		pnl_categoria.add(btnBuscarCaatgoria, gbc_btnBuscarCaatgoria);
 		
 		tblCategoria = new JTable();
-		tblCategoria.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Codigo", "Nombre"
+		tblCategoria.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				/* if ("".equals(textCodCategoria.getText())) {
+			            JOptionPane.showMessageDialog(null, "Seleecione una fila");
+			        } else {*/
+			        	limpiarCamposCategoria();
+			        	int fila = tblCategoria.rowAtPoint(e.getPoint());
+			           
+			         if(fila>0)  {
+			        	 String key= tblCategoria.getValueAt(fila, 0).toString();
+					        Categoria ca=categoriaDao.searchCategoriaId(Integer.parseInt(key));
+					        textCodCategoria.setText(String.valueOf(ca.getCodCategoria()  ));
+					        textNombreCategoria.setText(ca.getNombreCategoria());
+					        
+					       // btnAgregarCategoria.setVisible(false);
+					        btnAgregarCategoria.setEnabled(false);
+					        btnCancelar.setEnabled(true);
+					        btnCancelar.setVisible(true);
+			         }
+			        	
+			      //  }
+				
 			}
-		));
+		});
+		Object[][] data=new Object[][] {
+		};
+		String [] columnas=new String[] {
+				"Codigo", "Nombre"
+			};
+		tblCategoria.setModel(new DefaultTableModel(data,columnas){
+			public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
+		});
+		
+		
+
 		tblCategoria.getColumnModel().getColumn(0).setPreferredWidth(15);
 		tblCategoria.getColumnModel().getColumn(1).setPreferredWidth(621);
 		GridBagConstraints gbc_tblCategoria = new GridBagConstraints();
@@ -343,7 +381,18 @@ public class Main extends JFrame {
 		panel_2.add(textNombreCategoria, gbc_textNombreCategoria);
 		textNombreCategoria.setColumns(10);
 		
-		JButton btnAgregarCategoria = new JButton("Agregar");
+		 btnAgregarCategoria = new JButton("Agregar");
+		btnAgregarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				categoriaDao.registrarCategoria(new Categoria(textNombreCategoria.getText()));
+				limpiarTableCategoria();
+				//categoriaDao.ListarCategoriaTable(tblCategoria);
+				listarCategoriaTable();
+				limpiarCamposCategoria();
+			}
+
+			
+		});
 		GridBagConstraints gbc_btnAgregarCategoria = new GridBagConstraints();
 		gbc_btnAgregarCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_btnAgregarCategoria.fill = GridBagConstraints.HORIZONTAL;
@@ -354,6 +403,7 @@ public class Main extends JFrame {
 		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
 		
 		JButton btnEliminarCategoria_1 = new JButton("Eliminar");
+		btnEliminarCategoria_1.setOpaque(true);
 		GridBagConstraints gbc_btnEliminarCategoria_1 = new GridBagConstraints();
 		gbc_btnEliminarCategoria_1.anchor = GridBagConstraints.NORTH;
 		gbc_btnEliminarCategoria_1.fill = GridBagConstraints.HORIZONTAL;
@@ -372,6 +422,16 @@ public class Main extends JFrame {
 		gbc_btnActualizar.gridy = 5;
 		panel_2.add(btnActualizar, gbc_btnActualizar);
 		btnActualizar.setPreferredSize(new Dimension(117, 40));
+		
+		 btnCancelar = new JButton("Cancelar");
+		 btnCancelar.setPreferredSize(new Dimension(117, 40));
+		 btnCancelar.setVisible(false);
+		 btnCancelar.setOpaque(true);
+		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
+		gbc_btnCancelar.gridx = 0;
+		gbc_btnCancelar.gridy = 6;
+		panel_2.add(btnCancelar, gbc_btnCancelar);
+		
 		
 		
 		
@@ -399,8 +459,35 @@ public class Main extends JFrame {
 		
 
 	}
+	 public void listarCategoriaTable() {
+	        List<Categoria> ListarCl = categoriaDao.ListarCategoria();
+	        String[] columnNames = new String[] {"Column Header1", "Column Header2"};
+			
+	        modelo = (DefaultTableModel) tblCategoria.getModel();
+	        modelo.setColumnIdentifiers(columnNames);
+	        Object[] ob = new Object[2];
+	        for (int i = 0; i < ListarCl.size(); i++) {
+	            ob[0] = ListarCl.get(i).getCodCategoria();
+	            ob[1] = ListarCl.get(i).getNombreCategoria();
+	           
+	            modelo.addRow(ob);
+	        }
+	        tblCategoria.setModel(modelo);
+
+	    }
 	
-	
-	
+	 private void limpiarTableCategoria() {
+	        tmp = (DefaultTableModel) tblCategoria.getModel();
+	        int fila = tblCategoria.getRowCount();
+	        for (int i = 0; i < fila; i++) {
+	            tmp.removeRow(0);
+	        }
+	    }
+	 
+	 private void limpiarCamposCategoria() {
+			textNombreCategoria.setText("");
+			textCodCategoria.setText("");
+			
+		}
 	
 }
