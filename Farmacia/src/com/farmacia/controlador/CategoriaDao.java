@@ -20,8 +20,16 @@ import com.farmacia.entidades.Categoria;
 
 public class CategoriaDao {
 	private static Connection con=ConexionBD.conectar();
-	
-	private DefaultTableModel modelo = new DefaultTableModel();
+	Object[][] data=new Object[][] {
+	};
+	String [] columnas=new String[] {
+			"Codigo", "Nombre"
+		};
+	private DefaultTableModel modelo = new DefaultTableModel(data,columnas){
+	    private static final long serialVersionUID = 1L;
+
+		public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
+	};
 	
 	
 	
@@ -31,7 +39,7 @@ public class CategoriaDao {
 	 * 
 	 * insetar
 	 */
-	 public boolean RegistrarCategoria(Categoria cl){
+	 public boolean registrarCategoria(Categoria cl){
 	        String sql = "INSERT INTO Categoria (nombreCategoria) VALUES (?)";
 	        try {
 	            
@@ -46,11 +54,11 @@ public class CategoriaDao {
 	            JOptionPane.showMessageDialog(null, e.toString());
 	            return false;
 	        }finally{
-	            try {
-	                con.close();
+	           /* try {
+	               con.close();
 	            } catch (SQLException e) {
 	                System.out.println(e.toString());
-	            }
+	            }*/
 	        }
 	    }
 	
@@ -62,7 +70,7 @@ public class CategoriaDao {
 	 
 	 public List ListarCategoria(){
 	       List<Categoria> ListaCl = new ArrayList();
-	       String sql = "SELECT * FROM Categoria";
+	       String sql = "SELECT * FROM Categoria order by codCategoria";
 	       try {
 	           
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -103,15 +111,47 @@ public class CategoriaDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }    
         return result;
     }
     
+    /**
+     * search all clients in the tblClient whose name contains the @key
+     * @param key
+     * @return list of client whose name contains the @key
+     */
+    public Categoria searchCategoriaId(int key){
+    	Categoria categoria = new Categoria();
+    	
+        String sql = "SELECT * FROM Categoria WHERE codCategoria=?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,  key );
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+            	
+            	categoria.setCodCategoria(rs.getInt("codCategoria"));
+            	categoria.setNombreCategoria(rs.getString("nombreCategoria"));
+               
+                
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+           /* try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }*/
+        }    
+        return categoria;
+    }
     /**
      * update the @client
      * @param client
@@ -159,6 +199,8 @@ public class CategoriaDao {
     
     
     public void ListarCategoriaTable(JTable tblCategoria) {
+    	
+    	
         List<Categoria> ListarCl = this.ListarCategoria();
         modelo = (DefaultTableModel) tblCategoria.getModel();
         Object[] ob = new Object[2];
