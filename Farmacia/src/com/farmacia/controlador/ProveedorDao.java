@@ -12,13 +12,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.farmacia.bd.ConexionBD;
-import com.farmacia.entidades.Categoria;
+import com.farmacia.entidades.Proveedor;
 
 
 
 
 
-public class CategoriaDao {
+public class ProveedorDao {
 	private static Connection con=ConexionBD.conectar();
 	
 	private DefaultTableModel modelo = new DefaultTableModel();
@@ -31,14 +31,21 @@ public class CategoriaDao {
 	 * 
 	 * insetar
 	 */
-	 public boolean RegistrarCategoria(Categoria cl){
-	        String sql = "INSERT INTO Categoria (nombreCategoria) VALUES (?)";
+	 public boolean RegistrarProveedor(Proveedor cl){
+	        String sql = "INSERT INTO Proveedor (nombreEmpresa,"
+	        		+ "representante,"
+	        		+ "direccion,"
+	        		+ "celular,"
+	        		+ "telefono) VALUES (?,?,?,?,?)";
 	        try {
 	            
 	            PreparedStatement ps = con.prepareStatement(sql);
 	            
-	            ps.setString(1, cl.getNombreCategoria());
-	           
+	            ps.setString(1, cl.getNombreProveedor());
+	           ps.setString(2, cl.getRepresentante());
+	           ps.setString(3, cl.getDireccion());
+	           ps.setString(4, cl.getCelular());
+	           ps.setString(5, cl.getTelefono());
 	            
 	            ps.execute();
 	            return true;
@@ -60,17 +67,21 @@ public class CategoriaDao {
 	  * listar
 	  */
 	 
-	 public List ListarCategoria(){
-	       List<Categoria> ListaCl = new ArrayList();
-	       String sql = "SELECT * FROM Categoria";
+	 public List ListarProveedor(){
+	       List<Proveedor> ListaCl = new ArrayList();
+	       String sql = "SELECT * FROM Proveedor";
 	       try {
 	           
 	    	   PreparedStatement ps = con.prepareStatement(sql);
 	    	   ResultSet rs = ps.executeQuery();
 	           while (rs.next()) {               
-	               Categoria cl = new Categoria();
-	               cl.setCodCategoria(rs.getInt("codCategoria"));
-	               cl.setNombreCategoria(rs.getString("nombreCategoria"));
+	               Proveedor cl = new Proveedor();
+	               cl.setCodProveedor(rs.getInt("codProveedor"));
+	               cl.setNombreProveedor(rs.getString("nombreEmpresa"));
+	               cl.setRepresentante(rs.getString("representante"));
+	               cl.setDireccion(rs.getString("direccion"));
+	               cl.setCelular(rs.getString("celular"));
+	               cl.setTelefono(rs.getNString("telefono"));
 	               
 	               ListaCl.add(cl);
 	           }
@@ -85,20 +96,25 @@ public class CategoriaDao {
      * @param key
      * @return list of client whose name contains the @key
      */
-    public ArrayList<Categoria> searchCategoria(String key){
-        ArrayList<Categoria> result = new ArrayList<Categoria>();
-        String sql = "SELECT * FROM Categoria WHERE nombreCategoria LIKE ?";
+    public ArrayList<Proveedor> searchProveedor(String key){
+        ArrayList<Proveedor> result = new ArrayList<Proveedor>();
+        String sql = "SELECT * FROM Proveedor WHERE nombreProveedor LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-            	Categoria categoria = new Categoria();
-            	categoria.setCodCategoria(rs.getInt("codCategoria"));
-            	categoria.setNombreCategoria(rs.getString("nombreCategoria"));
+            	Proveedor Proveedor = new Proveedor(rs.getInt("codProveedor"),
+            										rs.getString("nombreEmpresa"),
+            										rs.getString("representante"),
+            										rs.getString("direccion"),
+            										rs.getString("celular"),
+            										rs.getString("telefono"));
+            	
+            	
                
-                result.add(categoria);
+                result.add(Proveedor);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -116,12 +132,20 @@ public class CategoriaDao {
      * update the @client
      * @param client
      */
-    public void editCategoria(Categoria categoria){
-        String sql = "UPDATE Categoria SET nombreCategoria=? WHERE codCategoria=?";
+    public void editProveedor(Proveedor Proveedor){
+        String sql = "UPDATE Proveedor SET nombreEmpresa=?, "
+        		+ "representante=?"
+        		+ "direccion=?"
+        		+ "celular=?"
+        		+ "telefono=? WHERE codProveedor=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, categoria.getNombreCategoria());
-            ps.setInt(2, categoria.getCodCategoria());
+            ps.setString(1, Proveedor.getNombreProveedor());
+            ps.setString(2, Proveedor.getRepresentante());
+            ps.setString(3, Proveedor.getCelular());
+            ps.setString(4, Proveedor.getTelefono());
+            
+            ps.setInt(5, Proveedor.getCodProveedor());
 
             ps.executeUpdate();
         }catch(Exception e){
@@ -139,8 +163,8 @@ public class CategoriaDao {
      * delete the client whose id is @id
      * @param id
      */
-    public void deleteCategoria(int id){
-        String sql = "DELETE FROM Categoria WHERE codCategoria=?";
+    public void deleteProveedor(int id){
+        String sql = "DELETE FROM Proveedor WHERE codProveedor=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
@@ -158,17 +182,21 @@ public class CategoriaDao {
     }
     
     
-    public void ListarCategoriaTable(JTable tblCategoria) {
-        List<Categoria> ListarCl = this.ListarCategoria();
-        modelo = (DefaultTableModel) tblCategoria.getModel();
-        Object[] ob = new Object[2];
+    public void ListarProveedorTable(JTable tblProveedor) {
+        List<Proveedor> ListarCl = this.ListarProveedor();
+        modelo = (DefaultTableModel) tblProveedor.getModel();
+        Object[] ob = new Object[6];
         for (int i = 0; i < ListarCl.size(); i++) {
-            ob[0] = ListarCl.get(i).getCodCategoria();
-            ob[1] = ListarCl.get(i).getNombreCategoria();
+            ob[0] = ListarCl.get(i).getCodProveedor();
+            ob[1] = ListarCl.get(i).getNombreProveedor();
+            ob[2] = ListarCl.get(i).getRepresentante();
+            ob[3] = ListarCl.get(i).getDireccion();
+            ob[4] = ListarCl.get(i).getCelular();
+            ob[5] = ListarCl.get(i).getTelefono();
            
             modelo.addRow(ob);
         }
-        tblCategoria.setModel(modelo);
+        tblProveedor.setModel(modelo);
 
     }
     
