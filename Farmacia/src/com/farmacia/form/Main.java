@@ -53,6 +53,10 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.farmacia.controlador.*;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
 
 public class Main extends JFrame {
 
@@ -62,6 +66,8 @@ public class Main extends JFrame {
 	private JTabbedPane tabPane_Vistas;
     private ArrayList<JButton> listEdit, listDelete;
     private CategoriaDao categoriaDao=new CategoriaDao();
+    private JTextField textNombreCategoria;
+    private JTextField textCodCategoria;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -84,7 +90,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1049, 461);
+		setBounds(100, 100, 1067, 491);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -252,7 +258,7 @@ public class Main extends JFrame {
 		GridBagLayout gbl_pnl_categoria = new GridBagLayout();
 		gbl_pnl_categoria.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_pnl_categoria.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_pnl_categoria.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_pnl_categoria.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_pnl_categoria.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		pnl_categoria.setLayout(gbl_pnl_categoria);
 		
@@ -276,22 +282,77 @@ public class Main extends JFrame {
 		gbc_btnBuscarCaatgoria.gridy = 0;
 		pnl_categoria.add(btnBuscarCaatgoria, gbc_btnBuscarCaatgoria);
 		
-		JButton btnAgregarCategoria = new JButton("Agregar");
-		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
-		GridBagConstraints gbc_btnAgregarCategoria = new GridBagConstraints();
-		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 0);
-		gbc_btnAgregarCategoria.gridx = 24;
-		gbc_btnAgregarCategoria.gridy = 0;
-		pnl_categoria.add(btnAgregarCategoria, gbc_btnAgregarCategoria);
-		
 		tblCategoria = new JTable();
+		tblCategoria.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Codigo", "Nombre"
+			}
+		));
+		tblCategoria.getColumnModel().getColumn(0).setPreferredWidth(15);
+		tblCategoria.getColumnModel().getColumn(1).setPreferredWidth(621);
 		GridBagConstraints gbc_tblCategoria = new GridBagConstraints();
-		gbc_tblCategoria.gridwidth = 25;
+		gbc_tblCategoria.gridwidth = 22;
 		gbc_tblCategoria.insets = new Insets(0, 0, 0, 5);
 		gbc_tblCategoria.fill = GridBagConstraints.BOTH;
 		gbc_tblCategoria.gridx = 0;
 		gbc_tblCategoria.gridy = 2;
 		pnl_categoria.add(tblCategoria, gbc_tblCategoria);
+		
+		JPanel panel_2 = new JPanel();
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.gridwidth = 3;
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 22;
+		gbc_panel_2.gridy = 2;
+		pnl_categoria.add(panel_2, gbc_panel_2);
+		panel_2.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
+		
+		textCodCategoria = new JTextField();
+		textCodCategoria.setVisible(false);
+		panel_2.add(textCodCategoria, "2, 2, fill, default");
+		textCodCategoria.setColumns(10);
+		
+		textNombreCategoria = new JTextField();
+		textNombreCategoria.setPreferredSize(new Dimension(7, 30));
+		panel_2.add(textNombreCategoria, "2, 4, fill, default");
+		textNombreCategoria.setColumns(10);
+		
+		JButton btnAgregarCategoria = new JButton("Agregar");
+		panel_2.add(btnAgregarCategoria, "2, 10");
+		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
+		
+		JButton btnAgregarCategoria_1 = new JButton("Agregar");
+		panel_2.add(btnAgregarCategoria_1, "2, 12");
+		btnAgregarCategoria_1.setPreferredSize(new Dimension(117, 40));
+		
+		JButton btnAgregarCategoria_2 = new JButton("Agregar");
+		panel_2.add(btnAgregarCategoria_2, "2, 14");
+		btnAgregarCategoria_2.setPreferredSize(new Dimension(117, 40));
+		
+		JButton btnAgregarCategoria_3 = new JButton("Agregar");
+		panel_2.add(btnAgregarCategoria_3, "2, 16");
+		btnAgregarCategoria_3.setPreferredSize(new Dimension(117, 40));
 		
 		
 		
