@@ -301,6 +301,7 @@ public class Main extends JFrame {
 		pnl_categoria.add(tblCategoria, gbc_tblCategoria);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setOpaque(false);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.gridwidth = 3;
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
@@ -315,6 +316,11 @@ public class Main extends JFrame {
 		panel_2.setLayout(gbl_panel_2);
 		
 		textCodCategoria = new JTextField();
+		
+		textCodCategoria.setToolTipText("");
+		textCodCategoria.setEnabled(false);
+		textCodCategoria.setSelectedTextColor(new Color(235, 235, 235));
+		textCodCategoria.setBorder(null);
 		textCodCategoria.setVisible(false);
 		GridBagConstraints gbc_textCodCategoria = new GridBagConstraints();
 		gbc_textCodCategoria.anchor = GridBagConstraints.NORTH;
@@ -326,6 +332,7 @@ public class Main extends JFrame {
 		textCodCategoria.setColumns(10);
 		
 		textNombreCategoria = new JTextField();
+		textNombreCategoria.setToolTipText("");
 		textNombreCategoria.setPreferredSize(new Dimension(7, 30));
 		GridBagConstraints gbc_textNombreCategoria = new GridBagConstraints();
 		gbc_textNombreCategoria.anchor = GridBagConstraints.NORTH;
@@ -346,34 +353,25 @@ public class Main extends JFrame {
 		panel_2.add(btnAgregarCategoria, gbc_btnAgregarCategoria);
 		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
 		
-		JButton btnAgregarCategoria_1 = new JButton("Agregar");
-		GridBagConstraints gbc_btnAgregarCategoria_1 = new GridBagConstraints();
-		gbc_btnAgregarCategoria_1.anchor = GridBagConstraints.NORTH;
-		gbc_btnAgregarCategoria_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnAgregarCategoria_1.insets = new Insets(0, 0, 5, 0);
-		gbc_btnAgregarCategoria_1.gridx = 0;
-		gbc_btnAgregarCategoria_1.gridy = 4;
-		panel_2.add(btnAgregarCategoria_1, gbc_btnAgregarCategoria_1);
-		btnAgregarCategoria_1.setPreferredSize(new Dimension(117, 40));
+		JButton btnEliminarCategoria_1 = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminarCategoria_1 = new GridBagConstraints();
+		gbc_btnEliminarCategoria_1.anchor = GridBagConstraints.NORTH;
+		gbc_btnEliminarCategoria_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnEliminarCategoria_1.insets = new Insets(0, 0, 5, 0);
+		gbc_btnEliminarCategoria_1.gridx = 0;
+		gbc_btnEliminarCategoria_1.gridy = 4;
+		panel_2.add(btnEliminarCategoria_1, gbc_btnEliminarCategoria_1);
+		btnEliminarCategoria_1.setPreferredSize(new Dimension(117, 40));
 		
-		JButton btnAgregarCategoria_2 = new JButton("Agregar");
-		GridBagConstraints gbc_btnAgregarCategoria_2 = new GridBagConstraints();
-		gbc_btnAgregarCategoria_2.anchor = GridBagConstraints.NORTH;
-		gbc_btnAgregarCategoria_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnAgregarCategoria_2.insets = new Insets(0, 0, 5, 0);
-		gbc_btnAgregarCategoria_2.gridx = 0;
-		gbc_btnAgregarCategoria_2.gridy = 5;
-		panel_2.add(btnAgregarCategoria_2, gbc_btnAgregarCategoria_2);
-		btnAgregarCategoria_2.setPreferredSize(new Dimension(117, 40));
-		
-		JButton btnAgregarCategoria_3 = new JButton("Agregar");
-		GridBagConstraints gbc_btnAgregarCategoria_3 = new GridBagConstraints();
-		gbc_btnAgregarCategoria_3.anchor = GridBagConstraints.NORTH;
-		gbc_btnAgregarCategoria_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnAgregarCategoria_3.gridx = 0;
-		gbc_btnAgregarCategoria_3.gridy = 6;
-		panel_2.add(btnAgregarCategoria_3, gbc_btnAgregarCategoria_3);
-		btnAgregarCategoria_3.setPreferredSize(new Dimension(117, 40));
+		JButton btnActualizar = new JButton("Actualizar");
+		GridBagConstraints gbc_btnActualizar = new GridBagConstraints();
+		gbc_btnActualizar.anchor = GridBagConstraints.NORTH;
+		gbc_btnActualizar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnActualizar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnActualizar.gridx = 0;
+		gbc_btnActualizar.gridy = 5;
+		panel_2.add(btnActualizar, gbc_btnActualizar);
+		btnActualizar.setPreferredSize(new Dimension(117, 40));
 		
 		
 		
