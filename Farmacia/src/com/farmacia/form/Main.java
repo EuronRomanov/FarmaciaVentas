@@ -41,6 +41,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.farmacia.entidades.Categoria;
+import com.farmacia.utils.ControlFormatos;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -60,6 +61,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 
 public class Main extends JFrame {
 
@@ -68,12 +72,15 @@ public class Main extends JFrame {
 	private JTable tblCategoria;
 	private JTabbedPane tabPane_Vistas;
     private ArrayList<JButton> listEdit, listDelete;
+    
     private CategoriaDao categoriaDao=new CategoriaDao();
+    private ControlFormatos controlFormato=new ControlFormatos();
+    
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableModel tmp = new DefaultTableModel();
-    private JButton btnAgregarCategoria,btnCancelar;
+    private JButton btnAgregarCategoria,btnCancelar,btnActualizarCategoria, btnEliminarCategoria;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -301,7 +308,7 @@ public class Main extends JFrame {
 			        	limpiarCamposCategoria();
 			        	int fila = tblCategoria.rowAtPoint(e.getPoint());
 			           
-			         if(fila>0)  {
+			         if(fila>=0)  {
 			        	 String key= tblCategoria.getValueAt(fila, 0).toString();
 					        Categoria ca=categoriaDao.searchCategoriaId(Integer.parseInt(key));
 					        textCodCategoria.setText(String.valueOf(ca.getCodCategoria()  ));
@@ -309,6 +316,8 @@ public class Main extends JFrame {
 					        
 					       // btnAgregarCategoria.setVisible(false);
 					        btnAgregarCategoria.setEnabled(false);
+					        btnActualizarCategoria.setEnabled(true);
+					        btnEliminarCategoria.setEnabled(true);
 					        btnCancelar.setEnabled(true);
 					        btnCancelar.setVisible(true);
 			         }
@@ -347,9 +356,9 @@ public class Main extends JFrame {
 		gbc_panel_2.gridy = 2;
 		pnl_categoria.add(panel_2, gbc_panel_2);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{172, 0};
+		gbl_panel_2.columnWidths = new int[]{172, 0, 0};
 		gbl_panel_2.rowHeights = new int[]{20, 30, 56, 40, 40, 40, 40, 0};
-		gbl_panel_2.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_2.setLayout(gbl_panel_2);
 		
@@ -363,16 +372,51 @@ public class Main extends JFrame {
 		GridBagConstraints gbc_textCodCategoria = new GridBagConstraints();
 		gbc_textCodCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_textCodCategoria.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textCodCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_textCodCategoria.insets = new Insets(0, 0, 5, 5);
 		gbc_textCodCategoria.gridx = 0;
 		gbc_textCodCategoria.gridy = 0;
 		panel_2.add(textCodCategoria, gbc_textCodCategoria);
 		textCodCategoria.setColumns(10);
 		
+		 btnAgregarCategoria = new JButton("Agregar");
+		btnAgregarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String [] campos=new String[1]; 
+				campos[0]=textNombreCategoria.getText();
+				
+				
+				if (!controlFormato.hayEspaciosVacios(campos)) {
+					categoriaDao.registrarCategoria(new Categoria(textNombreCategoria.getText()));
+					limpiarTableCategoria();
+					//categoriaDao.ListarCategoriaTable(tblCategoria);
+					listarCategoriaTable();
+					limpiarCamposCategoria();
+				}else {
+					JOptionPane.showMessageDialog(null, "Hay un campo vacio");
+				}
+				
+			}
+
+			
+		});
+		
 		textNombreCategoria = new JTextField();
+		textNombreCategoria.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int key=e.getKeyChar();
+				
+				
+				if (controlFormato.validarSoloLetras(key)) {
+					e.consume();
+				}
+			
+			}
+		});
 		textNombreCategoria.setToolTipText("");
 		textNombreCategoria.setPreferredSize(new Dimension(7, 30));
 		GridBagConstraints gbc_textNombreCategoria = new GridBagConstraints();
+		gbc_textNombreCategoria.gridwidth = 2;
 		gbc_textNombreCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_textNombreCategoria.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textNombreCategoria.insets = new Insets(0, 0, 5, 0);
@@ -380,54 +424,92 @@ public class Main extends JFrame {
 		gbc_textNombreCategoria.gridy = 1;
 		panel_2.add(textNombreCategoria, gbc_textNombreCategoria);
 		textNombreCategoria.setColumns(10);
-		
-		 btnAgregarCategoria = new JButton("Agregar");
-		btnAgregarCategoria.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				categoriaDao.registrarCategoria(new Categoria(textNombreCategoria.getText()));
-				limpiarTableCategoria();
-				//categoriaDao.ListarCategoriaTable(tblCategoria);
-				listarCategoriaTable();
-				limpiarCamposCategoria();
-			}
-
-			
-		});
 		GridBagConstraints gbc_btnAgregarCategoria = new GridBagConstraints();
 		gbc_btnAgregarCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_btnAgregarCategoria.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 5);
 		gbc_btnAgregarCategoria.gridx = 0;
 		gbc_btnAgregarCategoria.gridy = 3;
 		panel_2.add(btnAgregarCategoria, gbc_btnAgregarCategoria);
 		btnAgregarCategoria.setPreferredSize(new Dimension(117, 40));
 		
-		JButton btnEliminarCategoria_1 = new JButton("Eliminar");
-		btnEliminarCategoria_1.setOpaque(true);
-		GridBagConstraints gbc_btnEliminarCategoria_1 = new GridBagConstraints();
-		gbc_btnEliminarCategoria_1.anchor = GridBagConstraints.NORTH;
-		gbc_btnEliminarCategoria_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnEliminarCategoria_1.insets = new Insets(0, 0, 5, 0);
-		gbc_btnEliminarCategoria_1.gridx = 0;
-		gbc_btnEliminarCategoria_1.gridy = 4;
-		panel_2.add(btnEliminarCategoria_1, gbc_btnEliminarCategoria_1);
-		btnEliminarCategoria_1.setPreferredSize(new Dimension(117, 40));
+		 btnEliminarCategoria = new JButton("Eliminar");
+		 btnEliminarCategoria.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		categoriaDao.deleteCategoria(Integer.parseInt(textCodCategoria.getText()));
+		 		btnAgregarCategoria.setEnabled(true);
+				btnActualizarCategoria.setEnabled(false);
+		 		btnEliminarCategoria.setEnabled(false);
+		        btnCancelar.setEnabled(false);
+		        btnCancelar.setVisible(false);
+		        
+		        limpiarCamposCategoria();
+		        limpiarTableCategoria();
+		        listarCategoriaTable();
+		 	}
+		 });
+		btnEliminarCategoria.setEnabled(false);
+		btnEliminarCategoria.setOpaque(true);
+		GridBagConstraints gbc_btnEliminarCategoria = new GridBagConstraints();
+		gbc_btnEliminarCategoria.anchor = GridBagConstraints.NORTH;
+		gbc_btnEliminarCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnEliminarCategoria.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminarCategoria.gridx = 0;
+		gbc_btnEliminarCategoria.gridy = 4;
+		panel_2.add(btnEliminarCategoria, gbc_btnEliminarCategoria);
+		btnEliminarCategoria.setPreferredSize(new Dimension(117, 40));
 		
-		JButton btnActualizar = new JButton("Actualizar");
-		GridBagConstraints gbc_btnActualizar = new GridBagConstraints();
-		gbc_btnActualizar.anchor = GridBagConstraints.NORTH;
-		gbc_btnActualizar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnActualizar.insets = new Insets(0, 0, 5, 0);
-		gbc_btnActualizar.gridx = 0;
-		gbc_btnActualizar.gridy = 5;
-		panel_2.add(btnActualizar, gbc_btnActualizar);
-		btnActualizar.setPreferredSize(new Dimension(117, 40));
+		 btnActualizarCategoria = new JButton("Actualizar");
+		btnActualizarCategoria.setEnabled(false);
+		btnActualizarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String categoriaActualizar=textNombreCategoria.getText();
+				if (categoriaActualizar.length()>0) {
+					Categoria ca=new Categoria(Integer.parseInt(textCodCategoria.getText()), textNombreCategoria.getText());
+					categoriaDao.editCategoria(ca);
+					limpiarTableCategoria();
+					//categoriaDao.ListarCategoriaTable(tblCategoria);
+					listarCategoriaTable();
+				} else {
+
+				}
+				
+				btnAgregarCategoria.setEnabled(true);
+				btnActualizarCategoria.setEnabled(false);
+		 		btnEliminarCategoria.setEnabled(false);
+		        btnCancelar.setEnabled(false);
+		        btnCancelar.setVisible(false);
+		        
+		        limpiarCamposCategoria();
+				
+			}
+		});
+		GridBagConstraints gbc_btnActualizarCategoria = new GridBagConstraints();
+		gbc_btnActualizarCategoria.anchor = GridBagConstraints.NORTH;
+		gbc_btnActualizarCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnActualizarCategoria.insets = new Insets(0, 0, 5, 5);
+		gbc_btnActualizarCategoria.gridx = 0;
+		gbc_btnActualizarCategoria.gridy = 5;
+		panel_2.add(btnActualizarCategoria, gbc_btnActualizarCategoria);
+		btnActualizarCategoria.setPreferredSize(new Dimension(117, 40));
 		
 		 btnCancelar = new JButton("Cancelar");
-		 btnCancelar.setPreferredSize(new Dimension(117, 40));
+		 btnCancelar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 		btnAgregarCategoria.setEnabled(true);
+		 		btnActualizarCategoria.setEnabled(false);
+		 		btnEliminarCategoria.setEnabled(false);
+		        btnCancelar.setEnabled(false);
+		        btnCancelar.setVisible(false);
+		        limpiarCamposCategoria();
+		 	}
+		 });
+		 btnCancelar.setPreferredSize(new Dimension(170, 40));
 		 btnCancelar.setVisible(false);
 		 btnCancelar.setOpaque(true);
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
+		gbc_btnCancelar.insets = new Insets(0, 0, 0, 5);
 		gbc_btnCancelar.gridx = 0;
 		gbc_btnCancelar.gridy = 6;
 		panel_2.add(btnCancelar, gbc_btnCancelar);
