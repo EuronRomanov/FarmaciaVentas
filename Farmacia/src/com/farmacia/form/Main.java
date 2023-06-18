@@ -246,12 +246,12 @@ public class Main extends JFrame {
 		gridPanel.add(btnVentas);
 		contentPane.add(middlePanel, BorderLayout.WEST);
 		
-		JPanel panel1 = new JPanel();
-		contentPane.add(panel1, BorderLayout.CENTER);
-		panel1.setLayout(new GridLayout(0, 1, 0, 0));
+		JPanel centralPanel = new JPanel();
+		contentPane.add(centralPanel, BorderLayout.CENTER);
+		centralPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		 tabPane_Vistas = new JTabbedPane(JTabbedPane.TOP);
-		panel1.add(tabPane_Vistas);
+		centralPanel.add(tabPane_Vistas);
 		
 		JPanel pnl_producto = new JPanel();
 		tabPane_Vistas.addTab("Producto", null, pnl_producto, null);
