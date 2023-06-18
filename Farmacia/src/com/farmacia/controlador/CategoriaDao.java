@@ -167,11 +167,11 @@ public class CategoriaDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
@@ -189,11 +189,11 @@ public class CategoriaDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
