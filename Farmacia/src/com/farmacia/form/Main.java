@@ -459,7 +459,7 @@ public class Main extends JFrame {
 		panel_2.add(btnEliminarCategoria, gbc_btnEliminarCategoria);
 		btnEliminarCategoria.setPreferredSize(new Dimension(117, 40));
 		
-		 btnActualizarCategoria = new JButton("Actualizar");
+		 btnActualizarCategoria = new JButton("Modificar");
 		btnActualizarCategoria.setEnabled(false);
 		btnActualizarCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
