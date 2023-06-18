@@ -93,7 +93,13 @@ public class CategoriaDao {
      * @param key
      * @return list of client whose name contains the @key
      */
-    public ArrayList<Categoria> searchCategoria(String key){
+    public DefaultTableModel searchCategoria(String key,JTable tblCategoria){
+    	
+    	DefaultTableModel modelo=new DefaultTableModel();
+    	modelo=(DefaultTableModel) tblCategoria.getModel();
+    	 modelo.setRowCount(0);
+         String datos[]=new String[2];
+         
         ArrayList<Categoria> result = new ArrayList<Categoria>();
         String sql = "SELECT * FROM Categoria WHERE nombreCategoria LIKE ?";
         try{
@@ -102,11 +108,15 @@ public class CategoriaDao {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-            	Categoria categoria = new Categoria();
+            /*	Categoria categoria = new Categoria();
             	categoria.setCodCategoria(rs.getInt("codCategoria"));
             	categoria.setNombreCategoria(rs.getString("nombreCategoria"));
                
-                result.add(categoria);
+                result.add(categoria);*/
+                
+                datos[0]=String.valueOf(rs.getInt("codCategoria"));
+                datos[1]=rs.getString("nombreCategoria");
+                modelo.addRow(datos);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -117,7 +127,7 @@ public class CategoriaDao {
                 System.out.println(e.toString());
             }*/
         }    
-        return result;
+        return modelo;
     }
     
     /**
