@@ -289,6 +289,17 @@ public class Main extends JFrame {
 		textBuscarCategoria.setColumns(10);
 		
 		JButton btnBuscarCaatgoria = new JButton("Buscar");
+		btnBuscarCaatgoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textBuscarCategoria.getText().length()>0) {
+					categoriaDao.searchCategoria(textBuscarCategoria.getText(), tblCategoria);
+				}else {
+					limpiarTableCategoria();
+					//categoriaDao.ListarCategoriaTable(tblCategoria);
+					listarCategoriaTable();
+				}
+			}
+		});
 		btnBuscarCaatgoria.setPreferredSize(new Dimension(117, 40));
 		GridBagConstraints gbc_btnBuscarCaatgoria = new GridBagConstraints();
 		gbc_btnBuscarCaatgoria.gridwidth = 2;
