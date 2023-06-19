@@ -31,12 +31,12 @@ public class ProveedorDao {
 	 * 
 	 * insetar
 	 */
-	 public boolean RegistrarProveedor(Proveedor cl){
+	 public boolean registrarProveedor(Proveedor cl){
 	        String sql = "INSERT INTO Proveedor (nombreEmpresa,"
 	        		+ "representante,"
 	        		+ "direccion,"
 	        		+ "celular,"
-	        		+ "telefono) VALUES (?,?,?,?,?)";
+	        		+ "telefono,ruc) VALUES (?,?,?,?,?,?)";
 	        try {
 	            
 	            PreparedStatement ps = con.prepareStatement(sql);
@@ -46,6 +46,7 @@ public class ProveedorDao {
 	           ps.setString(3, cl.getDireccion());
 	           ps.setString(4, cl.getCelular());
 	           ps.setString(5, cl.getTelefono());
+	           ps.setString(6, cl.getRuc());
 	            
 	            ps.execute();
 	            return true;
@@ -53,11 +54,11 @@ public class ProveedorDao {
 	            JOptionPane.showMessageDialog(null, e.toString());
 	            return false;
 	        }finally{
-	            try {
+	          /*  try {
 	                con.close();
 	            } catch (SQLException e) {
 	                System.out.println(e.toString());
-	            }
+	            }*/
 	        }
 	    }
 	
@@ -81,7 +82,8 @@ public class ProveedorDao {
 	               cl.setRepresentante(rs.getString("representante"));
 	               cl.setDireccion(rs.getString("direccion"));
 	               cl.setCelular(rs.getString("celular"));
-	               cl.setTelefono(rs.getNString("telefono"));
+	               cl.setTelefono(rs.getString("telefono"));
+	               cl.setRuc(rs.getString("ruc"));
 	               
 	               ListaCl.add(cl);
 	           }
@@ -110,7 +112,8 @@ public class ProveedorDao {
             										rs.getString("representante"),
             										rs.getString("direccion"),
             										rs.getString("celular"),
-            										rs.getString("telefono"));
+            										rs.getString("telefono"),
+            										rs.getString("ruc"));
             	
             	
                
@@ -134,18 +137,20 @@ public class ProveedorDao {
      */
     public void editProveedor(Proveedor Proveedor){
         String sql = "UPDATE Proveedor SET nombreEmpresa=?, "
-        		+ "representante=?"
-        		+ "direccion=?"
-        		+ "celular=?"
-        		+ "telefono=? WHERE codProveedor=?";
+        		+ "representante=?,"
+        		+ "direccion=?,"
+        		+ "celular=?,"
+        		+ "telefono=?,"
+        		+ "ruc=? WHERE codProveedor=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, Proveedor.getNombreProveedor());
             ps.setString(2, Proveedor.getRepresentante());
             ps.setString(3, Proveedor.getCelular());
             ps.setString(4, Proveedor.getTelefono());
+            ps.setString(5, Proveedor.getTelefono());
             
-            ps.setInt(5, Proveedor.getCodProveedor());
+            ps.setInt(6, Proveedor.getCodProveedor());
 
             ps.executeUpdate();
         }catch(Exception e){
@@ -185,7 +190,7 @@ public class ProveedorDao {
     public void ListarProveedorTable(JTable tblProveedor) {
         List<Proveedor> ListarCl = this.ListarProveedor();
         modelo = (DefaultTableModel) tblProveedor.getModel();
-        Object[] ob = new Object[6];
+        Object[] ob = new Object[7];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodProveedor();
             ob[1] = ListarCl.get(i).getNombreProveedor();
@@ -193,7 +198,7 @@ public class ProveedorDao {
             ob[3] = ListarCl.get(i).getDireccion();
             ob[4] = ListarCl.get(i).getCelular();
             ob[5] = ListarCl.get(i).getTelefono();
-           
+            ob[6] = ListarCl.get(i).getRuc();
             modelo.addRow(ob);
         }
         tblProveedor.setModel(modelo);
