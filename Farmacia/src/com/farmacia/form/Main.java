@@ -41,6 +41,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.farmacia.entidades.Categoria;
+import com.farmacia.entidades.Proveedor;
 import com.farmacia.utils.ControlFormatos;
 
 import java.awt.event.MouseAdapter;
@@ -103,7 +104,8 @@ public class Main extends JFrame {
     private JTextField textCelularproveedor;
     private JTextField textTelefonoProveedor;
     private JTextField textDireccionProveedor;
-    private JTextField textField_5;
+    private JTextField textCodProveedor;
+    private JTextField textRucProveedor;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -597,12 +599,20 @@ public class Main extends JFrame {
 			pnl_proveedor.add(pnl_FormProveedor, gbc_pnl_FormProveedor);
 			GridBagLayout gbl_pnl_FormProveedor = new GridBagLayout();
 			gbl_pnl_FormProveedor.columnWidths = new int[]{0, 198, 0, 0, 0};
-			gbl_pnl_FormProveedor.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+			gbl_pnl_FormProveedor.rowHeights = new int[]{0, 33, 0, 33, 0, 0, 0, 0};
 			gbl_pnl_FormProveedor.columnWeights = new double[]{0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
-			gbl_pnl_FormProveedor.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_pnl_FormProveedor.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			pnl_FormProveedor.setLayout(gbl_pnl_FormProveedor);
 			
-			JLabel lblNewLabel = new JLabel("Empresa");
+			JLabel lblNewLabel_5 = new JLabel("Campos con * son obligatorios");
+			GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
+			gbc_lblNewLabel_5.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_5.gridx = 1;
+			gbc_lblNewLabel_5.gridy = 0;
+			pnl_FormProveedor.add(lblNewLabel_5, gbc_lblNewLabel_5);
+			
+			JLabel lblNewLabel = new JLabel("Empresa*");
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_lblNewLabel.gridx = 0;
@@ -610,6 +620,7 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(lblNewLabel, gbc_lblNewLabel);
 			
 			textNombreProveedor = new JTextField();
+			lblNewLabel.setLabelFor(textNombreProveedor);
 			GridBagConstraints gbc_textNombreProveedor = new GridBagConstraints();
 			gbc_textNombreProveedor.insets = new Insets(0, 0, 5, 5);
 			gbc_textNombreProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -620,7 +631,7 @@ public class Main extends JFrame {
 			
 			JLabel lblNewLabel_3 = new JLabel("Celular");
 			GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
-			gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_3.anchor = GridBagConstraints.WEST;
 			gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 			gbc_lblNewLabel_3.gridx = 2;
 			gbc_lblNewLabel_3.gridy = 1;
@@ -635,7 +646,7 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(textCelularproveedor, gbc_textCelularproveedor);
 			textCelularproveedor.setColumns(10);
 			
-			JLabel lblNewLabel_1 = new JLabel("Representante");
+			JLabel lblNewLabel_1 = new JLabel("Representante*");
 			GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 			gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
 			gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
@@ -671,28 +682,45 @@ public class Main extends JFrame {
 			
 			JLabel lblNewLabel_2 = new JLabel("Dirección");
 			GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-			gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
-			gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
 			gbc_lblNewLabel_2.gridx = 0;
 			gbc_lblNewLabel_2.gridy = 5;
 			pnl_FormProveedor.add(lblNewLabel_2, gbc_lblNewLabel_2);
 			
 			textDireccionProveedor = new JTextField();
 			GridBagConstraints gbc_textDireccionProveedor = new GridBagConstraints();
-			gbc_textDireccionProveedor.insets = new Insets(0, 0, 0, 5);
+			gbc_textDireccionProveedor.insets = new Insets(0, 0, 5, 5);
 			gbc_textDireccionProveedor.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textDireccionProveedor.gridx = 1;
 			gbc_textDireccionProveedor.gridy = 5;
 			pnl_FormProveedor.add(textDireccionProveedor, gbc_textDireccionProveedor);
 			textDireccionProveedor.setColumns(10);
 			
-			textField_5 = new JTextField();
-			GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-			gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField_5.gridx = 3;
-			gbc_textField_5.gridy = 5;
-			pnl_FormProveedor.add(textField_5, gbc_textField_5);
-			textField_5.setColumns(10);
+			textCodProveedor = new JTextField();
+			textCodProveedor.setVisible(false);
+			GridBagConstraints gbc_textCodProveedor = new GridBagConstraints();
+			gbc_textCodProveedor.insets = new Insets(0, 0, 5, 0);
+			gbc_textCodProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textCodProveedor.gridx = 3;
+			gbc_textCodProveedor.gridy = 5;
+			pnl_FormProveedor.add(textCodProveedor, gbc_textCodProveedor);
+			textCodProveedor.setColumns(10);
+			
+			JLabel lblNewLabel_6 = new JLabel("RUC");
+			GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
+			gbc_lblNewLabel_6.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel_6.gridx = 0;
+			gbc_lblNewLabel_6.gridy = 6;
+			pnl_FormProveedor.add(lblNewLabel_6, gbc_lblNewLabel_6);
+			
+			textRucProveedor = new JTextField();
+			GridBagConstraints gbc_textRucProveedor = new GridBagConstraints();
+			gbc_textRucProveedor.insets = new Insets(0, 0, 0, 5);
+			gbc_textRucProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textRucProveedor.gridx = 1;
+			gbc_textRucProveedor.gridy = 6;
+			pnl_FormProveedor.add(textRucProveedor, gbc_textRucProveedor);
+			textRucProveedor.setColumns(10);
 			
 			JScrollPane scrollPane = new JScrollPane();
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -704,19 +732,25 @@ public class Main extends JFrame {
 			pnl_proveedor.add(scrollPane, gbc_scrollPane);
 			
 			tblProveedores = new JTable();
+			tblProveedores.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
 			tblProveedores.setModel(new DefaultTableModel(
 				new Object[][] {
 				},
 				new String[] {
-					"C\u00F3digo", "Empresa", "representante", "direcci\u00F3n", "celular", "telefono"
+					"C\u00F3digo", "Empresa", "representante", "direcci\u00F3n", "celular", "telefono","RUC"
 				}
 			) {
 				boolean[] columnEditables = new boolean[] {
-					false, false, false, true, false, false
+					false, false, false, true, false, false,false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
 				}
+			
 			});
 			tblProveedores.getColumnModel().getColumn(0).setPreferredWidth(15);
 			tblProveedores.getColumnModel().getColumn(2).setPreferredWidth(113);
@@ -745,6 +779,29 @@ public class Main extends JFrame {
 			pnl_proveedor.add(btnBuscarProveedor, gbc_btnBuscarProveedor);
 			
 			JButton btnAgregarProveedor = new JButton("Agregar");
+			btnAgregarProveedor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					Proveedor pro=new Proveedor(textNombreProveedor.getText(),
+							textNombreRepresentante.getText(),
+							textDireccionProveedor.getText(),
+							textCelularproveedor.getText(),
+							textTelefonoProveedor.getText(),
+							textRucProveedor.getText());
+					
+					if (!controlFormato.hayEspaciosVacios(pro.getNombreProveedor(),pro.getRepresentante())) {
+						proveedorDao.registrarProveedor(pro);
+						limpiarCamposProveedor();
+						limpiarTableProveedor();
+						proveedorDao.ListarProveedorTable(tblProveedores);
+					} else {
+						 JOptionPane.showMessageDialog(null, "Se detectó un campo vacio");
+					}
+					
+				}
+
+				
+			});
 			btnAgregarProveedor.setPreferredSize(new Dimension(240, 23));
 			GridBagConstraints gbc_btnAgregarProveedor = new GridBagConstraints();
 			gbc_btnAgregarProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -754,6 +811,7 @@ public class Main extends JFrame {
 			pnl_proveedor.add(btnAgregarProveedor, gbc_btnAgregarProveedor);
 			
 			JButton btnModificarProveedor = new JButton("Modificar");
+			btnModificarProveedor.setEnabled(false);
 			GridBagConstraints gbc_btnModificarProveedor = new GridBagConstraints();
 			gbc_btnModificarProveedor.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnModificarProveedor.insets = new Insets(0, 0, 5, 5);
@@ -762,6 +820,7 @@ public class Main extends JFrame {
 			pnl_proveedor.add(btnModificarProveedor, gbc_btnModificarProveedor);
 			
 			JButton btnEliminarProveedor = new JButton("Eliminar");
+			btnEliminarProveedor.setEnabled(false);
 			GridBagConstraints gbc_btnEliminarProveedor = new GridBagConstraints();
 			gbc_btnEliminarProveedor.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnEliminarProveedor.insets = new Insets(0, 0, 5, 5);
@@ -770,6 +829,7 @@ public class Main extends JFrame {
 			pnl_proveedor.add(btnEliminarProveedor, gbc_btnEliminarProveedor);
 			
 			JButton btnCancelarProveedor = new JButton("Cancelar");
+			btnCancelarProveedor.setVisible(false);
 			GridBagConstraints gbc_btnCancelarProveedor = new GridBagConstraints();
 			gbc_btnCancelarProveedor.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnCancelarProveedor.insets = new Insets(0, 0, 0, 5);
@@ -824,6 +884,16 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			textNombreCategoria.setText("");
 			textCodCategoria.setText("");
 			
+		}
+	 
+	 private void limpiarCamposProveedor() {
+		    textCodProveedor.setText("");
+			textNombreProveedor.setText("");
+			textNombreRepresentante.setText("");
+			textDireccionProveedor.setText("");
+			textTelefonoProveedor.setText("");
+			textCelularproveedor.setText("");
+			textRucProveedor.setText("");
 		}
 	 
 	 public void cambiarAdministrador() {
