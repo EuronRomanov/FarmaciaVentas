@@ -63,6 +63,9 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
 
 
 public class Main extends JFrame {
@@ -72,8 +75,19 @@ public class Main extends JFrame {
 	private JTable tblCategoria;
 	private JTabbedPane tabPane_Vistas;
     private ArrayList<JButton> listEdit, listDelete;
+	JPanel pnl_factura = new JPanel();
+	JPanel pnl_consultas = new JPanel();
+    
+    private JPanel pnl_vendedores = new JPanel();
+    private JPanel pnl_producto = new JPanel();
+    private JPanel pnl_categoria = new JPanel();
+    private JPanel pnl_proveedor = new JPanel();
+    
+    JPanel pnl_ventas = new JPanel();
+	JPanel pnl_caja = new JPanel();
     
     private CategoriaDao categoriaDao=new CategoriaDao();
+    private ProveedorDao proveedorDao=new ProveedorDao();
     private ControlFormatos controlFormato=new ControlFormatos();
     
     private JTextField textNombreCategoria;
@@ -81,6 +95,15 @@ public class Main extends JFrame {
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableModel tmp = new DefaultTableModel();
     private JButton btnAgregarCategoria,btnCancelar,btnActualizarCategoria, btnEliminarCategoria;
+    private boolean flagAdministrador=false;
+    private JTable tblProveedores;
+    private JTextField textBuscarProveedor;
+    private JTextField textNombreProveedor;
+    private JTextField textNombreRepresentante;
+    private JTextField textCelularproveedor;
+    private JTextField textTelefonoProveedor;
+    private JTextField textDireccionProveedor;
+    private JTextField textField_5;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -103,7 +126,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1067, 491);
+		setBounds(100, 100, 1102, 548);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -147,9 +170,12 @@ public class Main extends JFrame {
 		JButton btnProducto = new JButton("Producto");
 		btnProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				limpiarTableCategoria();
+				//limpiarTableCategoria();
 				//categoriaDao.ListarCategoriaTable(tblCategoria);
-				listarCategoriaTable();
+				//listarCategoriaTable();
+				limpiarTableProveedor();
+				proveedorDao.ListarProveedorTable(tblProveedores);
+				
 			}
 		});
 		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
@@ -171,7 +197,10 @@ public class Main extends JFrame {
 		JButton btnUsuario = new JButton("Usuarios");
 		btnUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tabPane_Vistas.setSelectedIndex(2);
+				/*tabPane_Vistas.addTab("Vendedores", null, pnl_vendedores, null);
+				tabPane_Vistas.setBackgroundAt(2, new Color(214, 214, 214));*/
+				flagAdministrador=true;
+				//tabPane_Vistas.setSelectedIndex(2);
 			}
 		});
 		btnUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -210,6 +239,11 @@ public class Main extends JFrame {
 		gridPanel.add(btnFactura);
 		
 		JButton btnCaja = new JButton("Caja");
+		btnCaja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cambiarAdministrador();
+			}
+		});
 		btnCaja.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
 		btnCaja.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-48.png")));
 		btnCaja.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -253,8 +287,8 @@ public class Main extends JFrame {
 		 tabPane_Vistas = new JTabbedPane(JTabbedPane.TOP);
 		centralPanel.add(tabPane_Vistas);
 		
-		JPanel pnl_producto = new JPanel();
-		tabPane_Vistas.addTab("Producto", null, pnl_producto, null);
+	
+		
 		
 		JButton btnNewButton = new JButton("New button");
 		pnl_producto.add(btnNewButton);
@@ -268,8 +302,8 @@ public class Main extends JFrame {
        
         
         
-		JPanel pnl_categoria = new JPanel();
-		tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+		
+		
 		GridBagLayout gbl_pnl_categoria = new GridBagLayout();
 		gbl_pnl_categoria.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_pnl_categoria.rowHeights = new int[]{0, 0, 0, 0};
@@ -531,23 +565,225 @@ public class Main extends JFrame {
 		/*
 		 * ---------------categorias------------
 		 */
-		JPanel pnl_vendedores = new JPanel();
-		tabPane_Vistas.addTab("Vendedores", null, pnl_vendedores, null);
+	/*	
+		if (flagAdministrador==false)  {
+			
+			tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
+			
+			
+			tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
+		}*/
 		
-		JPanel pnl_proveedor = new JPanel();
-		tabPane_Vistas.addTab("Proveedor", null, pnl_proveedor, null);
 		
-		JPanel pnl_factura = new JPanel();
-		tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
+		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
+
+			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
+			
+			tabPane_Vistas.add("Proveedor",pnl_proveedor);
+			GridBagLayout gbl_pnl_proveedor = new GridBagLayout();
+			gbl_pnl_proveedor.columnWidths = new int[]{615, 334, -172, 0};
+			gbl_pnl_proveedor.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 34, 94, 0, 0, 0, 0, 0};
+			gbl_pnl_proveedor.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_pnl_proveedor.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			pnl_proveedor.setLayout(gbl_pnl_proveedor);
+			
+			JPanel pnl_FormProveedor = new JPanel();
+			GridBagConstraints gbc_pnl_FormProveedor = new GridBagConstraints();
+			gbc_pnl_FormProveedor.gridheight = 7;
+			gbc_pnl_FormProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_pnl_FormProveedor.fill = GridBagConstraints.BOTH;
+			gbc_pnl_FormProveedor.gridx = 0;
+			gbc_pnl_FormProveedor.gridy = 0;
+			pnl_proveedor.add(pnl_FormProveedor, gbc_pnl_FormProveedor);
+			GridBagLayout gbl_pnl_FormProveedor = new GridBagLayout();
+			gbl_pnl_FormProveedor.columnWidths = new int[]{0, 198, 0, 0, 0};
+			gbl_pnl_FormProveedor.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+			gbl_pnl_FormProveedor.columnWeights = new double[]{0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_pnl_FormProveedor.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			pnl_FormProveedor.setLayout(gbl_pnl_FormProveedor);
+			
+			JLabel lblNewLabel = new JLabel("Empresa");
+			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel.gridx = 0;
+			gbc_lblNewLabel.gridy = 1;
+			pnl_FormProveedor.add(lblNewLabel, gbc_lblNewLabel);
+			
+			textNombreProveedor = new JTextField();
+			GridBagConstraints gbc_textNombreProveedor = new GridBagConstraints();
+			gbc_textNombreProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_textNombreProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textNombreProveedor.gridx = 1;
+			gbc_textNombreProveedor.gridy = 1;
+			pnl_FormProveedor.add(textNombreProveedor, gbc_textNombreProveedor);
+			textNombreProveedor.setColumns(10);
+			
+			JLabel lblNewLabel_3 = new JLabel("Celular");
+			GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
+			gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_3.gridx = 2;
+			gbc_lblNewLabel_3.gridy = 1;
+			pnl_FormProveedor.add(lblNewLabel_3, gbc_lblNewLabel_3);
+			
+			textCelularproveedor = new JTextField();
+			GridBagConstraints gbc_textCelularproveedor = new GridBagConstraints();
+			gbc_textCelularproveedor.insets = new Insets(0, 0, 5, 0);
+			gbc_textCelularproveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textCelularproveedor.gridx = 3;
+			gbc_textCelularproveedor.gridy = 1;
+			pnl_FormProveedor.add(textCelularproveedor, gbc_textCelularproveedor);
+			textCelularproveedor.setColumns(10);
+			
+			JLabel lblNewLabel_1 = new JLabel("Representante");
+			GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+			gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_1.gridx = 0;
+			gbc_lblNewLabel_1.gridy = 3;
+			pnl_FormProveedor.add(lblNewLabel_1, gbc_lblNewLabel_1);
+			
+			textNombreRepresentante = new JTextField();
+			GridBagConstraints gbc_textNombreRepresentante = new GridBagConstraints();
+			gbc_textNombreRepresentante.insets = new Insets(0, 0, 5, 5);
+			gbc_textNombreRepresentante.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textNombreRepresentante.gridx = 1;
+			gbc_textNombreRepresentante.gridy = 3;
+			pnl_FormProveedor.add(textNombreRepresentante, gbc_textNombreRepresentante);
+			textNombreRepresentante.setColumns(10);
+			
+			JLabel lblNewLabel_4 = new JLabel("Telefono");
+			GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
+			gbc_lblNewLabel_4.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_4.gridx = 2;
+			gbc_lblNewLabel_4.gridy = 3;
+			pnl_FormProveedor.add(lblNewLabel_4, gbc_lblNewLabel_4);
+			
+			textTelefonoProveedor = new JTextField();
+			GridBagConstraints gbc_textTelefonoProveedor = new GridBagConstraints();
+			gbc_textTelefonoProveedor.insets = new Insets(0, 0, 5, 0);
+			gbc_textTelefonoProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textTelefonoProveedor.gridx = 3;
+			gbc_textTelefonoProveedor.gridy = 3;
+			pnl_FormProveedor.add(textTelefonoProveedor, gbc_textTelefonoProveedor);
+			textTelefonoProveedor.setColumns(10);
+			
+			JLabel lblNewLabel_2 = new JLabel("Dirección");
+			GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+			gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel_2.gridx = 0;
+			gbc_lblNewLabel_2.gridy = 5;
+			pnl_FormProveedor.add(lblNewLabel_2, gbc_lblNewLabel_2);
+			
+			textDireccionProveedor = new JTextField();
+			GridBagConstraints gbc_textDireccionProveedor = new GridBagConstraints();
+			gbc_textDireccionProveedor.insets = new Insets(0, 0, 0, 5);
+			gbc_textDireccionProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textDireccionProveedor.gridx = 1;
+			gbc_textDireccionProveedor.gridy = 5;
+			pnl_FormProveedor.add(textDireccionProveedor, gbc_textDireccionProveedor);
+			textDireccionProveedor.setColumns(10);
+			
+			textField_5 = new JTextField();
+			GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+			gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textField_5.gridx = 3;
+			gbc_textField_5.gridy = 5;
+			pnl_FormProveedor.add(textField_5, gbc_textField_5);
+			textField_5.setColumns(10);
+			
+			JScrollPane scrollPane = new JScrollPane();
+			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+			gbc_scrollPane.gridheight = 6;
+			gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
+			gbc_scrollPane.fill = GridBagConstraints.BOTH;
+			gbc_scrollPane.gridx = 0;
+			gbc_scrollPane.gridy = 7;
+			pnl_proveedor.add(scrollPane, gbc_scrollPane);
+			
+			tblProveedores = new JTable();
+			tblProveedores.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"C\u00F3digo", "Empresa", "representante", "direcci\u00F3n", "celular", "telefono"
+				}
+			) {
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, true, false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			});
+			tblProveedores.getColumnModel().getColumn(0).setPreferredWidth(15);
+			tblProveedores.getColumnModel().getColumn(2).setPreferredWidth(113);
+			tblProveedores.getColumnModel().getColumn(3).setPreferredWidth(137);
+			tblProveedores.getColumnModel().getColumn(4).setPreferredWidth(94);
+			tblProveedores.getColumnModel().getColumn(5).setPreferredWidth(87);
+			scrollPane.setViewportView(tblProveedores);
+			
+			textBuscarProveedor = new JTextField();
+			textBuscarProveedor.setPreferredSize(new Dimension(20, 40));
+			GridBagConstraints gbc_textBuscarProveedor = new GridBagConstraints();
+			gbc_textBuscarProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_textBuscarProveedor.fill = GridBagConstraints.BOTH;
+			gbc_textBuscarProveedor.gridx = 1;
+			gbc_textBuscarProveedor.gridy = 7;
+			pnl_proveedor.add(textBuscarProveedor, gbc_textBuscarProveedor);
+			textBuscarProveedor.setColumns(10);
+			
+			JButton btnBuscarProveedor = new JButton("Buscar");
+			GridBagConstraints gbc_btnBuscarProveedor = new GridBagConstraints();
+			gbc_btnBuscarProveedor.anchor = GridBagConstraints.NORTH;
+			gbc_btnBuscarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnBuscarProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnBuscarProveedor.gridx = 1;
+			gbc_btnBuscarProveedor.gridy = 8;
+			pnl_proveedor.add(btnBuscarProveedor, gbc_btnBuscarProveedor);
+			
+			JButton btnAgregarProveedor = new JButton("Agregar");
+			btnAgregarProveedor.setPreferredSize(new Dimension(240, 23));
+			GridBagConstraints gbc_btnAgregarProveedor = new GridBagConstraints();
+			gbc_btnAgregarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnAgregarProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnAgregarProveedor.gridx = 1;
+			gbc_btnAgregarProveedor.gridy = 9;
+			pnl_proveedor.add(btnAgregarProveedor, gbc_btnAgregarProveedor);
+			
+			JButton btnModificarProveedor = new JButton("Modificar");
+			GridBagConstraints gbc_btnModificarProveedor = new GridBagConstraints();
+			gbc_btnModificarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnModificarProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnModificarProveedor.gridx = 1;
+			gbc_btnModificarProveedor.gridy = 10;
+			pnl_proveedor.add(btnModificarProveedor, gbc_btnModificarProveedor);
+			
+			JButton btnEliminarProveedor = new JButton("Eliminar");
+			GridBagConstraints gbc_btnEliminarProveedor = new GridBagConstraints();
+			gbc_btnEliminarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnEliminarProveedor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnEliminarProveedor.gridx = 1;
+			gbc_btnEliminarProveedor.gridy = 11;
+			pnl_proveedor.add(btnEliminarProveedor, gbc_btnEliminarProveedor);
+			
+			JButton btnCancelarProveedor = new JButton("Cancelar");
+			GridBagConstraints gbc_btnCancelarProveedor = new GridBagConstraints();
+			gbc_btnCancelarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnCancelarProveedor.insets = new Insets(0, 0, 0, 5);
+			gbc_btnCancelarProveedor.gridx = 1;
+			gbc_btnCancelarProveedor.gridy = 12;
+			pnl_proveedor.add(btnCancelarProveedor, gbc_btnCancelarProveedor);
+tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
+			
+			
+			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
 		
-		JPanel pnl_consultas = new JPanel();
-		tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
-		
-		JPanel pnl_ventas = new JPanel();
-		tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
-		
-		JPanel pnl_caja = new JPanel();
-		tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
+			tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
+			
+			tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
 		
 		
 
@@ -576,11 +812,37 @@ public class Main extends JFrame {
 	            tmp.removeRow(0);
 	        }
 	    }
-	 
+	 private void limpiarTableProveedor() {
+		 
+	        tmp = (DefaultTableModel) tblProveedores.getModel();
+	        int fila = tblProveedores.getRowCount();
+	        for (int i = 0; i < fila; i++) {
+	            tmp.removeRow(0);
+	        }
+	    }
 	 private void limpiarCamposCategoria() {
 			textNombreCategoria.setText("");
 			textCodCategoria.setText("");
 			
 		}
+	 
+	 public void cambiarAdministrador() {
+		 flagAdministrador=true;
+		 tabPane_Vistas.removeAll();
+		
+		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
+
+			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
+			
+			tabPane_Vistas.add("Proveedor",pnl_proveedor);
+tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
+			
+			
+			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
+		
+			tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
+			
+			tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+	 }
 	
 }
