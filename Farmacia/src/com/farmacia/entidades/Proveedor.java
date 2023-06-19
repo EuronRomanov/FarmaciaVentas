@@ -7,21 +7,25 @@ public class Proveedor {
     private String direccion ;
     private String celular ;
     private String telefono ;
+    private String ruc;
+    
 	public Proveedor() {
 		super();
 	}
-	public Proveedor( String nombreProveedor, String representante, String direccion, String celular,
-			String telefono) {
+	
+	public Proveedor(String nombreProveedor, String representante, String direccion, String celular, String telefono,
+			String ruc) {
 		super();
-		this.codProveedor = codProveedor;
 		this.nombreProveedor = nombreProveedor;
 		this.representante = representante;
 		this.direccion = direccion;
 		this.celular = celular;
 		this.telefono = telefono;
+		this.ruc = ruc;
 	}
+
 	public Proveedor(int codProveedor, String nombreProveedor, String representante, String direccion, String celular,
-			String telefono) {
+			String telefono, String ruc) {
 		super();
 		this.codProveedor = codProveedor;
 		this.nombreProveedor = nombreProveedor;
@@ -29,7 +33,9 @@ public class Proveedor {
 		this.direccion = direccion;
 		this.celular = celular;
 		this.telefono = telefono;
+		this.ruc = ruc;
 	}
+
 	public int getCodProveedor() {
 		return codProveedor;
 	}
@@ -66,6 +72,14 @@ public class Proveedor {
 	}
 	public void setNombreProveedor(String nombreProveedor) {
 		this.nombreProveedor = nombreProveedor;
+	}
+
+	public String getRuc() {
+		return ruc;
+	}
+
+	public void setRuc(String ruc) {
+		this.ruc = ruc;
 	}
     
     
