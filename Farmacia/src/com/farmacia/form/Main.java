@@ -107,6 +107,13 @@ public class Main extends JFrame {
     private JTextField textDireccionProveedor;
     private JTextField textCodProveedor;
     private JTextField textRucProveedor;
+    private JTable tblProductos;
+    private JTextField textProductoNombre;
+    private JTextField textProductoPcompra;
+    private JTextField textProductoPventa;
+    private JTextField textProductoUmedida;
+    private JTextField textProductoPresentacion;
+    private JTextField textProductoMarca;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -129,7 +136,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1102, 548);
+		setBounds(100, 100, 1112, 573);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -289,12 +296,6 @@ public class Main extends JFrame {
 		
 		 tabPane_Vistas = new JTabbedPane(JTabbedPane.TOP);
 		centralPanel.add(tabPane_Vistas);
-		
-	
-		
-		
-		JButton btnNewButton = new JButton("New button");
-		pnl_producto.add(btnNewButton);
 		
 		
 		/*
@@ -1006,6 +1007,141 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
 		
 			tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
+			GridBagLayout gbl_pnl_producto = new GridBagLayout();
+			gbl_pnl_producto.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
+			gbl_pnl_producto.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+			gbl_pnl_producto.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_pnl_producto.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+			pnl_producto.setLayout(gbl_pnl_producto);
+			
+			JLabel lblProductoNombre = new JLabel("Nombre");
+			GridBagConstraints gbc_lblProductoNombre = new GridBagConstraints();
+			gbc_lblProductoNombre.anchor = GridBagConstraints.WEST;
+			gbc_lblProductoNombre.insets = new Insets(0, 0, 5, 5);
+			gbc_lblProductoNombre.gridx = 0;
+			gbc_lblProductoNombre.gridy = 0;
+			pnl_producto.add(lblProductoNombre, gbc_lblProductoNombre);
+			
+			textProductoNombre = new JTextField();
+			GridBagConstraints gbc_textProductoNombre = new GridBagConstraints();
+			gbc_textProductoNombre.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoNombre.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoNombre.gridx = 1;
+			gbc_textProductoNombre.gridy = 0;
+			pnl_producto.add(textProductoNombre, gbc_textProductoNombre);
+			textProductoNombre.setColumns(10);
+			
+			JLabel lblNewLabel_7 = new JLabel("Precio  de compra");
+			GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
+			gbc_lblNewLabel_7.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_7.gridx = 0;
+			gbc_lblNewLabel_7.gridy = 1;
+			pnl_producto.add(lblNewLabel_7, gbc_lblNewLabel_7);
+			
+			textProductoPcompra = new JTextField();
+			GridBagConstraints gbc_textProductoPcompra = new GridBagConstraints();
+			gbc_textProductoPcompra.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoPcompra.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoPcompra.gridx = 1;
+			gbc_textProductoPcompra.gridy = 1;
+			pnl_producto.add(textProductoPcompra, gbc_textProductoPcompra);
+			textProductoPcompra.setColumns(10);
+			
+			JLabel lblNewLabel_8 = new JLabel("Precio de venta");
+			GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
+			gbc_lblNewLabel_8.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_8.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_8.gridx = 0;
+			gbc_lblNewLabel_8.gridy = 2;
+			pnl_producto.add(lblNewLabel_8, gbc_lblNewLabel_8);
+			
+			textProductoPventa = new JTextField();
+			GridBagConstraints gbc_textProductoPventa = new GridBagConstraints();
+			gbc_textProductoPventa.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoPventa.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoPventa.gridx = 1;
+			gbc_textProductoPventa.gridy = 2;
+			pnl_producto.add(textProductoPventa, gbc_textProductoPventa);
+			textProductoPventa.setColumns(10);
+			
+			JLabel lblNewLabel_9 = new JLabel("Unidad Medida");
+			GridBagConstraints gbc_lblNewLabel_9 = new GridBagConstraints();
+			gbc_lblNewLabel_9.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_9.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_9.gridx = 0;
+			gbc_lblNewLabel_9.gridy = 3;
+			pnl_producto.add(lblNewLabel_9, gbc_lblNewLabel_9);
+			
+			textProductoUmedida = new JTextField();
+			GridBagConstraints gbc_textProductoUmedida = new GridBagConstraints();
+			gbc_textProductoUmedida.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoUmedida.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoUmedida.gridx = 1;
+			gbc_textProductoUmedida.gridy = 3;
+			pnl_producto.add(textProductoUmedida, gbc_textProductoUmedida);
+			textProductoUmedida.setColumns(10);
+			
+			JLabel lblNewLabel_10 = new JLabel("Presentación");
+			GridBagConstraints gbc_lblNewLabel_10 = new GridBagConstraints();
+			gbc_lblNewLabel_10.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_10.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_10.gridx = 0;
+			gbc_lblNewLabel_10.gridy = 4;
+			pnl_producto.add(lblNewLabel_10, gbc_lblNewLabel_10);
+			
+			textProductoPresentacion = new JTextField();
+			GridBagConstraints gbc_textProductoPresentacion = new GridBagConstraints();
+			gbc_textProductoPresentacion.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoPresentacion.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoPresentacion.gridx = 1;
+			gbc_textProductoPresentacion.gridy = 4;
+			pnl_producto.add(textProductoPresentacion, gbc_textProductoPresentacion);
+			textProductoPresentacion.setColumns(10);
+			
+			JLabel lblNewLabel_11 = new JLabel("Marca");
+			GridBagConstraints gbc_lblNewLabel_11 = new GridBagConstraints();
+			gbc_lblNewLabel_11.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_11.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_11.gridx = 0;
+			gbc_lblNewLabel_11.gridy = 5;
+			pnl_producto.add(lblNewLabel_11, gbc_lblNewLabel_11);
+			
+			textProductoMarca = new JTextField();
+			GridBagConstraints gbc_textProductoMarca = new GridBagConstraints();
+			gbc_textProductoMarca.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoMarca.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoMarca.gridx = 1;
+			gbc_textProductoMarca.gridy = 5;
+			pnl_producto.add(textProductoMarca, gbc_textProductoMarca);
+			textProductoMarca.setColumns(10);
+			
+			JLabel lblNewLabel_12 = new JLabel("Fecha Caducidad");
+			GridBagConstraints gbc_lblNewLabel_12 = new GridBagConstraints();
+			gbc_lblNewLabel_12.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_12.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_12.gridx = 0;
+			gbc_lblNewLabel_12.gridy = 6;
+			pnl_producto.add(lblNewLabel_12, gbc_lblNewLabel_12);
+			
+			JScrollPane scrollPane_1 = new JScrollPane();
+			GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+			gbc_scrollPane_1.gridwidth = 5;
+			gbc_scrollPane_1.insets = new Insets(0, 0, 0, 5);
+			gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
+			gbc_scrollPane_1.gridx = 0;
+			gbc_scrollPane_1.gridy = 8;
+			pnl_producto.add(scrollPane_1, gbc_scrollPane_1);
+			
+			tblProductos = new JTable();
+			scrollPane_1.setViewportView(tblProductos);
+			
+			JPanel panel_3 = new JPanel();
+			GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+			gbc_panel_3.fill = GridBagConstraints.BOTH;
+			gbc_panel_3.gridx = 5;
+			gbc_panel_3.gridy = 8;
+			pnl_producto.add(panel_3, gbc_panel_3);
 			
 			tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
 		
