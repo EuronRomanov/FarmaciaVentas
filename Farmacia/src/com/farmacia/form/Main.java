@@ -96,6 +96,7 @@ public class Main extends JFrame {
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableModel tmp = new DefaultTableModel();
     private JButton btnAgregarCategoria,btnCancelar,btnActualizarCategoria, btnEliminarCategoria;
+    private JButton btnAgregarProveedor,btnModificarProveedor,btnEliminarProveedor,btnCancelarProveedor,btnBuscarProveedor;
     private boolean flagAdministrador=false;
     private JTable tblProveedores;
     private JTextField textBuscarProveedor;
@@ -483,16 +484,19 @@ public class Main extends JFrame {
 		 btnEliminarCategoria = new JButton("Eliminar");
 		 btnEliminarCategoria.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
-		 		categoriaDao.deleteCategoria(Integer.parseInt(textCodCategoria.getText()));
-		 		btnAgregarCategoria.setEnabled(true);
-				btnActualizarCategoria.setEnabled(false);
-		 		btnEliminarCategoria.setEnabled(false);
-		        btnCancelar.setEnabled(false);
-		        btnCancelar.setVisible(false);
-		        
-		        limpiarCamposCategoria();
-		        limpiarTableCategoria();
-		        listarCategoriaTable();
+		 		if (textCodCategoria.getText().length()>0) {
+		 			categoriaDao.deleteCategoria(Integer.parseInt(textCodCategoria.getText()));
+			 		btnAgregarCategoria.setEnabled(true);
+					btnActualizarCategoria.setEnabled(false);
+			 		btnEliminarCategoria.setEnabled(false);
+			        btnCancelar.setEnabled(false);
+			        btnCancelar.setVisible(false);
+			        
+			        limpiarCamposCategoria();
+			        limpiarTableCategoria();
+			        listarCategoriaTable();
+				}
+		 		
 		 	}
 		 });
 		btnEliminarCategoria.setEnabled(false);
@@ -620,6 +624,18 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(lblNewLabel, gbc_lblNewLabel);
 			
 			textNombreProveedor = new JTextField();
+			textNombreProveedor.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarSoloLetras(key)) {
+						e.consume();
+					}
+				
+				}
+			});
 			lblNewLabel.setLabelFor(textNombreProveedor);
 			GridBagConstraints gbc_textNombreProveedor = new GridBagConstraints();
 			gbc_textNombreProveedor.insets = new Insets(0, 0, 5, 5);
@@ -638,6 +654,19 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(lblNewLabel_3, gbc_lblNewLabel_3);
 			
 			textCelularproveedor = new JTextField();
+			textCelularproveedor.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosEnteros(key) || textCelularproveedor.getText().length()>10) {
+						e.consume();
+					}
+					
+				
+				}
+			});
 			GridBagConstraints gbc_textCelularproveedor = new GridBagConstraints();
 			gbc_textCelularproveedor.insets = new Insets(0, 0, 5, 0);
 			gbc_textCelularproveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -646,7 +675,7 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(textCelularproveedor, gbc_textCelularproveedor);
 			textCelularproveedor.setColumns(10);
 			
-			JLabel lblNewLabel_1 = new JLabel("Representante*");
+			JLabel lblNewLabel_1 = new JLabel("Representante");
 			GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 			gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
 			gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
@@ -655,6 +684,18 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(lblNewLabel_1, gbc_lblNewLabel_1);
 			
 			textNombreRepresentante = new JTextField();
+			textNombreRepresentante.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarSoloLetras(key)) {
+						e.consume();
+					}
+				
+				}
+			});
 			GridBagConstraints gbc_textNombreRepresentante = new GridBagConstraints();
 			gbc_textNombreRepresentante.insets = new Insets(0, 0, 5, 5);
 			gbc_textNombreRepresentante.fill = GridBagConstraints.HORIZONTAL;
@@ -672,6 +713,18 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(lblNewLabel_4, gbc_lblNewLabel_4);
 			
 			textTelefonoProveedor = new JTextField();
+			textTelefonoProveedor.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosEnteros(key)) {
+						e.consume();
+					}
+				
+				}
+			});
 			GridBagConstraints gbc_textTelefonoProveedor = new GridBagConstraints();
 			gbc_textTelefonoProveedor.insets = new Insets(0, 0, 5, 0);
 			gbc_textTelefonoProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -714,6 +767,18 @@ public class Main extends JFrame {
 			pnl_FormProveedor.add(lblNewLabel_6, gbc_lblNewLabel_6);
 			
 			textRucProveedor = new JTextField();
+			textRucProveedor.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosEnteros(key) || textRucProveedor.getText().length()>11) {
+						e.consume();
+					}
+				
+				}
+			});
 			GridBagConstraints gbc_textRucProveedor = new GridBagConstraints();
 			gbc_textRucProveedor.insets = new Insets(0, 0, 0, 5);
 			gbc_textRucProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -723,6 +788,11 @@ public class Main extends JFrame {
 			textRucProveedor.setColumns(10);
 			
 			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 			gbc_scrollPane.gridheight = 6;
 			gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
@@ -735,6 +805,31 @@ public class Main extends JFrame {
 			tblProveedores.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
+					limpiarCamposProveedor();;
+		        	int fila = tblProveedores.rowAtPoint(e.getPoint());
+		           
+		         if(fila>=0)  {
+		        	 String key= tblProveedores.getValueAt(fila, 0).toString();
+				       Proveedor ca=proveedorDao.searchProveedorId(Integer.parseInt(key));
+				        textCodProveedor.setText(String.valueOf(ca.getCodProveedor()  ));
+				        textNombreProveedor.setText(ca.getNombreProveedor());
+				        textNombreRepresentante.setText(ca.getRepresentante());
+				        textCelularproveedor.setText(ca.getCelular());
+				        textTelefonoProveedor.setText(ca.getTelefono());
+				        textDireccionProveedor.setText(ca.getDireccion());
+				        textRucProveedor.setText(ca.getRuc());
+				        
+				        
+				       // btnAgregarCategoria.setVisible(false);
+				        btnAgregarProveedor.setEnabled(false);
+				        btnModificarProveedor.setEnabled(true);
+				        btnEliminarProveedor.setEnabled(true);
+				        btnCancelarProveedor.setEnabled(true);
+				        btnCancelarProveedor.setVisible(true);
+		         }
+		         
+		         
 				}
 			});
 			tblProveedores.setModel(new DefaultTableModel(
@@ -769,7 +864,19 @@ public class Main extends JFrame {
 			pnl_proveedor.add(textBuscarProveedor, gbc_textBuscarProveedor);
 			textBuscarProveedor.setColumns(10);
 			
-			JButton btnBuscarProveedor = new JButton("Buscar");
+			 btnBuscarProveedor = new JButton("Buscar");
+			 btnBuscarProveedor.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (textBuscarProveedor.getText().length()>0) {
+			 			
+			 			proveedorDao.searchProveedor(textBuscarProveedor.getText(), tblProveedores);
+					} else {
+						limpiarCamposProveedor();
+						proveedorDao.ListarProveedorTable(tblProveedores);
+					}
+			 		
+			 	}
+			 });
 			GridBagConstraints gbc_btnBuscarProveedor = new GridBagConstraints();
 			gbc_btnBuscarProveedor.anchor = GridBagConstraints.NORTH;
 			gbc_btnBuscarProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -778,7 +885,7 @@ public class Main extends JFrame {
 			gbc_btnBuscarProveedor.gridy = 8;
 			pnl_proveedor.add(btnBuscarProveedor, gbc_btnBuscarProveedor);
 			
-			JButton btnAgregarProveedor = new JButton("Agregar");
+		    btnAgregarProveedor = new JButton("Agregar");
 			btnAgregarProveedor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -789,7 +896,7 @@ public class Main extends JFrame {
 							textTelefonoProveedor.getText(),
 							textRucProveedor.getText());
 					
-					if (!controlFormato.hayEspaciosVacios(pro.getNombreProveedor(),pro.getRepresentante())) {
+					if (!controlFormato.hayEspaciosVacios(pro.getNombreProveedor())) {
 						proveedorDao.registrarProveedor(pro);
 						limpiarCamposProveedor();
 						limpiarTableProveedor();
@@ -810,7 +917,35 @@ public class Main extends JFrame {
 			gbc_btnAgregarProveedor.gridy = 9;
 			pnl_proveedor.add(btnAgregarProveedor, gbc_btnAgregarProveedor);
 			
-			JButton btnModificarProveedor = new JButton("Modificar");
+			
+			 btnModificarProveedor = new JButton("Modificar");
+			 btnModificarProveedor.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		
+			 		Proveedor ca=new Proveedor(Integer.parseInt(textCodProveedor.getText()),
+			 				textNombreProveedor.getText(),
+							textNombreRepresentante.getText(),
+							textDireccionProveedor.getText(),
+							textCelularproveedor.getText(),
+							textTelefonoProveedor.getText(),
+							textRucProveedor.getText());
+					
+					if (!controlFormato.hayEspaciosVacios(ca.getNombreProveedor())) {
+						proveedorDao.editProveedor(ca);
+						limpiarTableProveedor();
+						//categoriaDao.ListarCategoriaTable(tblCategoria);
+						proveedorDao.ListarProveedorTable(tblProveedores);
+					} 
+					
+					btnAgregarProveedor.setEnabled(true);
+					btnModificarProveedor.setEnabled(false);
+			 		btnEliminarProveedor.setEnabled(false);
+			        btnCancelarProveedor.setEnabled(false);
+			        btnCancelarProveedor.setVisible(false);
+			        
+			        limpiarCamposProveedor(); 
+			 	}
+			 });
 			btnModificarProveedor.setEnabled(false);
 			GridBagConstraints gbc_btnModificarProveedor = new GridBagConstraints();
 			gbc_btnModificarProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -819,7 +954,23 @@ public class Main extends JFrame {
 			gbc_btnModificarProveedor.gridy = 10;
 			pnl_proveedor.add(btnModificarProveedor, gbc_btnModificarProveedor);
 			
-			JButton btnEliminarProveedor = new JButton("Eliminar");
+			 btnEliminarProveedor = new JButton("Eliminar");
+			 btnEliminarProveedor.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (textCodProveedor.getText().length()>0) {
+						proveedorDao.deleteProveedor(Integer.valueOf(textCodProveedor.getText()));
+						btnAgregarProveedor.setEnabled(true);
+				 		btnModificarProveedor.setEnabled(false);
+				 		btnEliminarProveedor.setEnabled(false);
+				        btnCancelarProveedor.setEnabled(false);
+				        btnCancelarProveedor.setVisible(false);
+				        
+						limpiarCamposProveedor();
+						limpiarTableProveedor();
+						proveedorDao.ListarProveedorTable(tblProveedores);
+					}
+			 	}
+			 });
 			btnEliminarProveedor.setEnabled(false);
 			GridBagConstraints gbc_btnEliminarProveedor = new GridBagConstraints();
 			gbc_btnEliminarProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -828,7 +979,19 @@ public class Main extends JFrame {
 			gbc_btnEliminarProveedor.gridy = 11;
 			pnl_proveedor.add(btnEliminarProveedor, gbc_btnEliminarProveedor);
 			
-			JButton btnCancelarProveedor = new JButton("Cancelar");
+			 btnCancelarProveedor = new JButton("Cancelar");
+			 btnCancelarProveedor.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		
+			 		btnAgregarProveedor.setEnabled(true);
+			 		btnModificarProveedor.setEnabled(false);
+			 		btnEliminarProveedor.setEnabled(false);
+			        btnCancelarProveedor.setEnabled(false);
+			        btnCancelarProveedor.setVisible(false);
+			 		limpiarCamposProveedor();
+			 		
+			 	}
+			 });
 			btnCancelarProveedor.setVisible(false);
 			GridBagConstraints gbc_btnCancelarProveedor = new GridBagConstraints();
 			gbc_btnCancelarProveedor.fill = GridBagConstraints.HORIZONTAL;
