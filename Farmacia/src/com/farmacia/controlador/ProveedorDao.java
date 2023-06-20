@@ -236,6 +236,7 @@ public class ProveedorDao {
     public void ListarProveedorTable(JTable tblProveedor) {
         List<Proveedor> ListarCl = this.ListarProveedor();
         modelo = (DefaultTableModel) tblProveedor.getModel();
+        modelo.setRowCount(0);
         Object[] ob = new Object[7];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodProveedor();

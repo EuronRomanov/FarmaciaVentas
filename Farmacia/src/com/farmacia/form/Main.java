@@ -176,7 +176,7 @@ public class Main extends JFrame {
 				//limpiarTableCategoria();
 				//categoriaDao.ListarCategoriaTable(tblCategoria);
 				//listarCategoriaTable();
-				limpiarTableProveedor();
+				//limpiarTableProveedor();
 				proveedorDao.ListarProveedorTable(tblProveedores);
 				
 			}
@@ -719,7 +719,7 @@ public class Main extends JFrame {
 					int key=e.getKeyChar();
 					
 					
-					if (controlFormato.validarNumerosEnteros(key)) {
+					if (controlFormato.validarNumerosEnteros(key) || textTelefonoProveedor.getText().length()>9) {
 						e.consume();
 					}
 				
@@ -840,7 +840,7 @@ public class Main extends JFrame {
 				}
 			) {
 				boolean[] columnEditables = new boolean[] {
-					false, false, false, true, false, false,false
+					false, false, false, false, false, false,false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
@@ -872,6 +872,7 @@ public class Main extends JFrame {
 			 			proveedorDao.searchProveedor(textBuscarProveedor.getText(), tblProveedores);
 					} else {
 						limpiarCamposProveedor();
+						
 						proveedorDao.ListarProveedorTable(tblProveedores);
 					}
 			 		
@@ -899,7 +900,7 @@ public class Main extends JFrame {
 					if (!controlFormato.hayEspaciosVacios(pro.getNombreProveedor())) {
 						proveedorDao.registrarProveedor(pro);
 						limpiarCamposProveedor();
-						limpiarTableProveedor();
+						//limpiarTableProveedor();
 						proveedorDao.ListarProveedorTable(tblProveedores);
 					} else {
 						 JOptionPane.showMessageDialog(null, "Se detectó un campo vacio");
@@ -932,7 +933,7 @@ public class Main extends JFrame {
 					
 					if (!controlFormato.hayEspaciosVacios(ca.getNombreProveedor())) {
 						proveedorDao.editProveedor(ca);
-						limpiarTableProveedor();
+						//limpiarTableProveedor();
 						//categoriaDao.ListarCategoriaTable(tblCategoria);
 						proveedorDao.ListarProveedorTable(tblProveedores);
 					} 
@@ -966,7 +967,7 @@ public class Main extends JFrame {
 				        btnCancelarProveedor.setVisible(false);
 				        
 						limpiarCamposProveedor();
-						limpiarTableProveedor();
+						//limpiarTableProveedor();
 						proveedorDao.ListarProveedorTable(tblProveedores);
 					}
 			 	}
