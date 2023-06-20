@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Proveedor;
 
 
@@ -98,38 +99,82 @@ public class ProveedorDao {
      * @param key
      * @return list of client whose name contains the @key
      */
-    public ArrayList<Proveedor> searchProveedor(String key){
+    public void searchProveedor(String key, JTable tblProveedor){
         ArrayList<Proveedor> result = new ArrayList<Proveedor>();
-        String sql = "SELECT * FROM Proveedor WHERE nombreProveedor LIKE ?";
+        String sql = "SELECT * FROM Proveedor WHERE nombreEmpresa LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
+            modelo = (DefaultTableModel) tblProveedor.getModel();
+            modelo.setRowCount(0);
+            Object[] ob = new Object[7];
+            while(rs.next()){
+            	ob[0] =rs.getInt("codProveedor");
+            	ob[1] =rs.getString("nombreEmpresa");
+            	ob[2] =rs.getString("representante");
+            	ob[3] =rs.getString("direccion");
+            	ob[4] =rs.getString("celular");
+            	ob[5] =rs.getString("telefono");
+            	ob[6] =rs.getString("ruc");
+            	
+            	modelo.addRow(ob);
+               
+                //result.add(Proveedor);
+            }
+           
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+          /*  try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }*/
+        }    
+        //return result;
+        tblProveedor.setModel(modelo);
+    }
+    
+    
+    
+    /*
+     * buscar por id
+     */
+    
+    public Proveedor searchProveedorId(int key){
+    	Proveedor proveedor = new Proveedor();
+    	
+        String sql = "SELECT * FROM Proveedor WHERE codProveedor=?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,  key );
+            ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-            	Proveedor Proveedor = new Proveedor(rs.getInt("codProveedor"),
-            										rs.getString("nombreEmpresa"),
-            										rs.getString("representante"),
-            										rs.getString("direccion"),
-            										rs.getString("celular"),
-            										rs.getString("telefono"),
-            										rs.getString("ruc"));
             	
-            	
+            	proveedor = new Proveedor(rs.getInt("codProveedor"),
+						rs.getString("nombreEmpresa"),
+						rs.getString("representante"),
+						rs.getString("direccion"),
+						rs.getString("celular"),
+						rs.getString("telefono"),
+						rs.getString("ruc"));
                
-                result.add(Proveedor);
+                
             }
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }    
-        return result;
+        return proveedor;
     }
+    
     
     /**
      * update the @client
@@ -146,21 +191,22 @@ public class ProveedorDao {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, Proveedor.getNombreProveedor());
             ps.setString(2, Proveedor.getRepresentante());
-            ps.setString(3, Proveedor.getCelular());
-            ps.setString(4, Proveedor.getTelefono());
+            ps.setString(3, Proveedor.getDireccion());
+            ps.setString(4, Proveedor.getCelular());
             ps.setString(5, Proveedor.getTelefono());
+            ps.setString(6, Proveedor.getRuc());
             
-            ps.setInt(6, Proveedor.getCodProveedor());
+            ps.setInt(7, Proveedor.getCodProveedor());
 
             ps.executeUpdate();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+          /*  try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
@@ -178,11 +224,11 @@ public class ProveedorDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
