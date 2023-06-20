@@ -1,5 +1,9 @@
 package com.farmacia.utils;
 
+import java.text.ParseException;
+
+import javax.swing.text.MaskFormatter;
+
 public class ControlFormatos {
 
 	
@@ -56,5 +60,18 @@ public class ControlFormatos {
 		boolean punto=key==46;
 		return (!(numero || 
 				punto ));
+	}
+
+	public MaskFormatter getFormatoPrecio() {
+		MaskFormatter mascara=null;
+		try {
+		 mascara=new MaskFormatter("##.##");
+		 mascara.setPlaceholderCharacter('0');
+		 mascara.setOverwriteMode(true);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mascara;
 	}
 }
