@@ -3,10 +3,13 @@ package com.farmacia.utils;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import javax.swing.text.MaskFormatter;
 
@@ -81,24 +84,34 @@ public class ControlFormatos {
 		return mascara;
 	}
 
-	public Date cambiarLocaldateToDate(LocalDateTime fechaCaduca) {
-		Instant insta=Timestamp.valueOf(fechaCaduca.format(DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss.S"))).toInstant();
+	public Date cambiarLocaldateToDate(LocalDate fechaCaduca) {
+		Instant insta=Timestamp.valueOf(fechaCaduca.format(DateTimeFormatter.ofPattern("yyy-MM-dd"))).toInstant();
 		return  Date.from(insta);
 	}
 	
-	public boolean validarFormatoFecha(String strDate) {
-		if (strDate.trim().equals("")) {
+	public boolean validarFormatoFecha(Date strDate) {
+		if (strDate.toString().trim().equals("")) {
 			return false;
 		} else {
-               SimpleDateFormat sdfrmt=new SimpleDateFormat("yyyy-MM-dd");
+               DateFormat sdfrmt=new SimpleDateFormat("yyyy-MM-dd");
                try {
-				Date javaDate=sdfrmt.parse(strDate);
-			} catch (ParseException e) {
+				Date javaDate=strDate;
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}
                return true;
 		}
+	}
+	
+	public LocalDate fromDateToLocalDate(Date date) {
+		return date.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.toLocalDate();
+	}
+	public Date toDate(LocalDate localDate) {
+		return Date.from(localDate.atStartOfDay()
+				.atZone(ZoneId.systemDefault()).toInstant());
 	}
 }
