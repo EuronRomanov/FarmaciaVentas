@@ -1438,6 +1438,14 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			panel_3.add(btnProductoBuscar, gbc_btnProductoBuscar);
 			
 			 btnProductoAgregar = new JButton("Agregar");
+			 btnProductoAgregar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (controlFormato.validarFormatoFecha(textProductoFCaducidad.toString())) {
+						Producto producto=new Producto();
+					}
+			 		
+			 	}
+			 });
 			GridBagConstraints gbc_btnProductoAgregar = new GridBagConstraints();
 			gbc_btnProductoAgregar.anchor = GridBagConstraints.SOUTH;
 			gbc_btnProductoAgregar.fill = GridBagConstraints.HORIZONTAL;
