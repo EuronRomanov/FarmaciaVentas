@@ -1,5 +1,6 @@
 package com.farmacia.entidades;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Producto {
@@ -13,7 +14,7 @@ public class Producto {
     private double presentacion;
     private String marca ;
     private LocalDateTime fechaRegistro ;
-    private LocalDateTime fechaCaduca ;
+    private LocalDate fechaCaduca ;
     private String observaciones ;
     private String formaFarmaceutica;
     private int  codCategoria ;
@@ -38,7 +39,7 @@ public class Producto {
 
 
 	public Producto(String nombreProducto, String codigobarra, double precioCompra, double precioVenta, int cantidad,
-			String unidadMedida, double presentacion, String marca, LocalDateTime fechaCaduca, String observaciones,String formaFarmaceutica,
+			String unidadMedida, double presentacion, String marca, LocalDate fechaCaduca, String observaciones,String formaFarmaceutica,
 			int codCategoria, int codProveedor) {
 		super();
 		this.nombreProducto = nombreProducto;
@@ -79,7 +80,7 @@ public class Producto {
 
 	public Producto(int codProducto, String nombreProducto, String codigobarra, double precioCompra, double precioVenta,
 			int cantidad, String unidadMedida, double presentacion, String marca, LocalDateTime fechaRegistro,
-			LocalDateTime fechaCaduca, String observaciones,String formaFarmaceutica, String proveedor, String categoria) {
+			LocalDate fechaCaduca, String observaciones,String formaFarmaceutica, String proveedor, String categoria) {
 		super();
 		this.codProducto = codProducto;
 		this.nombreProducto = nombreProducto;
@@ -113,7 +114,7 @@ public class Producto {
 
 	public Producto(int codProducto, String nombreProducto, String codigobarra, double precioCompra, double precioVenta,
 			int cantidad, String unidadMedida, double presentacion, String marca, LocalDateTime fechaRegistro,
-			LocalDateTime fechaCaduca, String observaciones,String formaFarmaceutica, int codCategoria, int codProveedor) {
+			LocalDate fechaCaduca, String observaciones,String formaFarmaceutica, int codCategoria, int codProveedor) {
 		super();
 		this.codProducto = codProducto;
 		this.nombreProducto = nombreProducto;
@@ -191,10 +192,10 @@ public class Producto {
 	public void setFechaRegistro(LocalDateTime fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
 	}
-	public LocalDateTime getFechaCaduca() {
+	public LocalDate getFechaCaduca() {
 		return fechaCaduca;
 	}
-	public void setFechaCaduca(LocalDateTime fechaCaduca) {
+	public void setFechaCaduca(LocalDate fechaCaduca) {
 		this.fechaCaduca = fechaCaduca;
 	}
 	public String getObservaciones() {
