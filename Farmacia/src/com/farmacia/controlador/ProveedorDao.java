@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -252,5 +253,13 @@ public class ProveedorDao {
 
     }
     
+    public void cargarListaProveedor(JComboBox cmbProductoProveedor) {
+    	 List<Proveedor> ListarCl = this.ListarProveedor();
+    	 cmbProductoProveedor.removeAllItems();
+    	 for (Proveedor proveedor : ListarCl) {
+			cmbProductoProveedor.addItem(proveedor);
+			
+		}
+    }
     
 }

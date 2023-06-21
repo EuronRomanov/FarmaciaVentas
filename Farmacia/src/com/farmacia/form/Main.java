@@ -42,6 +42,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import com.farmacia.entidades.Categoria;
+import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Proveedor;
 import com.farmacia.utils.ControlFormatos;
 
@@ -95,6 +96,7 @@ public class Main extends JFrame {
     private CategoriaDao categoriaDao=new CategoriaDao();
     private ProveedorDao proveedorDao=new ProveedorDao();
     private ControlFormatos controlFormato=new ControlFormatos();
+    private ProductoDao productoDao=new ProductoDao();
     
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
@@ -120,6 +122,14 @@ public class Main extends JFrame {
     private JTextField textProductoFRegistro;
     private JTextField textProductoCantidad;
     private JTextField textField;
+    private JTextField textProductoCodigo;
+    private JTextField textProductoCodBarra;
+    private JTextField textProductoFormFarmaceutica;
+    private JTextArea textProductoObservacion ;
+    private JComboBox cmbProductoProveedor,cmbProductoCategoria;
+    private JDateChooser textProductoFCaducidad;
+    private JFormattedTextField textProductoPcompra, textProductoPventa;
+    private  JButton btnProductoAgregar,btnProductoBuscar,btnProductoModificar,btnProductoEliminar,btnProductoCancelar ;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -190,7 +200,10 @@ public class Main extends JFrame {
 				//categoriaDao.ListarCategoriaTable(tblCategoria);
 				//listarCategoriaTable();
 				//limpiarTableProveedor();
-				proveedorDao.ListarProveedorTable(tblProveedores);
+				//proveedorDao.ListarProveedorTable(tblProveedores);
+				productoDao.ListarProductoTable(tblProductos);
+				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
+				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
 				
 			}
 		});
@@ -1045,7 +1058,7 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbc_lblNewLabel_13.gridy = 0;
 			pnl_producto.add(lblNewLabel_13, gbc_lblNewLabel_13);
 			
-			JComboBox cmbProductoCategoria = new JComboBox();
+			 cmbProductoCategoria = new JComboBox();
 			GridBagConstraints gbc_cmbProductoCategoria = new GridBagConstraints();
 			gbc_cmbProductoCategoria.insets = new Insets(0, 0, 5, 5);
 			gbc_cmbProductoCategoria.fill = GridBagConstraints.HORIZONTAL;
@@ -1070,7 +1083,19 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbc_lblNewLabel_7.gridy = 1;
 			pnl_producto.add(lblNewLabel_7, gbc_lblNewLabel_7);
 			
-			JFormattedTextField textProductoPcompra = new JFormattedTextField(controlFormato.getFormatoPrecio());
+			 textProductoPcompra = new JFormattedTextField();
+			 textProductoPcompra.addKeyListener(new KeyAdapter() {
+			 	@Override
+			 	public void keyTyped(KeyEvent e) {
+			 		
+			 			int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosDecimal(key)) {
+						e.consume();
+					}
+			 	}
+			 });
 			GridBagConstraints gbc_textProductoPcompra = new GridBagConstraints();
 			gbc_textProductoPcompra.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoPcompra.fill = GridBagConstraints.HORIZONTAL;
@@ -1086,7 +1111,7 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbc_lblNewLabel_14.gridy = 1;
 			pnl_producto.add(lblNewLabel_14, gbc_lblNewLabel_14);
 			
-			JComboBox cmbProductoProveedor = new JComboBox();
+			 cmbProductoProveedor = new JComboBox();
 			GridBagConstraints gbc_cmbProductoProveedor = new GridBagConstraints();
 			gbc_cmbProductoProveedor.insets = new Insets(0, 0, 5, 5);
 			gbc_cmbProductoProveedor.fill = GridBagConstraints.HORIZONTAL;
@@ -1109,7 +1134,18 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbc_lblNewLabel_8.gridx = 0;
 			gbc_lblNewLabel_8.gridy = 2;
 			pnl_producto.add(lblNewLabel_8, gbc_lblNewLabel_8);
-			JFormattedTextField textProductoPventa = new JFormattedTextField(controlFormato.getFormatoPrecio());
+			 textProductoPventa = new JFormattedTextField();
+			 textProductoPventa.addKeyListener(new KeyAdapter() {
+			 	@Override
+			 	public void keyTyped(KeyEvent e) {
+			 			int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosDecimal(key)) {
+						e.consume();
+					}
+			 	}
+			 });
 			
 			GridBagConstraints gbc_textProductoPventa = new GridBagConstraints();
 			gbc_textProductoPventa.insets = new Insets(0, 0, 5, 5);
@@ -1126,18 +1162,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbc_lblNewLabel_15.gridy = 2;
 			pnl_producto.add(lblNewLabel_15, gbc_lblNewLabel_15);
 			
-			JTextArea textArea = new JTextArea();
-			textArea.setTabSize(6);
-			textArea.setAutoscrolls(false);
-			textArea.setMinimumSize(new Dimension(250, 30));
-			textArea.setPreferredSize(new Dimension(400, 5));
-			GridBagConstraints gbc_textArea = new GridBagConstraints();
-			gbc_textArea.fill = GridBagConstraints.VERTICAL;
-			gbc_textArea.anchor = GridBagConstraints.WEST;
-			gbc_textArea.insets = new Insets(0, 0, 5, 5);
-			gbc_textArea.gridx = 3;
-			gbc_textArea.gridy = 2;
-			pnl_producto.add(textArea, gbc_textArea);
+			 textProductoObservacion = new JTextArea();
+			textProductoObservacion.setTabSize(6);
+			textProductoObservacion.setMinimumSize(new Dimension(250, 30));
+			textProductoObservacion.setPreferredSize(new Dimension(400, 5));
+			GridBagConstraints gbc_textProductoObservacion = new GridBagConstraints();
+			gbc_textProductoObservacion.fill = GridBagConstraints.VERTICAL;
+			gbc_textProductoObservacion.anchor = GridBagConstraints.WEST;
+			gbc_textProductoObservacion.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoObservacion.gridx = 3;
+			gbc_textProductoObservacion.gridy = 2;
+			pnl_producto.add(textProductoObservacion, gbc_textProductoObservacion);
 			
 			JLabel lblNewLabel_9 = new JLabel("Unidad Medida");
 			GridBagConstraints gbc_lblNewLabel_9 = new GridBagConstraints();
@@ -1234,6 +1269,23 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 				e1.printStackTrace();
 			}
 			
+			JLabel lblNewLabel_18 = new JLabel("Forma Farmaceutica");
+			GridBagConstraints gbc_lblNewLabel_18 = new GridBagConstraints();
+			gbc_lblNewLabel_18.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_18.anchor = GridBagConstraints.WEST;
+			gbc_lblNewLabel_18.gridx = 2;
+			gbc_lblNewLabel_18.gridy = 5;
+			pnl_producto.add(lblNewLabel_18, gbc_lblNewLabel_18);
+			
+			textProductoFormFarmaceutica = new JTextField();
+			GridBagConstraints gbc_textProductoFormFarmaceutica = new GridBagConstraints();
+			gbc_textProductoFormFarmaceutica.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoFormFarmaceutica.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoFormFarmaceutica.gridx = 3;
+			gbc_textProductoFormFarmaceutica.gridy = 5;
+			pnl_producto.add(textProductoFormFarmaceutica, gbc_textProductoFormFarmaceutica);
+			textProductoFormFarmaceutica.setColumns(10);
+			
 			JLabel lblNewLabel_12 = new JLabel("Fecha Caducidad");
 			GridBagConstraints gbc_lblNewLabel_12 = new GridBagConstraints();
 			gbc_lblNewLabel_12.anchor = GridBagConstraints.WEST;
@@ -1242,16 +1294,49 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbc_lblNewLabel_12.gridy = 6;
 			pnl_producto.add(lblNewLabel_12, gbc_lblNewLabel_12);
 			
-			JDateChooser dateChooser = new JDateChooser();
+			 textProductoFCaducidad = new JDateChooser();
+			lblNewLabel_12.setLabelFor(textProductoFCaducidad);
 			
-			dateChooser.setPreferredSize(new Dimension(400, 60));
-			dateChooser.setDateFormatString("dd-MM-yyyy");
-			GridBagConstraints gbc_dateChooser = new GridBagConstraints();
-			gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
-			gbc_dateChooser.fill = GridBagConstraints.HORIZONTAL;
-			gbc_dateChooser.gridx = 1;
-			gbc_dateChooser.gridy = 6;
-			pnl_producto.add(dateChooser, gbc_dateChooser);
+			textProductoFCaducidad.setPreferredSize(new Dimension(400, 60));
+			textProductoFCaducidad.setDateFormatString("yyyy-MM-dd");
+			GridBagConstraints gbc_textProductoFCaducidad = new GridBagConstraints();
+			gbc_textProductoFCaducidad.anchor = GridBagConstraints.NORTH;
+			gbc_textProductoFCaducidad.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoFCaducidad.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoFCaducidad.gridx = 1;
+			gbc_textProductoFCaducidad.gridy = 6;
+			pnl_producto.add(textProductoFCaducidad, gbc_textProductoFCaducidad);
+			
+			textProductoCodigo = new JTextField();
+			textProductoCodigo.setVisible(false);
+			
+			JLabel lblProductoCodBarra = new JLabel("Codigo de  Barra");
+			lblProductoCodBarra.setVisible(false);
+			GridBagConstraints gbc_lblProductoCodBarra = new GridBagConstraints();
+			gbc_lblProductoCodBarra.insets = new Insets(0, 0, 5, 5);
+			gbc_lblProductoCodBarra.anchor = GridBagConstraints.WEST;
+			gbc_lblProductoCodBarra.gridx = 2;
+			gbc_lblProductoCodBarra.gridy = 6;
+			pnl_producto.add(lblProductoCodBarra, gbc_lblProductoCodBarra);
+			
+			textProductoCodBarra = new JTextField();
+			textProductoCodBarra.setEditable(false);
+			textProductoCodBarra.setVisible(false);
+			lblProductoCodBarra.setLabelFor(textProductoCodBarra);
+			GridBagConstraints gbc_textProductoCodBarra = new GridBagConstraints();
+			gbc_textProductoCodBarra.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoCodBarra.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoCodBarra.gridx = 3;
+			gbc_textProductoCodBarra.gridy = 6;
+			pnl_producto.add(textProductoCodBarra, gbc_textProductoCodBarra);
+			textProductoCodBarra.setColumns(10);
+			GridBagConstraints gbc_textProductoCodigo = new GridBagConstraints();
+			gbc_textProductoCodigo.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoCodigo.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoCodigo.gridx = 1;
+			gbc_textProductoCodigo.gridy = 7;
+			pnl_producto.add(textProductoCodigo, gbc_textProductoCodigo);
+			textProductoCodigo.setColumns(10);
 			
 			JScrollPane scrollPane_1 = new JScrollPane();
 			GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
@@ -1263,6 +1348,59 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(scrollPane_1, gbc_scrollPane_1);
 			
 			tblProductos = new JTable();
+			tblProductos.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					limpiarCamposProducto();
+		        	int fila = tblProductos.rowAtPoint(e.getPoint());
+		           
+		         if(fila>=0)  {
+		        	 String key= tblProductos.getValueAt(fila, 0).toString();
+				        Producto ca=productoDao.searchProductoId(Integer.parseInt(key));
+				        textProductoCodigo.setText(String.valueOf(ca.getCodProducto()  ));
+				        textProductoNombre.setText(ca.getNombreProducto());
+				        textProductoCantidad.setText(String.valueOf(ca.getCantidad()));
+						 textProductoCodBarra.setText(ca.getCodigobarra());
+						 textProductoFormFarmaceutica.setText(ca.getFormaFarmaceutica());
+						 textProductoFRegistro.setText(ca.getFechaRegistro().toString());
+						 textProductoMarca.setText(ca.getMarca());
+						 textProductoPresentacion.setText(String.valueOf(ca.getPresentacion()));
+						 textProductoUmedida.setText(ca.getUnidadMedida());
+						 
+						 cmbProductoProveedor.setSelectedIndex(buscarIdComboProveedor(ca.getCodProveedor()));
+						 cmbProductoCategoria.setSelectedIndex(buscarIdComboCategoria(ca.getCodCategoria()));
+						 textProductoObservacion.setText(ca.getObservaciones());
+						
+						 textProductoFCaducidad.setDate(controlFormato.cambiarLocaldateToDate(ca.getFechaCaduca()));
+						 textProductoPcompra.setText(String.valueOf(ca.getPrecioCompra()));
+						 textProductoPventa.setText(String.valueOf(ca.getPrecioVenta()));
+						
+						 lblProductoCodBarra.setVisible(true);
+						 textProductoCodBarra.setVisible(true);
+				       // btnAgregarCategoria.setVisible(false);
+				        btnProductoAgregar.setEnabled(false);
+				        btnProductoModificar.setEnabled(true);
+				        btnProductoEliminar.setEnabled(true);
+				        btnProductoCancelar.setEnabled(true);
+				        btnProductoCancelar.setVisible(true);
+		         }
+		        	
+				}
+			});
+			tblProductos.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Codigo", "Nombre", "C\u00F3digo Barra", "Precio Compra", "Precio Venta", "Cantidad", "Unidades", "Presentaci\u00F3n", "Marca", "Ingreso", "Caduca", "Observaciones","Forma", "Proveedor", "Categor\u00EDa"
+				}
+			) {
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false, false, false, false, false, true, false, false, false,false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			});
 			scrollPane_1.setViewportView(tblProductos);
 			
 			JPanel panel_3 = new JPanel();
@@ -1280,7 +1418,7 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			
 			textField = new JTextField();
 			GridBagConstraints gbc_textField = new GridBagConstraints();
-			gbc_textField.gridwidth = 4;
+			gbc_textField.gridwidth = 11;
 			gbc_textField.insets = new Insets(0, 0, 5, 0);
 			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textField.gridx = 0;
@@ -1288,46 +1426,64 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			panel_3.add(textField, gbc_textField);
 			textField.setColumns(10);
 			
-			JButton btnProductoBuscar = new JButton("Buscar");
+			
+			 btnProductoBuscar = new JButton("Buscar");
 			GridBagConstraints gbc_btnProductoBuscar = new GridBagConstraints();
+			gbc_btnProductoBuscar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnProductoBuscar.anchor = GridBagConstraints.NORTH;
-			gbc_btnProductoBuscar.insets = new Insets(0, 0, 5, 0);
-			gbc_btnProductoBuscar.gridwidth = 5;
+			gbc_btnProductoBuscar.insets = new Insets(0, 0, 5, 5);
+			gbc_btnProductoBuscar.gridwidth = 11;
 			gbc_btnProductoBuscar.gridx = 0;
 			gbc_btnProductoBuscar.gridy = 1;
 			panel_3.add(btnProductoBuscar, gbc_btnProductoBuscar);
 			
-			JButton btnProductoAgregar = new JButton("Agregar");
+			 btnProductoAgregar = new JButton("Agregar");
 			GridBagConstraints gbc_btnProductoAgregar = new GridBagConstraints();
 			gbc_btnProductoAgregar.anchor = GridBagConstraints.SOUTH;
 			gbc_btnProductoAgregar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnProductoAgregar.insets = new Insets(0, 0, 5, 0);
-			gbc_btnProductoAgregar.gridwidth = 7;
+			gbc_btnProductoAgregar.gridwidth = 11;
 			gbc_btnProductoAgregar.gridx = 0;
 			gbc_btnProductoAgregar.gridy = 4;
 			panel_3.add(btnProductoAgregar, gbc_btnProductoAgregar);
 			
-			JButton btnProductoModificar = new JButton("Modificar");
+			 btnProductoModificar = new JButton("Modificar");
+			btnProductoModificar.setEnabled(false);
 			GridBagConstraints gbc_btnProductoModificar = new GridBagConstraints();
 			gbc_btnProductoModificar.anchor = GridBagConstraints.SOUTH;
 			gbc_btnProductoModificar.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnProductoModificar.insets = new Insets(0, 0, 5, 0);
-			gbc_btnProductoModificar.gridwidth = 7;
+			gbc_btnProductoModificar.insets = new Insets(0, 0, 5, 5);
+			gbc_btnProductoModificar.gridwidth = 11;
 			gbc_btnProductoModificar.gridx = 0;
 			gbc_btnProductoModificar.gridy = 5;
 			panel_3.add(btnProductoModificar, gbc_btnProductoModificar);
 			
-			JButton btnProductoEliminar = new JButton("Eliminar");
+			 btnProductoEliminar = new JButton("Eliminar");
+			btnProductoEliminar.setEnabled(false);
 			GridBagConstraints gbc_btnProductoEliminar = new GridBagConstraints();
 			gbc_btnProductoEliminar.anchor = GridBagConstraints.SOUTH;
 			gbc_btnProductoEliminar.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnProductoEliminar.insets = new Insets(0, 0, 5, 0);
-			gbc_btnProductoEliminar.gridwidth = 7;
+			gbc_btnProductoEliminar.insets = new Insets(0, 0, 5, 5);
+			gbc_btnProductoEliminar.gridwidth = 11;
 			gbc_btnProductoEliminar.gridx = 0;
 			gbc_btnProductoEliminar.gridy = 6;
 			panel_3.add(btnProductoEliminar, gbc_btnProductoEliminar);
 			
-			JButton btnProductoCancelar = new JButton("Cancelar");
+			 btnProductoCancelar = new JButton("Cancelar");
+			 btnProductoCancelar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		limpiarCamposProducto();
+			 		 lblProductoCodBarra.setVisible(false);
+					 textProductoCodBarra.setVisible(false);
+			       // btnAgregarCategoria.setVisible(false);
+			        btnProductoAgregar.setEnabled(true);
+			        btnProductoModificar.setEnabled(false);
+			        btnProductoEliminar.setEnabled(false);
+			        btnProductoCancelar.setEnabled(false);
+			        btnProductoCancelar.setVisible(true);
+			 	}
+			 });
+			 btnProductoCancelar.setVisible(false);
 			GridBagConstraints gbc_btnProductoCancelar = new GridBagConstraints();
 			gbc_btnProductoCancelar.anchor = GridBagConstraints.SOUTH;
 			gbc_btnProductoCancelar.fill = GridBagConstraints.HORIZONTAL;
@@ -1341,7 +1497,32 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 		
 
 	}
-	 public void listarCategoriaTable() {
+	 protected int buscarIdComboCategoria(int j) {
+		 int y=-1;
+         for (int i = 0; i < cmbProductoCategoria.getItemCount(); i++) {
+			 Categoria p=(Categoria)cmbProductoCategoria.getItemAt(i);
+			 if (p.getCodCategoria()==j) {
+				 y=i;
+				break;
+			}
+		}
+		return y;
+	}
+
+	protected int buscarIdComboProveedor(int j) {
+
+        int y=-1;
+         for (int i = 0; i < cmbProductoProveedor.getItemCount(); i++) {
+			 Proveedor p=(Proveedor)cmbProductoProveedor.getItemAt(i);
+			 if (p.getCodProveedor()==j) {
+				 y=i;
+				break;
+			}
+		}
+		return y;
+	}
+
+	public void listarCategoriaTable() {
 	        List<Categoria> ListarCl = categoriaDao.ListarCategoria();
 	        String[] columnNames = new String[] {"Column Header1", "Column Header2"};
 			
@@ -1388,6 +1569,25 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			textCelularproveedor.setText("");
 			textRucProveedor.setText("");
 		}
+	 
+	 private void limpiarCamposProducto() {
+		 textProductoCantidad.setText("");
+		 textProductoCodBarra.setText("");
+		 textProductoCodigo.setText("");
+		 textProductoFormFarmaceutica.setText("");
+		 textProductoFRegistro.setText("");
+		 textProductoMarca.setText("");
+		 textProductoNombre.setText("");
+		 textProductoPresentacion.setText("");
+		 textProductoUmedida.setText("");
+		 cmbProductoProveedor.setSelectedIndex(0);
+		 cmbProductoCategoria.setSelectedIndex(0);
+		 textProductoObservacion.setText("");
+		 textProductoFCaducidad.setDate(null);
+		 textProductoPcompra.setText("");
+		 textProductoPventa.setText("");
+		 
+	 }
 	 
 	 public void cambiarAdministrador() {
 		 flagAdministrador=true;

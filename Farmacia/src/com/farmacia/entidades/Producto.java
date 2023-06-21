@@ -15,14 +15,105 @@ public class Producto {
     private LocalDateTime fechaRegistro ;
     private LocalDateTime fechaCaduca ;
     private String observaciones ;
+    private String formaFarmaceutica;
     private int  codCategoria ;
     private int  codProveedor;
+    private String proveedor;
+    private String categoria;
 	public Producto() {
 		super();
 	}
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+	public Producto(String nombreProducto, String codigobarra, double precioCompra, double precioVenta, int cantidad,
+			String unidadMedida, double presentacion, String marca, LocalDateTime fechaCaduca, String observaciones,String formaFarmaceutica,
+			int codCategoria, int codProveedor) {
+		super();
+		this.nombreProducto = nombreProducto;
+		this.codigobarra = codigobarra;
+		this.precioCompra = precioCompra;
+		this.precioVenta = precioVenta;
+		this.cantidad = cantidad;
+		this.unidadMedida = unidadMedida;
+		this.presentacion = presentacion;
+		this.marca = marca;
+		this.fechaCaduca = fechaCaduca;
+		this.observaciones = observaciones;
+		this.codCategoria = codCategoria;
+		this.codProveedor = codProveedor;
+		this.formaFarmaceutica=formaFarmaceutica;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
 	public Producto(int codProducto, String nombreProducto, String codigobarra, double precioCompra, double precioVenta,
 			int cantidad, String unidadMedida, double presentacion, String marca, LocalDateTime fechaRegistro,
-			LocalDateTime fechaCaduca, String observaciones, int codCategoria, int codProveedor) {
+			LocalDateTime fechaCaduca, String observaciones,String formaFarmaceutica, String proveedor, String categoria) {
+		super();
+		this.codProducto = codProducto;
+		this.nombreProducto = nombreProducto;
+		this.codigobarra = codigobarra;
+		this.precioCompra = precioCompra;
+		this.precioVenta = precioVenta;
+		this.cantidad = cantidad;
+		this.unidadMedida = unidadMedida;
+		this.presentacion = presentacion;
+		this.marca = marca;
+		this.fechaRegistro = fechaRegistro;
+		this.fechaCaduca = fechaCaduca;
+		this.observaciones = observaciones;
+		this.proveedor = proveedor;
+		this.categoria = categoria;
+		this.formaFarmaceutica=formaFarmaceutica;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public Producto(int codProducto, String nombreProducto, String codigobarra, double precioCompra, double precioVenta,
+			int cantidad, String unidadMedida, double presentacion, String marca, LocalDateTime fechaRegistro,
+			LocalDateTime fechaCaduca, String observaciones,String formaFarmaceutica, int codCategoria, int codProveedor) {
 		super();
 		this.codProducto = codProducto;
 		this.nombreProducto = nombreProducto;
@@ -38,6 +129,7 @@ public class Producto {
 		this.observaciones = observaciones;
 		this.codCategoria = codCategoria;
 		this.codProveedor = codProveedor;
+		this.formaFarmaceutica=formaFarmaceutica;
 	}
 	public int getCodProducto() {
 		return codProducto;
@@ -123,6 +215,82 @@ public class Producto {
 	public void setCodProveedor(int codProveedor) {
 		this.codProveedor = codProveedor;
 	}
+
+
+
+
+
+
+
+	public String getProveedor() {
+		return proveedor;
+	}
+
+
+
+
+
+
+
+	public void setProveedor(String proveedor) {
+		this.proveedor = proveedor;
+	}
+
+
+
+
+
+
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+
+
+
+
+
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public String getFormaFarmaceutica() {
+		return formaFarmaceutica;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setFormaFarmaceutica(String formaFarmaceutica) {
+		this.formaFarmaceutica = formaFarmaceutica;
+	}
+	
+	
     
     
     

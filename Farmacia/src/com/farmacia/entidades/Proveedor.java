@@ -81,6 +81,11 @@ public class Proveedor {
 	public void setRuc(String ruc) {
 		this.ruc = ruc;
 	}
+
+	@Override
+	public String toString() {
+		return  nombreProveedor ;
+	}
     
     
 }

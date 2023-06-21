@@ -7,12 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.entidades.Categoria;
+import com.farmacia.entidades.Proveedor;
 
 
 
@@ -224,5 +226,12 @@ public class CategoriaDao {
 
     }
     
-    
+    public void cargarListaCategorias(JComboBox cmbProductoCategoria) {
+   	 List<Categoria> ListarCl = this.ListarCategoria();
+   	cmbProductoCategoria.removeAllItems();
+   	 for (Categoria proveedor : ListarCl) {
+   		cmbProductoCategoria.addItem(proveedor);
+			
+		}
+   }
 }

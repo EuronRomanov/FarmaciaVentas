@@ -1,6 +1,11 @@
 package com.farmacia.utils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javax.swing.text.MaskFormatter;
 
@@ -74,4 +79,10 @@ public class ControlFormatos {
 		}
 		return mascara;
 	}
+
+	public Date cambiarLocaldateToDate(LocalDateTime fechaCaduca) {
+		Instant insta=Timestamp.valueOf(fechaCaduca.format(DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss.S"))).toInstant();
+		return  Date.from(insta);
+	}
+	
 }
