@@ -49,6 +49,8 @@ import com.farmacia.utils.ControlFormatos;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1042,6 +1044,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(lblProductoNombre, gbc_lblProductoNombre);
 			
 			textProductoNombre = new JTextField();
+			textProductoNombre.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+						int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarSoloLetras(key)) {
+						e.consume();
+					}
+				}
+			});
 			GridBagConstraints gbc_textProductoNombre = new GridBagConstraints();
 			gbc_textProductoNombre.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoNombre.fill = GridBagConstraints.HORIZONTAL;
@@ -1191,15 +1204,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(textProductoUmedida, gbc_textProductoUmedida);
 			textProductoUmedida.setColumns(10);
 			
-			JLabel lblNewLabel_16 = new JLabel("Fecha de Ingreso");
-			GridBagConstraints gbc_lblNewLabel_16 = new GridBagConstraints();
-			gbc_lblNewLabel_16.anchor = GridBagConstraints.WEST;
-			gbc_lblNewLabel_16.insets = new Insets(0, 0, 5, 5);
-			gbc_lblNewLabel_16.gridx = 2;
-			gbc_lblNewLabel_16.gridy = 3;
-			pnl_producto.add(lblNewLabel_16, gbc_lblNewLabel_16);
+			JLabel lblProductoFIngreso = new JLabel("Fecha de Ingreso");
+			lblProductoFIngreso.setVisible(false);
+			GridBagConstraints gbc_lblProductoFIngreso = new GridBagConstraints();
+			gbc_lblProductoFIngreso.anchor = GridBagConstraints.WEST;
+			gbc_lblProductoFIngreso.insets = new Insets(0, 0, 5, 5);
+			gbc_lblProductoFIngreso.gridx = 2;
+			gbc_lblProductoFIngreso.gridy = 3;
+			pnl_producto.add(lblProductoFIngreso, gbc_lblProductoFIngreso);
 			
 			textProductoFRegistro = new JTextField();
+			textProductoFRegistro.setVisible(false);
 			textProductoFRegistro.setEditable(false);
 			GridBagConstraints gbc_textProductoFRegistro = new GridBagConstraints();
 			gbc_textProductoFRegistro.insets = new Insets(0, 0, 5, 5);
@@ -1218,6 +1233,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(lblNewLabel_10, gbc_lblNewLabel_10);
 			
 			textProductoPresentacion = new JTextField();
+			textProductoPresentacion.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosDecimal(key)) {
+						e.consume();
+					}
+				}
+			});
 			GridBagConstraints gbc_textProductoPresentacion = new GridBagConstraints();
 			gbc_textProductoPresentacion.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoPresentacion.fill = GridBagConstraints.HORIZONTAL;
@@ -1235,6 +1261,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(lblNewLabel_17, gbc_lblNewLabel_17);
 			
 			textProductoCantidad = new JTextField();
+			textProductoCantidad.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+						int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosEnteros(key)) {
+						e.consume();
+					}
+				}
+			});
 			GridBagConstraints gbc_textProductoCantidad = new GridBagConstraints();
 			gbc_textProductoCantidad.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoCantidad.fill = GridBagConstraints.HORIZONTAL;
@@ -1252,6 +1289,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(lblNewLabel_11, gbc_lblNewLabel_11);
 			
 			textProductoMarca = new JTextField();
+			textProductoMarca.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarSoloLetras(key)) {
+						e.consume();
+					}
+				}
+			});
 			GridBagConstraints gbc_textProductoMarca = new GridBagConstraints();
 			gbc_textProductoMarca.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoMarca.fill = GridBagConstraints.HORIZONTAL;
@@ -1366,17 +1414,19 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 						 textProductoMarca.setText(ca.getMarca());
 						 textProductoPresentacion.setText(String.valueOf(ca.getPresentacion()));
 						 textProductoUmedida.setText(ca.getUnidadMedida());
-						 
+						 textProductoPcompra.setText(String.valueOf(ca.getPrecioCompra()));
+						 textProductoPventa.setText(String.valueOf(ca.getPrecioVenta()));
 						 cmbProductoProveedor.setSelectedIndex(buscarIdComboProveedor(ca.getCodProveedor()));
 						 cmbProductoCategoria.setSelectedIndex(buscarIdComboCategoria(ca.getCodCategoria()));
 						 textProductoObservacion.setText(ca.getObservaciones());
 						
-						 textProductoFCaducidad.setDate(controlFormato.cambiarLocaldateToDate(ca.getFechaCaduca()));
-						 textProductoPcompra.setText(String.valueOf(ca.getPrecioCompra()));
-						 textProductoPventa.setText(String.valueOf(ca.getPrecioVenta()));
+						 textProductoFCaducidad.setDate(controlFormato.toDate(ca.getFechaCaduca()));
+						
 						
 						 lblProductoCodBarra.setVisible(true);
 						 textProductoCodBarra.setVisible(true);
+						 lblProductoFIngreso.setVisible(true);
+						 textProductoFRegistro.setVisible(true);
 				       // btnAgregarCategoria.setVisible(false);
 				        btnProductoAgregar.setEnabled(false);
 				        btnProductoModificar.setEnabled(true);
@@ -1440,8 +1490,39 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			 btnProductoAgregar = new JButton("Agregar");
 			 btnProductoAgregar.addActionListener(new ActionListener() {
 			 	public void actionPerformed(ActionEvent e) {
-			 		if (controlFormato.validarFormatoFecha(textProductoFCaducidad.toString())) {
-						Producto producto=new Producto();
+			 		  if (textProductoFCaducidad.getDate()!=null) {
+			 		 	
+			 			
+			 			
+			 			 Proveedor p=(Proveedor)cmbProductoProveedor.getSelectedItem();
+			 			 Categoria c=(Categoria)cmbProductoCategoria.getSelectedItem();
+			 			
+						
+						
+						if (!controlFormato.hayEspaciosVacios(textProductoNombre.getText(),
+								textProductoFormFarmaceutica.getText(),
+								textProductoPventa.getText(),
+								textProductoPcompra.getText(),
+								textProductoCantidad.getText(),
+								textProductoUmedida.getText(),
+								textProductoPresentacion.getText())) {
+
+							Producto producto=new Producto( textProductoNombre.getText(), textProductoCodBarra.getText(), 
+									Double.valueOf( textProductoPcompra.getText()),Double.valueOf( textProductoPventa.getText()), 
+									Integer.parseInt(textProductoCantidad.getText()),textProductoUmedida.getText(),
+									Double.valueOf(textProductoPresentacion.getText()),  textProductoMarca.getText(),
+									controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()),  textProductoObservacion.getText(),
+									textProductoFormFarmaceutica.getText(),
+									c.getCodCategoria(), p.getCodProveedor());
+							productoDao.registrarProducto(producto);
+							limpiarCamposProducto();
+							productoDao.ListarProductoTable(tblProductos);
+							
+						}else {
+							JOptionPane.showMessageDialog(null, "Hay un campo vacio");
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Fecha de caducidad no es correcta");
 					}
 			 		
 			 	}
@@ -1483,6 +1564,8 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			 		limpiarCamposProducto();
 			 		 lblProductoCodBarra.setVisible(false);
 					 textProductoCodBarra.setVisible(false);
+					 lblProductoFIngreso.setVisible(false);
+					 textProductoFRegistro.setVisible(false);
 			       // btnAgregarCategoria.setVisible(false);
 			        btnProductoAgregar.setEnabled(true);
 			        btnProductoModificar.setEnabled(false);

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DateFormatter;
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.entidades.Producto;
@@ -95,6 +97,7 @@ public class ProductoDao {
 	    	   PreparedStatement ps = con.prepareStatement(sql);
 	    	   ResultSet rs = ps.executeQuery();
 	    	   DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+	    	   DateTimeFormatter parser2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	           while (rs.next()) {      
 	        	   
 	               Producto cl = new Producto(rs.getInt("codProducto"),
@@ -107,7 +110,7 @@ public class ProductoDao {
 	            		                      rs.getDouble("presentacion"), 
 	            		                      rs.getString("marca"), 
 	           			LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString(),parser),
-	        			LocalDateTime.parse(rs.getTimestamp("fechaCaduca").toString(),parser), 
+	        			LocalDate.parse(rs.getDate("fechaCaduca").toString(),parser2), 
 	        			rs.getString("observaciones"),
 	        			rs.getString("formaFarmaceutica"),
 	        			rs.getString("nombreCategoria"), 
@@ -147,7 +150,7 @@ public class ProductoDao {
 	                      rs.getDouble("presentacion"), 
 	                      rs.getString("marca"), 
 						LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString()),
-					    LocalDateTime.parse(rs.getTimestamp("fechaCaduca").toString()), 
+					    LocalDate.parse(rs.getTimestamp("fechaCaduca").toString()), 
 					    rs.getString("observaciones"),
 					    rs.getString("formaFarmaceutica"),
 					    rs.getInt("codCategoria"), 
@@ -287,7 +290,7 @@ public class ProductoDao {
 		                      rs.getDouble("presentacion"), 
 		                      rs.getString("marca"), 
 							LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString(),parser ),
-						    LocalDateTime.parse(rs.getTimestamp("fechaCaduca").toString(),parser ), 
+						    LocalDate.parse(rs.getTimestamp("fechaCaduca").toString(),parser ), 
 						    rs.getString("observaciones"),
 						    rs.getString("formaFarmaceutica"),
 						    rs.getInt("codCategoria"), 
