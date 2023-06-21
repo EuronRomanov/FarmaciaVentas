@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import javax.swing.text.MaskFormatter;
 
@@ -85,4 +86,19 @@ public class ControlFormatos {
 		return  Date.from(insta);
 	}
 	
+	public boolean validarFormatoFecha(String strDate) {
+		if (strDate.trim().equals("")) {
+			return false;
+		} else {
+               SimpleDateFormat sdfrmt=new SimpleDateFormat("yyyy-MM-dd");
+               try {
+				Date javaDate=sdfrmt.parse(strDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+               return true;
+		}
+	}
 }
