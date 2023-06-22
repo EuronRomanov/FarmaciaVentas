@@ -1507,13 +1507,22 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 								textProductoUmedida.getText(),
 								textProductoPresentacion.getText())) {
 
-							Producto producto=new Producto( textProductoNombre.getText(), textProductoCodBarra.getText(), 
-									Double.valueOf( textProductoPcompra.getText()),Double.valueOf( textProductoPventa.getText()), 
-									Integer.parseInt(textProductoCantidad.getText()),textProductoUmedida.getText(),
-									Double.valueOf(textProductoPresentacion.getText()),  textProductoMarca.getText(),
-									controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()),  textProductoObservacion.getText(),
+							Producto producto=new Producto(textProductoNombre.getText(), 
+									textProductoCodBarra.getText(),
+									Double.valueOf( textProductoPcompra.getText()),
+									Double.valueOf( textProductoPventa.getText()), 
+									Integer.parseInt(textProductoCantidad.getText()),
+									textProductoUmedida.getText(),
+									Double.valueOf(textProductoPresentacion.getText()), 
+									textProductoMarca.getText(),
+									controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()), 
+									textProductoObservacion.getText(),
 									textProductoFormFarmaceutica.getText(),
-									c.getCodCategoria(), p.getCodProveedor());
+									c.getCodCategoria(), 
+									p.getCodProveedor());
+							
+							
+							
 							productoDao.registrarProducto(producto);
 							limpiarCamposProducto();
 							productoDao.ListarProductoTable(tblProductos);
@@ -1537,6 +1546,64 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			panel_3.add(btnProductoAgregar, gbc_btnProductoAgregar);
 			
 			 btnProductoModificar = new JButton("Modificar");
+			 btnProductoModificar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		 if (textProductoFCaducidad.getDate()!=null) {
+				 		 	
+				 			
+				 			
+			 			 Proveedor p=(Proveedor)cmbProductoProveedor.getSelectedItem();
+			 			 Categoria c=(Categoria)cmbProductoCategoria.getSelectedItem();
+			 			
+						
+						
+						if (!controlFormato.hayEspaciosVacios(textProductoNombre.getText(),
+								textProductoFormFarmaceutica.getText(),
+								textProductoPventa.getText(),
+								textProductoPcompra.getText(),
+								textProductoCantidad.getText(),
+								textProductoUmedida.getText(),
+								textProductoPresentacion.getText())) {
+							
+							 String sql = "UPDATE Producto SET nombreProducto=?, "
+						        		+ "precioCompra=?,"
+						        		+ "precioVenta=?,"
+						        		+ "cantidad=?,"
+						        		+ "unidadMedida=?,"
+						        		+ "presentacion=?,"
+						        		+ "marca=?,"
+						        		+ "fechaCaduca=?,"
+						        		+ "observaciones=?,"
+						        		+ "codCategoria=?,"
+						        		+ "codProveedor=? WHERE codProducto=?";
+							
+							
+							Producto producto=new Producto(Integer.parseInt(textProductoCodigo.getText()) ,
+									textProductoNombre.getText(),
+									Double.valueOf( textProductoPcompra.getText()),
+									Double.valueOf( textProductoPventa.getText()), 
+									Integer.parseInt(textProductoCantidad.getText()),
+									textProductoUmedida.getText(),
+									Double.valueOf(textProductoPresentacion.getText()), 
+									textProductoMarca.getText(),
+									(LocalDate)controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()), 
+									textProductoObservacion.getText(),
+									textProductoFormFarmaceutica.getText(),
+									c.getCodCategoria(),
+									p.getCodProveedor());
+							
+							productoDao.editProducto(producto);
+							limpiarCamposProducto();
+							productoDao.ListarProductoTable(tblProductos);
+							
+						}else {
+							JOptionPane.showMessageDialog(null, "Hay un campo vacio");
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Fecha de caducidad no es correcta");
+					}
+			 	}
+			 });
 			btnProductoModificar.setEnabled(false);
 			GridBagConstraints gbc_btnProductoModificar = new GridBagConstraints();
 			gbc_btnProductoModificar.anchor = GridBagConstraints.SOUTH;
@@ -1548,6 +1615,16 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			panel_3.add(btnProductoModificar, gbc_btnProductoModificar);
 			
 			 btnProductoEliminar = new JButton("Eliminar");
+			 btnProductoEliminar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (textProductoCodigo.getText().length()>0) {
+			 			
+			 			productoDao.deleteProducto(Integer.parseInt(textProductoCodigo.getText()));
+			 			limpiarCamposProducto();
+			 			productoDao.ListarProductoTable(tblProductos);
+					}
+			 	}
+			 });
 			btnProductoEliminar.setEnabled(false);
 			GridBagConstraints gbc_btnProductoEliminar = new GridBagConstraints();
 			gbc_btnProductoEliminar.anchor = GridBagConstraints.SOUTH;

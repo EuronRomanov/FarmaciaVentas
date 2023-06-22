@@ -132,6 +132,73 @@ public class Producto {
 		this.codProveedor = codProveedor;
 		this.formaFarmaceutica=formaFarmaceutica;
 	}
+	
+
+
+
+
+
+
+
+
+
+
+
+	public Producto(int parseInt, String text, Double valueOf, Double valueOf2, int parseInt2, String text2,
+			Double valueOf3, String text3, LocalDate fromDateToLocalDate, String text4, String text5, int codCategoria2,
+			int codProveedor2) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public Producto(int codProducto, String nombreProducto, double precioCompra, double precioVenta, int cantidad,
+			String unidadMedida, double presentacion, String marca,  LocalDate fechaCaduca,
+			String observaciones, String formaFarmaceutica, int codCategoria, int codProveedor) {
+		super();
+		this.codProducto = codProducto;
+		this.nombreProducto = nombreProducto;
+		this.precioCompra = precioCompra;
+		this.precioVenta = precioVenta;
+		this.cantidad = cantidad;
+		this.unidadMedida = unidadMedida;
+		this.presentacion = presentacion;
+		this.marca = marca;
+		
+		this.fechaCaduca = fechaCaduca;
+		this.observaciones = observaciones;
+		this.formaFarmaceutica = formaFarmaceutica;
+		this.codCategoria = codCategoria;
+		this.codProveedor = codProveedor;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public int getCodProducto() {
 		return codProducto;
 	}

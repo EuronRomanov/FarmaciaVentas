@@ -189,6 +189,7 @@ public class ProductoDao {
         		+ "codCategoria=?,"
         		+ "codProveedor=? WHERE codProducto=?";
         try{
+        	System.out.println("Comprobrar Mtodo1"+cl.getFechaCaduca().toString());
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, cl.getNombreProducto());
 	           ps.setDouble(2, cl.getPrecioCompra());
@@ -206,13 +207,14 @@ public class ProductoDao {
 
             ps.executeUpdate();
         }catch(Exception e){
-            e.printStackTrace();
+        	System.out.println("Comprobrar Mtodo2"+cl.getFechaCaduca().toString());
+           // e.printStackTrace();
         }finally{
-            try {
+            /*try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
@@ -230,11 +232,11 @@ public class ProductoDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
