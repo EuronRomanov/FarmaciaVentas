@@ -123,7 +123,7 @@ public class Main extends JFrame {
     private JTextField textProductoMarca;
     private JTextField textProductoFRegistro;
     private JTextField textProductoCantidad;
-    private JTextField textField;
+    private JTextField textProductoBuscar;
     private JTextField textProductoCodigo;
     private JTextField textProductoCodBarra;
     private JTextField textProductoFormFarmaceutica;
@@ -132,6 +132,8 @@ public class Main extends JFrame {
     private JDateChooser textProductoFCaducidad;
     private JFormattedTextField textProductoPcompra, textProductoPventa;
     private  JButton btnProductoAgregar,btnProductoBuscar,btnProductoModificar,btnProductoEliminar,btnProductoCancelar ;
+    private JButton btnVolverCategoriaProducto;
+    private JButton btnProveedorRegresarProducto;
 	/**
 	 * Launch the application. 
 	 * author : 
@@ -206,7 +208,7 @@ public class Main extends JFrame {
 				productoDao.ListarProductoTable(tblProductos);
 				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
 				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
-				
+				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
 			}
 		});
 		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
@@ -353,9 +355,9 @@ public class Main extends JFrame {
 				if(textBuscarCategoria.getText().length()>0) {
 					categoriaDao.searchCategoria(textBuscarCategoria.getText(), tblCategoria);
 				}else {
-					limpiarTableCategoria();
-					//categoriaDao.ListarCategoriaTable(tblCategoria);
-					listarCategoriaTable();
+					//limpiarTableCategoria();
+					categoriaDao.ListarCategoriaTable(tblCategoria);
+					//listarCategoriaTable();
 				}
 			}
 		});
@@ -401,21 +403,33 @@ public class Main extends JFrame {
 		String [] columnas=new String[] {
 				"Codigo", "Nombre"
 			};
-		tblCategoria.setModel(new DefaultTableModel(data,columnas){
-			public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
+		tblCategoria.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Codigo", "Nombre"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
 		});
-		
-		
-
-		tblCategoria.getColumnModel().getColumn(0).setPreferredWidth(15);
-		tblCategoria.getColumnModel().getColumn(1).setPreferredWidth(621);
+		tblCategoria.getColumnModel().getColumn(0).setPreferredWidth(332);
+		tblCategoria.getColumnModel().getColumn(1).setPreferredWidth(293);
 		GridBagConstraints gbc_tblCategoria = new GridBagConstraints();
+		JScrollPane scrollPane_2 = new JScrollPane();
 		gbc_tblCategoria.gridwidth = 22;
 		gbc_tblCategoria.insets = new Insets(0, 0, 0, 5);
 		gbc_tblCategoria.fill = GridBagConstraints.BOTH;
 		gbc_tblCategoria.gridx = 0;
 		gbc_tblCategoria.gridy = 2;
-		pnl_categoria.add(tblCategoria, gbc_tblCategoria);
+		pnl_categoria.add(scrollPane_2, gbc_tblCategoria);
+		scrollPane_2.setViewportView(tblCategoria);
+	
+		
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setOpaque(false);
@@ -427,9 +441,9 @@ public class Main extends JFrame {
 		pnl_categoria.add(panel_2, gbc_panel_2);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
 		gbl_panel_2.columnWidths = new int[]{172, 0, 0};
-		gbl_panel_2.rowHeights = new int[]{20, 30, 56, 40, 40, 40, 40, 0};
+		gbl_panel_2.rowHeights = new int[]{20, 30, 56, 40, 40, 40, 40, 0, 0};
 		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_2.setLayout(gbl_panel_2);
 		
 		textCodCategoria = new JTextField();
@@ -457,10 +471,11 @@ public class Main extends JFrame {
 				
 				if (!controlFormato.hayEspaciosVacios(campos)) {
 					categoriaDao.registrarCategoria(new Categoria(textNombreCategoria.getText()));
-					limpiarTableCategoria();
-					//categoriaDao.ListarCategoriaTable(tblCategoria);
-					listarCategoriaTable();
+					//limpiarTableCategoria();
+					categoriaDao.ListarCategoriaTable(tblCategoria);
 					limpiarCamposCategoria();
+					//listarCategoriaTable();
+					
 				}else {
 					JOptionPane.showMessageDialog(null, "Hay un campo vacio");
 				}
@@ -495,9 +510,10 @@ public class Main extends JFrame {
 		panel_2.add(textNombreCategoria, gbc_textNombreCategoria);
 		textNombreCategoria.setColumns(10);
 		GridBagConstraints gbc_btnAgregarCategoria = new GridBagConstraints();
+		gbc_btnAgregarCategoria.gridwidth = 2;
 		gbc_btnAgregarCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_btnAgregarCategoria.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAgregarCategoria.insets = new Insets(0, 0, 5, 0);
 		gbc_btnAgregarCategoria.gridx = 0;
 		gbc_btnAgregarCategoria.gridy = 3;
 		panel_2.add(btnAgregarCategoria, gbc_btnAgregarCategoria);
@@ -515,8 +531,9 @@ public class Main extends JFrame {
 			        btnCancelar.setVisible(false);
 			        
 			        limpiarCamposCategoria();
-			        limpiarTableCategoria();
-			        listarCategoriaTable();
+			        categoriaDao.ListarCategoriaTable(tblCategoria);
+			        //limpiarTableCategoria();
+			       //listarCategoriaTable();
 				}
 		 		
 		 	}
@@ -524,9 +541,10 @@ public class Main extends JFrame {
 		btnEliminarCategoria.setEnabled(false);
 		btnEliminarCategoria.setOpaque(true);
 		GridBagConstraints gbc_btnEliminarCategoria = new GridBagConstraints();
+		gbc_btnEliminarCategoria.gridwidth = 2;
 		gbc_btnEliminarCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_btnEliminarCategoria.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnEliminarCategoria.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminarCategoria.insets = new Insets(0, 0, 5, 0);
 		gbc_btnEliminarCategoria.gridx = 0;
 		gbc_btnEliminarCategoria.gridy = 4;
 		panel_2.add(btnEliminarCategoria, gbc_btnEliminarCategoria);
@@ -540,9 +558,9 @@ public class Main extends JFrame {
 				if (categoriaActualizar.length()>0) {
 					Categoria ca=new Categoria(Integer.parseInt(textCodCategoria.getText()), textNombreCategoria.getText());
 					categoriaDao.editCategoria(ca);
-					limpiarTableCategoria();
-					//categoriaDao.ListarCategoriaTable(tblCategoria);
-					listarCategoriaTable();
+					//limpiarTableCategoria();
+					categoriaDao.ListarCategoriaTable(tblCategoria);
+					//listarCategoriaTable();
 				} else {
 
 				}
@@ -558,9 +576,10 @@ public class Main extends JFrame {
 			}
 		});
 		GridBagConstraints gbc_btnActualizarCategoria = new GridBagConstraints();
+		gbc_btnActualizarCategoria.gridwidth = 2;
 		gbc_btnActualizarCategoria.anchor = GridBagConstraints.NORTH;
 		gbc_btnActualizarCategoria.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnActualizarCategoria.insets = new Insets(0, 0, 5, 5);
+		gbc_btnActualizarCategoria.insets = new Insets(0, 0, 5, 0);
 		gbc_btnActualizarCategoria.gridx = 0;
 		gbc_btnActualizarCategoria.gridy = 5;
 		panel_2.add(btnActualizarCategoria, gbc_btnActualizarCategoria);
@@ -582,10 +601,30 @@ public class Main extends JFrame {
 		 btnCancelar.setVisible(false);
 		 btnCancelar.setOpaque(true);
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
-		gbc_btnCancelar.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCancelar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnCancelar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnCancelar.gridwidth = 2;
 		gbc_btnCancelar.gridx = 0;
 		gbc_btnCancelar.gridy = 6;
 		panel_2.add(btnCancelar, gbc_btnCancelar);
+		
+		btnVolverCategoriaProducto = new JButton("Volver");
+		btnVolverCategoriaProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
+				tabPane_Vistas.remove(tabPane_Vistas.indexOfTab("Categoria"));
+				productoDao.ListarProductoTable(tblProductos);
+				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
+				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
+			}
+		});
+		GridBagConstraints gbc_btnVolverCategoriaProducto = new GridBagConstraints();
+		gbc_btnVolverCategoriaProducto.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnVolverCategoriaProducto.gridwidth = 2;
+		gbc_btnVolverCategoriaProducto.insets = new Insets(0, 0, 0, 5);
+		gbc_btnVolverCategoriaProducto.gridx = 0;
+		gbc_btnVolverCategoriaProducto.gridy = 7;
+		panel_2.add(btnVolverCategoriaProducto, gbc_btnVolverCategoriaProducto);
 		
 		
 		
@@ -610,9 +649,9 @@ public class Main extends JFrame {
 			tabPane_Vistas.add("Proveedor",pnl_proveedor);
 			GridBagLayout gbl_pnl_proveedor = new GridBagLayout();
 			gbl_pnl_proveedor.columnWidths = new int[]{615, 334, -172, 0};
-			gbl_pnl_proveedor.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 34, 94, 0, 0, 0, 0, 0};
+			gbl_pnl_proveedor.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 34, 94, 0, 0, 0, 0, 0, 0};
 			gbl_pnl_proveedor.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
-			gbl_pnl_proveedor.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_pnl_proveedor.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			pnl_proveedor.setLayout(gbl_pnl_proveedor);
 			
 			JPanel pnl_FormProveedor = new JPanel();
@@ -816,7 +855,7 @@ public class Main extends JFrame {
 				}
 			});
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-			gbc_scrollPane.gridheight = 6;
+			gbc_scrollPane.gridheight = 7;
 			gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 			gbc_scrollPane.fill = GridBagConstraints.BOTH;
 			gbc_scrollPane.gridx = 0;
@@ -909,36 +948,36 @@ public class Main extends JFrame {
 			pnl_proveedor.add(btnBuscarProveedor, gbc_btnBuscarProveedor);
 			
 		    btnAgregarProveedor = new JButton("Agregar");
-			btnAgregarProveedor.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					Proveedor pro=new Proveedor(textNombreProveedor.getText(),
-							textNombreRepresentante.getText(),
-							textDireccionProveedor.getText(),
-							textCelularproveedor.getText(),
-							textTelefonoProveedor.getText(),
-							textRucProveedor.getText());
-					
-					if (!controlFormato.hayEspaciosVacios(pro.getNombreProveedor())) {
-						proveedorDao.registrarProveedor(pro);
-						limpiarCamposProveedor();
-						//limpiarTableProveedor();
-						proveedorDao.ListarProveedorTable(tblProveedores);
-					} else {
-						 JOptionPane.showMessageDialog(null, "Se detectó un campo vacio");
-					}
-					
-				}
+		    btnAgregarProveedor.addActionListener(new ActionListener() {
+		    	public void actionPerformed(ActionEvent e) {
+		    		
+		    		Proveedor pro=new Proveedor(textNombreProveedor.getText(),
+		    				textNombreRepresentante.getText(),
+		    				textDireccionProveedor.getText(),
+		    				textCelularproveedor.getText(),
+		    				textTelefonoProveedor.getText(),
+		    				textRucProveedor.getText());
+		    		
+		    		if (!controlFormato.hayEspaciosVacios(pro.getNombreProveedor())) {
+		    			proveedorDao.registrarProveedor(pro);
+		    			limpiarCamposProveedor();
+		    			//limpiarTableProveedor();
+		    			proveedorDao.ListarProveedorTable(tblProveedores);
+		    		} else {
+		    			 JOptionPane.showMessageDialog(null, "Se detectó un campo vacio");
+		    		}
+		    		
+		    	}
 
-				
-			});
-			btnAgregarProveedor.setPreferredSize(new Dimension(240, 23));
-			GridBagConstraints gbc_btnAgregarProveedor = new GridBagConstraints();
-			gbc_btnAgregarProveedor.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnAgregarProveedor.insets = new Insets(0, 0, 5, 5);
-			gbc_btnAgregarProveedor.gridx = 1;
-			gbc_btnAgregarProveedor.gridy = 9;
-			pnl_proveedor.add(btnAgregarProveedor, gbc_btnAgregarProveedor);
+		    	
+		    });
+		    btnAgregarProveedor.setPreferredSize(new Dimension(240, 23));
+		    GridBagConstraints gbc_btnAgregarProveedor = new GridBagConstraints();
+		    gbc_btnAgregarProveedor.fill = GridBagConstraints.HORIZONTAL;
+		    gbc_btnAgregarProveedor.insets = new Insets(0, 0, 5, 5);
+		    gbc_btnAgregarProveedor.gridx = 1;
+		    gbc_btnAgregarProveedor.gridy = 9;
+		    pnl_proveedor.add(btnAgregarProveedor, gbc_btnAgregarProveedor);
 			
 			
 			 btnModificarProveedor = new JButton("Modificar");
@@ -969,13 +1008,13 @@ public class Main extends JFrame {
 			        limpiarCamposProveedor(); 
 			 	}
 			 });
-			btnModificarProveedor.setEnabled(false);
-			GridBagConstraints gbc_btnModificarProveedor = new GridBagConstraints();
-			gbc_btnModificarProveedor.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnModificarProveedor.insets = new Insets(0, 0, 5, 5);
-			gbc_btnModificarProveedor.gridx = 1;
-			gbc_btnModificarProveedor.gridy = 10;
-			pnl_proveedor.add(btnModificarProveedor, gbc_btnModificarProveedor);
+			 btnModificarProveedor.setEnabled(false);
+			 GridBagConstraints gbc_btnModificarProveedor = new GridBagConstraints();
+			 gbc_btnModificarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			 gbc_btnModificarProveedor.insets = new Insets(0, 0, 5, 5);
+			 gbc_btnModificarProveedor.gridx = 1;
+			 gbc_btnModificarProveedor.gridy = 10;
+			 pnl_proveedor.add(btnModificarProveedor, gbc_btnModificarProveedor);
 			
 			 btnEliminarProveedor = new JButton("Eliminar");
 			 btnEliminarProveedor.addActionListener(new ActionListener() {
@@ -994,13 +1033,13 @@ public class Main extends JFrame {
 					}
 			 	}
 			 });
-			btnEliminarProveedor.setEnabled(false);
-			GridBagConstraints gbc_btnEliminarProveedor = new GridBagConstraints();
-			gbc_btnEliminarProveedor.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnEliminarProveedor.insets = new Insets(0, 0, 5, 5);
-			gbc_btnEliminarProveedor.gridx = 1;
-			gbc_btnEliminarProveedor.gridy = 11;
-			pnl_proveedor.add(btnEliminarProveedor, gbc_btnEliminarProveedor);
+			 btnEliminarProveedor.setEnabled(false);
+			 GridBagConstraints gbc_btnEliminarProveedor = new GridBagConstraints();
+			 gbc_btnEliminarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			 gbc_btnEliminarProveedor.insets = new Insets(0, 0, 5, 5);
+			 gbc_btnEliminarProveedor.gridx = 1;
+			 gbc_btnEliminarProveedor.gridy = 11;
+			 pnl_proveedor.add(btnEliminarProveedor, gbc_btnEliminarProveedor);
 			
 			 btnCancelarProveedor = new JButton("Cancelar");
 			 btnCancelarProveedor.addActionListener(new ActionListener() {
@@ -1015,13 +1054,31 @@ public class Main extends JFrame {
 			 		
 			 	}
 			 });
-			btnCancelarProveedor.setVisible(false);
-			GridBagConstraints gbc_btnCancelarProveedor = new GridBagConstraints();
-			gbc_btnCancelarProveedor.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnCancelarProveedor.insets = new Insets(0, 0, 0, 5);
-			gbc_btnCancelarProveedor.gridx = 1;
-			gbc_btnCancelarProveedor.gridy = 12;
-			pnl_proveedor.add(btnCancelarProveedor, gbc_btnCancelarProveedor);
+			 btnCancelarProveedor.setVisible(false);
+			 GridBagConstraints gbc_btnCancelarProveedor = new GridBagConstraints();
+			 gbc_btnCancelarProveedor.fill = GridBagConstraints.HORIZONTAL;
+			 gbc_btnCancelarProveedor.insets = new Insets(0, 0, 5, 5);
+			 gbc_btnCancelarProveedor.gridx = 1;
+			 gbc_btnCancelarProveedor.gridy = 12;
+			 pnl_proveedor.add(btnCancelarProveedor, gbc_btnCancelarProveedor);
+			 
+			 btnProveedorRegresarProducto = new JButton("Regresar");
+			 btnProveedorRegresarProducto.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		
+					tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
+					tabPane_Vistas.remove(tabPane_Vistas.indexOfTab("Proveedor"));
+					productoDao.ListarProductoTable(tblProductos);
+					proveedorDao.cargarListaProveedor(cmbProductoProveedor);
+					categoriaDao.cargarListaCategorias(cmbProductoCategoria);
+			 	}
+			 });
+			 GridBagConstraints gbc_btnProveedorRegresarProducto = new GridBagConstraints();
+			 gbc_btnProveedorRegresarProducto.fill = GridBagConstraints.HORIZONTAL;
+			 gbc_btnProveedorRegresarProducto.insets = new Insets(0, 0, 0, 5);
+			 gbc_btnProveedorRegresarProducto.gridx = 1;
+			 gbc_btnProveedorRegresarProducto.gridy = 13;
+			 pnl_proveedor.add(btnProveedorRegresarProducto, gbc_btnProveedorRegresarProducto);
 tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			
 			
@@ -1080,6 +1137,14 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(cmbProductoCategoria, gbc_cmbProductoCategoria);
 			
 			JButton btnProductoAddCategoria = new JButton("");
+			btnProductoAddCategoria.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tabPane_Vistas.remove(tabPane_Vistas.indexOfTab("Productos"));
+					tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+					categoriaDao.ListarCategoriaTable(tblCategoria);
+					tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Categoria"));
+				}
+			});
 			btnProductoAddCategoria.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/boton-agregar.png")));
 			GridBagConstraints gbc_btnProductoAddCategoria = new GridBagConstraints();
 			gbc_btnProductoAddCategoria.anchor = GridBagConstraints.WEST;
@@ -1133,6 +1198,18 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(cmbProductoProveedor, gbc_cmbProductoProveedor);
 			
 			JButton btnProductoAddProveedor = new JButton("");
+			btnProductoAddProveedor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					tabPane_Vistas.remove(tabPane_Vistas.indexOfTab("Productos"));
+					tabPane_Vistas.add("Proveedor",pnl_proveedor);
+					proveedorDao.ListarProveedorTable(tblProveedores);
+					tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Proveedor"));
+					
+					
+				}
+			});
 			btnProductoAddProveedor.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/boton-agregar.png")));
 			GridBagConstraints gbc_btnProductoAddProveedor = new GridBagConstraints();
 			gbc_btnProductoAddProveedor.insets = new Insets(0, 0, 5, 5);
@@ -1326,6 +1403,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(lblNewLabel_18, gbc_lblNewLabel_18);
 			
 			textProductoFormFarmaceutica = new JTextField();
+			textProductoFormFarmaceutica.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarSoloLetras(key) ) {
+						e.consume();
+					}
+				}
+			});
 			GridBagConstraints gbc_textProductoFormFarmaceutica = new GridBagConstraints();
 			gbc_textProductoFormFarmaceutica.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoFormFarmaceutica.fill = GridBagConstraints.HORIZONTAL;
@@ -1466,18 +1554,27 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			gbl_panel_3.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			panel_3.setLayout(gbl_panel_3);
 			
-			textField = new JTextField();
-			GridBagConstraints gbc_textField = new GridBagConstraints();
-			gbc_textField.gridwidth = 11;
-			gbc_textField.insets = new Insets(0, 0, 5, 0);
-			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField.gridx = 0;
-			gbc_textField.gridy = 0;
-			panel_3.add(textField, gbc_textField);
-			textField.setColumns(10);
+			textProductoBuscar = new JTextField();
+			GridBagConstraints gbc_textProductoBuscar = new GridBagConstraints();
+			gbc_textProductoBuscar.gridwidth = 11;
+			gbc_textProductoBuscar.insets = new Insets(0, 0, 5, 0);
+			gbc_textProductoBuscar.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoBuscar.gridx = 0;
+			gbc_textProductoBuscar.gridy = 0;
+			panel_3.add(textProductoBuscar, gbc_textProductoBuscar);
+			textProductoBuscar.setColumns(10);
 			
 			
 			 btnProductoBuscar = new JButton("Buscar");
+			 btnProductoBuscar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (textProductoBuscar.getText().length()>0) {
+						productoDao.searchProducto(textProductoBuscar.getText(), tblProductos);
+					} else {
+						productoDao.ListarProductoTable(tblProductos);
+					}
+			 	}
+			 });
 			GridBagConstraints gbc_btnProductoBuscar = new GridBagConstraints();
 			gbc_btnProductoBuscar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnProductoBuscar.anchor = GridBagConstraints.NORTH;
@@ -1558,6 +1655,7 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 						
 						
 						if (!controlFormato.hayEspaciosVacios(textProductoNombre.getText(),
+								textProductoCodigo.getText(),
 								textProductoFormFarmaceutica.getText(),
 								textProductoPventa.getText(),
 								textProductoPcompra.getText(),
@@ -1565,32 +1663,24 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 								textProductoUmedida.getText(),
 								textProductoPresentacion.getText())) {
 							
-							 String sql = "UPDATE Producto SET nombreProducto=?, "
-						        		+ "precioCompra=?,"
-						        		+ "precioVenta=?,"
-						        		+ "cantidad=?,"
-						        		+ "unidadMedida=?,"
-						        		+ "presentacion=?,"
-						        		+ "marca=?,"
-						        		+ "fechaCaduca=?,"
-						        		+ "observaciones=?,"
-						        		+ "codCategoria=?,"
-						        		+ "codProveedor=? WHERE codProducto=?";
 							
 							
-							Producto producto=new Producto(Integer.parseInt(textProductoCodigo.getText()) ,
-									textProductoNombre.getText(),
-									Double.valueOf( textProductoPcompra.getText()),
-									Double.valueOf( textProductoPventa.getText()), 
-									Integer.parseInt(textProductoCantidad.getText()),
-									textProductoUmedida.getText(),
-									Double.valueOf(textProductoPresentacion.getText()), 
-									textProductoMarca.getText(),
-									(LocalDate)controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()), 
-									textProductoObservacion.getText(),
-									textProductoFormFarmaceutica.getText(),
-									c.getCodCategoria(),
-									p.getCodProveedor());
+							
+							Producto producto=new Producto();
+							      producto.setCodProducto(Integer.parseInt(textProductoCodigo.getText()));    
+							      producto.setNombreProducto(textProductoNombre.getText());	
+							      producto.setPrecioCompra(Double.valueOf( textProductoPcompra.getText()));
+							      producto.setPrecioVenta(Double.valueOf( textProductoPventa.getText()));
+									producto.setCantidad(Integer.parseInt(textProductoCantidad.getText())); 
+									producto.setUnidadMedida(textProductoUmedida.getText());
+									producto.setPresentacion(Double.valueOf(textProductoPresentacion.getText()));
+									producto.setMarca(textProductoMarca.getText());
+									producto.setFechaCaduca(controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()));
+									producto.setObservaciones(textProductoObservacion.getText());
+									producto.setFormaFarmaceutica(textProductoFormFarmaceutica.getText());
+								    producto.setCodCategoria(c.getCodCategoria());
+									producto.setCodProveedor(p.getCodProveedor());
+									
 							
 							productoDao.editProducto(producto);
 							limpiarCamposProducto();
@@ -1707,21 +1797,8 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 
 	    }
 	
-	 private void limpiarTableCategoria() {
-	        tmp = (DefaultTableModel) tblCategoria.getModel();
-	        int fila = tblCategoria.getRowCount();
-	        for (int i = 0; i < fila; i++) {
-	            tmp.removeRow(0);
-	        }
-	    }
-	 private void limpiarTableProveedor() {
-		 
-	        tmp = (DefaultTableModel) tblProveedores.getModel();
-	        int fila = tblProveedores.getRowCount();
-	        for (int i = 0; i < fila; i++) {
-	            tmp.removeRow(0);
-	        }
-	    }
+	
+	
 	 private void limpiarCamposCategoria() {
 			textNombreCategoria.setText("");
 			textCodCategoria.setText("");
@@ -1765,15 +1842,15 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
-			tabPane_Vistas.add("Proveedor",pnl_proveedor);
-tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
+			//tabPane_Vistas.add("Proveedor",pnl_proveedor);
+			tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			
 			
 			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
 		
 			tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 			
-			tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+			//tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
 	 }
 	
 }
