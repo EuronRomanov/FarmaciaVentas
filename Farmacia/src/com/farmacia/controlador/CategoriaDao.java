@@ -22,16 +22,8 @@ import com.farmacia.entidades.Proveedor;
 
 public class CategoriaDao {
 	private static Connection con=ConexionBD.conectar();
-	Object[][] data=new Object[][] {
-	};
-	String [] columnas=new String[] {
-			"Codigo", "Nombre"
-		};
-	private DefaultTableModel modelo = new DefaultTableModel(data,columnas){
-	    private static final long serialVersionUID = 1L;
-
-		public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
-	};
+	
+	private DefaultTableModel modelo;
 	
 	
 	
@@ -97,7 +89,7 @@ public class CategoriaDao {
      */
     public DefaultTableModel searchCategoria(String key,JTable tblCategoria){
     	
-    	DefaultTableModel modelo=new DefaultTableModel();
+    
     	modelo=(DefaultTableModel) tblCategoria.getModel();
     	 modelo.setRowCount(0);
          String datos[]=new String[2];
@@ -215,6 +207,7 @@ public class CategoriaDao {
     	
         List<Categoria> ListarCl = this.ListarCategoria();
         modelo = (DefaultTableModel) tblCategoria.getModel();
+        modelo.setRowCount(0);
         Object[] ob = new Object[2];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodCategoria();
