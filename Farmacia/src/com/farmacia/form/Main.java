@@ -14,6 +14,7 @@ import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.JLayeredPane;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -45,9 +46,11 @@ import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Proveedor;
 import com.farmacia.utils.ControlFormatos;
+import com.farmacia.utils.GenerdorDocumentos;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -134,7 +137,11 @@ public class Main extends JFrame {
     private  JButton btnProductoAgregar,btnProductoBuscar,btnProductoModificar,btnProductoEliminar,btnProductoCancelar ;
     private JButton btnVolverCategoriaProducto;
     private JButton btnProveedorRegresarProducto;
-	/**
+    private JTextField textProductoCantCodBarras;
+    private JLabel lblProductoCantCodBarras;
+    private JButton btnProductoDescarga;
+	
+    /**
 	 * Launch the application. 
 	 * author : 
 	 */
@@ -156,7 +163,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1132, 573);
+		setBounds(100, 100, 1156, 573);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -205,6 +212,9 @@ public class Main extends JFrame {
 				//listarCategoriaTable();
 				//limpiarTableProveedor();
 				//proveedorDao.ListarProveedorTable(tblProveedores);
+				
+				
+				
 				productoDao.ListarProductoTable(tblProductos);
 				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
 				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
@@ -1474,6 +1484,63 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			pnl_producto.add(textProductoCodigo, gbc_textProductoCodigo);
 			textProductoCodigo.setColumns(10);
 			
+			textProductoCantCodBarras = new JTextField();
+			textProductoCantCodBarras.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+						int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarNumerosEnteros(key)) {
+						e.consume();
+					}
+				}
+			});
+			textProductoCantCodBarras.setVisible(false);
+			
+			lblProductoCantCodBarras = new JLabel("Cantidad de Cod. de barras");
+			lblProductoCantCodBarras.setVisible(false);
+			GridBagConstraints gbc_lblProductoCantCodBarras = new GridBagConstraints();
+			gbc_lblProductoCantCodBarras.insets = new Insets(0, 0, 5, 5);
+			gbc_lblProductoCantCodBarras.anchor = GridBagConstraints.WEST;
+			gbc_lblProductoCantCodBarras.gridx = 2;
+			gbc_lblProductoCantCodBarras.gridy = 7;
+			pnl_producto.add(lblProductoCantCodBarras, gbc_lblProductoCantCodBarras);
+			GridBagConstraints gbc_textProductoCantCodBarras = new GridBagConstraints();
+			gbc_textProductoCantCodBarras.insets = new Insets(0, 0, 5, 5);
+			gbc_textProductoCantCodBarras.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textProductoCantCodBarras.gridx = 3;
+			gbc_textProductoCantCodBarras.gridy = 7;
+			pnl_producto.add(textProductoCantCodBarras, gbc_textProductoCantCodBarras);
+			textProductoCantCodBarras.setColumns(10);
+			
+			btnProductoDescarga = new JButton("");
+			btnProductoDescarga.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser selectCarpeta=new JFileChooser();
+					selectCarpeta.setCurrentDirectory(new File("."));
+					selectCarpeta.setDialogTitle("Seleccionar la carpeta para guardar los archivos");
+					selectCarpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					selectCarpeta.setAcceptAllFileFilterUsed(false);
+					if (selectCarpeta.showOpenDialog(contentPane)==JFileChooser.APPROVE_OPTION) {
+						
+						
+						GenerdorDocumentos generador=new GenerdorDocumentos();
+						if (!controlFormato.hayEspaciosVacios(textProductoCodBarra.getText(),textProductoCantCodBarras.getText())) {
+							generador.generarPDFs(textProductoCodBarra.getText(),Integer.parseInt(textProductoCantCodBarras.getText()) ,selectCarpeta.getSelectedFile().toPath().toString());
+						}
+						
+					}
+				}
+			});
+			btnProductoDescarga.setVisible(false);
+			btnProductoDescarga.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/download-icon.png")));
+			GridBagConstraints gbc_btnProductoDescarga = new GridBagConstraints();
+			gbc_btnProductoDescarga.insets = new Insets(0, 0, 5, 5);
+			gbc_btnProductoDescarga.gridx = 4;
+			gbc_btnProductoDescarga.gridy = 7;
+			pnl_producto.add(btnProductoDescarga, gbc_btnProductoDescarga);
+			
 			JScrollPane scrollPane_1 = new JScrollPane();
 			GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 			gbc_scrollPane_1.gridwidth = 5;
@@ -1515,6 +1582,9 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 						 textProductoCodBarra.setVisible(true);
 						 lblProductoFIngreso.setVisible(true);
 						 textProductoFRegistro.setVisible(true);
+						 lblProductoCantCodBarras.setVisible(true);
+						 textProductoCantCodBarras.setVisible(true);
+						 btnProductoDescarga.setVisible(true);
 				       // btnAgregarCategoria.setVisible(false);
 				        btnProductoAgregar.setEnabled(false);
 				        btnProductoModificar.setEnabled(true);
@@ -1733,6 +1803,9 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 					 textProductoCodBarra.setVisible(false);
 					 lblProductoFIngreso.setVisible(false);
 					 textProductoFRegistro.setVisible(false);
+					 lblProductoCantCodBarras.setVisible(false);
+					 textProductoCantCodBarras.setVisible(false);
+					 btnProductoDescarga.setVisible(false);
 			       // btnAgregarCategoria.setVisible(false);
 			        btnProductoAgregar.setEnabled(true);
 			        btnProductoModificar.setEnabled(false);
@@ -1831,6 +1904,7 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 		 textProductoFCaducidad.setDate(null);
 		 textProductoPcompra.setText("");
 		 textProductoPventa.setText("");
+		 textProductoCantCodBarras.setText("");
 		 
 	 }
 	 
