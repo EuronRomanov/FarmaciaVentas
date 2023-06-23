@@ -78,6 +78,9 @@ import javax.swing.JScrollPane;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTextArea;
 import javax.swing.JFormattedTextField;
+import java.awt.TextField;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 
 public class Main extends JFrame {
@@ -140,6 +143,7 @@ public class Main extends JFrame {
     private JTextField textProductoCantCodBarras;
     private JLabel lblProductoCantCodBarras;
     private JButton btnProductoDescarga;
+    private JTextField textField;
 	
     /**
 	 * Launch the application. 
@@ -314,6 +318,8 @@ public class Main extends JFrame {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnVentas.setBackground(new Color(174,214, 241));
+		 		textField.requestFocus();
+
 			}
 			
 			public void mouseExited(MouseEvent e) {
@@ -653,6 +659,23 @@ public class Main extends JFrame {
 		
 		
 		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
+		 
+		 textField = new JTextField(); 
+		 textField.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		textField.requestFocus();
+		 	}
+		 });
+		
+		
+		 textField.addFocusListener(new FocusAdapter() {
+		 	@Override
+		 	public void focusGained(FocusEvent e) {
+		 		
+		 	}
+		 });
+		 pnl_vendedores.add(textField);
+		 textField.setColumns(10);
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
