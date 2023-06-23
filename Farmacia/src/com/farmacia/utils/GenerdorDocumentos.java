@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 
 import javax.swing.JFileChooser;
@@ -19,6 +22,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.Barcode39;
 import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -33,28 +37,30 @@ public class GenerdorDocumentos {
 			//BufferedWriter writer=Files.newBufferedWriter(Paths.get(carpetaSeleccionada.getAbsolutePath()+File.separator+"codigo.pdf"));
 
 			//String h=Paths.get(carpetaSeleccionada.getAbsolutePath()+File.separator+"codigo.pdf").toString();
-			String h=carpetaSeleccionada.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/codigo1.pdf";
+			LocalDateTime hora = LocalDateTime.now();
+	        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+	        //System.out.println(hora.format(f));
+			String h=carpetaSeleccionada.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/codigo"+hora.format(f)+".pdf";
 			//System.out.println("Desde metodo "+h);
 			Document doc=new Document(PageSize.A4);
 			
 			PdfWriter pdf=PdfWriter.getInstance(doc, new FileOutputStream(h));
 			pdf.open();
 			doc.open();
-			BarcodeEAN code=new BarcodeEAN();
+			Barcode39 code=new Barcode39();
 			code.setCode(codigo);
 			Image img=code.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-			
+			//img.scaleToFit(200, 200);
 			 PdfPTable table = new PdfPTable(2);
-			 PdfPCell cell1 = new PdfPCell(img);
+			 table.setWidthPercentage(100);
+			 PdfPCell cell1 = new PdfPCell();
 			 for (int i = 0; i <= cantidad; i++) {
 				  cell1 = new PdfPCell(img);
 				 cell1.setPadding(10);
 				 
 				 table.addCell(cell1);
 			}
-			 cell1 = new PdfPCell(img);
-			 cell1.setPadding(10);
-			 table.addCell(cell1);
+			
 			
 		doc.add(table);
 		
