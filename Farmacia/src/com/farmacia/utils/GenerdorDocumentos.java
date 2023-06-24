@@ -50,7 +50,7 @@ public class GenerdorDocumentos {
 			Barcode39 code=new Barcode39();
 			code.setCode(codigo);
 			Image img=code.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-			//img.scaleToFit(200, 200);
+			//img.scaleToFit(100, 100);
 			 PdfPTable table = new PdfPTable(2);
 			 table.setWidthPercentage(100);
 			 PdfPCell cell1 = new PdfPCell();

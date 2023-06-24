@@ -144,6 +144,11 @@ public class Main extends JFrame {
     private JLabel lblProductoCantCodBarras;
     private JButton btnProductoDescarga;
     private JTextField textField;
+    private JPanel pnlVentasHeader;
+    private JPanel pnlVentasFooter;
+    private JScrollPane scrollPane_3;
+    private JTable tblVentas;
+    private JTextField textField_1;
 	
     /**
 	 * Launch the application. 
@@ -657,7 +662,31 @@ public class Main extends JFrame {
 			tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 		}*/
 		
+		tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
+		pnl_ventas.setLayout(new BorderLayout(0, 0));
 		
+		pnlVentasHeader = new JPanel();
+		pnl_ventas.add(pnlVentasHeader, BorderLayout.NORTH);
+		pnlVentasHeader.setLayout(new GridLayout(3, 3, 0, 0));
+		
+		JLabel lblNewLabel_16 = new JLabel("New label");
+		pnlVentasHeader.add(lblNewLabel_16);
+		
+		textField_1 = new JTextField();
+		pnlVentasHeader.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JButton btnNewButton = new JButton("New button");
+		pnlVentasHeader.add(btnNewButton);
+		
+		pnlVentasFooter = new JPanel();
+		pnl_ventas.add(pnlVentasFooter, BorderLayout.SOUTH);
+		
+		scrollPane_3 = new JScrollPane();
+		pnl_ventas.add(scrollPane_3, BorderLayout.CENTER);
+		
+		tblVentas = new JTable();
+		scrollPane_3.setViewportView(tblVentas);
 		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
 		 
 		 textField = new JTextField(); 
@@ -1949,5 +1978,4 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			
 			//tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
 	 }
-	
 }
