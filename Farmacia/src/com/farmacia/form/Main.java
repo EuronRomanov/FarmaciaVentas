@@ -697,7 +697,12 @@ public class Main extends JFrame {
 		textVentasCodProd.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				int key=e.getKeyChar();
 				
+				
+				if (controlFormato.validarNumerosEnteros(key)) {
+					e.consume();
+				}
 			}
 		});
 		panel_4.add(textVentasCodProd);
@@ -706,6 +711,12 @@ public class Main extends JFrame {
 		JButton btnNewButton_1 = new JButton("Agregar");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if (	textVentasCodProd.getText().length()>10) {
+					productoDao.agregarProductoProCodigo(textVentasCodProd.getText(), tblVentas);
+					textVentasCodProd.setText("");
+					textVentasCodProd.requestFocus();
+				}
 				
 			}
 		});
