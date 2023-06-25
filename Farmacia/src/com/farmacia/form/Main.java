@@ -81,6 +81,7 @@ import javax.swing.JFormattedTextField;
 import java.awt.TextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.Component;
 
 
 public class Main extends JFrame {
@@ -144,11 +145,13 @@ public class Main extends JFrame {
     private JLabel lblProductoCantCodBarras;
     private JButton btnProductoDescarga;
     private JTextField textField;
-    private JPanel pnlVentasHeader;
-    private JPanel pnlVentasFooter;
+    private JTextField textVentasCodProd;
+    private JTextField textField_3;
+    private JLabel label;
+    private JLabel label_1;
+    private JPanel panel_6;
     private JScrollPane scrollPane_3;
     private JTable tblVentas;
-    private JTextField textField_1;
 	
     /**
 	 * Launch the application. 
@@ -172,7 +175,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1156, 573);
+		setBounds(100, 100, 1237, 573);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -323,7 +326,7 @@ public class Main extends JFrame {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnVentas.setBackground(new Color(174,214, 241));
-		 		textField.requestFocus();
+		 		textVentasCodProd.requestFocus();
 
 			}
 			
@@ -661,38 +664,130 @@ public class Main extends JFrame {
 			
 			tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 		}*/
+		pnl_ventas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				textVentasCodProd.requestFocus();
+			}
+		});
 		
 		tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 		pnl_ventas.setLayout(new BorderLayout(0, 0));
 		
-		pnlVentasHeader = new JPanel();
-		pnl_ventas.add(pnlVentasHeader, BorderLayout.NORTH);
-		pnlVentasHeader.setLayout(new GridLayout(3, 3, 0, 0));
+		JPanel panel_4 = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel_4.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEADING);
+		pnl_ventas.add(panel_4, BorderLayout.NORTH);
 		
-		JLabel lblNewLabel_16 = new JLabel("New label");
-		pnlVentasHeader.add(lblNewLabel_16);
+		textVentasCodProd = new JTextField();
+		textVentasCodProd.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+			
+			}
+			@Override
+			public void focusLost(FocusEvent e) {if (!textVentasCodProd.getText().equalsIgnoreCase("")) {
+				productoDao.agregarProductoProCodigo(textVentasCodProd.getText(), tblVentas);
+				textVentasCodProd.setText("");
+				textVentasCodProd.requestFocus();
+			}// JOptionPane.showMessageDialog(null, "El bastior ya se encuentra registrado en la base de datos","Duplicado",JOptionPane.ERROR_MESSAGE);
+                return;
+			}
+		});
+		textVentasCodProd.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+		});
+		panel_4.add(textVentasCodProd);
+		textVentasCodProd.setColumns(10);
 		
-		textField_1 = new JTextField();
-		pnlVentasHeader.add(textField_1);
-		textField_1.setColumns(10);
+		JButton btnNewButton_1 = new JButton("Agregar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		panel_4.add(btnNewButton_1);
 		
-		JButton btnNewButton = new JButton("New button");
-		pnlVentasHeader.add(btnNewButton);
+		JPanel panel_5 = new JPanel();
+		pnl_ventas.add(panel_5, BorderLayout.SOUTH);
+		panel_5.setLayout(new GridLayout(0, 6, 0, 0));
 		
-		pnlVentasFooter = new JPanel();
-		pnl_ventas.add(pnlVentasFooter, BorderLayout.SOUTH);
+		label = new JLabel("");
+		panel_5.add(label);
+		
+		JButton btnNewButton_2 = new JButton("Vender");
+		panel_5.add(btnNewButton_2);
+		
+		label_1 = new JLabel("");
+		panel_5.add(label_1);
+		
+		JLabel lblNewLabel_16 = new JLabel("Total");
+		lblNewLabel_16.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel_5.add(lblNewLabel_16);
+		
+		textField_3 = new JTextField();
+		textField_3.setFocusable(false);
+		textField_3.setEnabled(false);
+		panel_5.add(textField_3);
+		textField_3.setColumns(10);
+		
+		panel_6 = new JPanel();
+		panel_6.setMinimumSize(new Dimension(200, 200));
+		panel_6.setPreferredSize(new Dimension(200, 200));
+		pnl_ventas.add(panel_6, BorderLayout.EAST);
 		
 		scrollPane_3 = new JScrollPane();
 		pnl_ventas.add(scrollPane_3, BorderLayout.CENTER);
 		
 		tblVentas = new JTable();
+		tblVentas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int column = tblVentas.getColumnModel().getColumnIndexAtX(e.getX());
+				 int row    = e.getY()/tblVentas.getRowHeight();
+				 if (row < tblVentas.getRowCount() && row >= 0  && column < tblVentas.getColumnCount() && column >= 0)  {
+	                 Object value = tblVentas.getValueAt(row, column);
+	                 if (value instanceof JButton) {
+	                     //perform a click event
+	                     ((JButton)value).doClick();
+	                     JButton botones=(JButton)value;
+	                     if (botones.getName().equals("btnEliminarVenta")) {
+							//JOptionPane.showMessageDialog(null, "Elimino");
+	                    	 productoDao.eliminarFilaJTable(row, tblVentas);textVentasCodProd.requestFocus();
+						}
+	                 }
+	             }
+			}
+		});
+		tblVentas.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Codigo", "Producto", "Precio por Unidad", "Total", "Acci\u00F3n"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		tblVentas.getColumnModel().getColumn(0).setPreferredWidth(126);
+		tblVentas.getColumnModel().getColumn(1).setPreferredWidth(150);
+		tblVentas.getColumnModel().getColumn(2).setPreferredWidth(128);
+		tblVentas.getColumnModel().getColumn(3).setPreferredWidth(127);
+		tblVentas.getColumnModel().getColumn(4).setPreferredWidth(95);
 		scrollPane_3.setViewportView(tblVentas);
 		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
 		 
 		 textField = new JTextField(); 
 		 textField.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
-		 		textField.requestFocus();
+		 		textVentasCodProd.requestFocus();
 		 	}
 		 });
 		

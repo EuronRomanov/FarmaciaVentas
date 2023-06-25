@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +19,8 @@ import javax.swing.text.DateFormatter;
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.entidades.Producto;
+import com.farmacia.form.Main;
+import com.farmacia.form.RenderTabla;
 
 
 
@@ -324,5 +328,56 @@ public class ProductoDao {
 		return producto;
 	}
     
-    
+	
+	 public void agregarProductoProCodigo(String key,JTable tblVentas){
+	        ArrayList<Producto> result = new ArrayList<Producto>();
+	        String sql = "SELECT * FROM Producto"
+	        		+ " WHERE codProducto=? ";
+	        modelo = (DefaultTableModel) tblVentas.getModel();
+	       // modelo.setRowCount(0);
+	        Object[] ob = new Object[5];
+	        try{
+	            PreparedStatement ps = con.prepareStatement(sql);
+	            ps.setInt(1,  Integer.parseInt(key));
+	            
+	            ResultSet rs = ps.executeQuery();
+	            JButton button=new JButton("ELiminar");
+	            button.setName("btnEliminarVenta");
+	            button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
+	            while(rs.next()){
+	            	ob[0]=rs.getInt("codProducto");
+	            	ob[1]= rs.getString("nombreProducto");
+	            	 
+	            	
+	            	ob[2]=rs.getDouble("precioVenta");
+	            	 
+	            	ob[3]=rs.getDouble("precioVenta");
+	            	
+	            	ob[4]=button;
+	            	
+	            	
+	               
+	            	 modelo.addRow(ob);
+	            	 
+	            }
+	            tblVentas.setDefaultRenderer(Object.class,new RenderTabla());
+	           
+	            tblVentas.setModel(modelo);
+	            tblVentas.setRowHeight(30);
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }finally{
+	            /*try {
+	                con.close();
+	            } catch (SQLException e) {
+	                System.out.println(e.toString());
+	            }*/
+	        }    
+	       
+	    }
+    public void eliminarFilaJTable(int fila, JTable  tblVentas) {
+    	DefaultTableModel dtm = (DefaultTableModel)  tblVentas.getModel(); //TableProducto es el nombre de mi tabla ;)
+    	dtm.removeRow(fila); 
+    	 tblVentas.setModel(dtm);
+    }
 }
