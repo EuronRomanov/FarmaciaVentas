@@ -158,12 +158,6 @@ public class Main extends JFrame {
     private JPanel panel_6;
     private JTextField textField_1;
     private JLabel lblNewLabel_16;
-    private JLabel lblNewLabel_19;
-    private JTextField textField_2;
-    private JLabel lblNewLabel_20;
-    private JTextArea textArea;
-    private JButton btnNewButton;
-    private JButton btnNewButton_3;
 	
     /**
 	 * Launch the application. 
@@ -784,37 +778,31 @@ public class Main extends JFrame {
 		
 		panel_6 = new JPanel();
 		pnlVentasLadoDerecho.add(panel_6);
-		panel_6.setLayout(new GridLayout(7, 1, 5, 5));
+		GridBagLayout gbl_panel_6 = new GridBagLayout();
+		gbl_panel_6.columnWidths = new int[] {2, 46, 86, 0};
+		gbl_panel_6.rowHeights = new int[]{0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_6.columnWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_6.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_6.setLayout(gbl_panel_6);
 		
-		lblNewLabel_19 = new JLabel("RUC");
-		lblNewLabel_19.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_19.setHorizontalTextPosition(SwingConstants.LEADING);
-		panel_6.add(lblNewLabel_19);
+		lblNewLabel_16 = new JLabel("New label");
+		GridBagConstraints gbc_lblNewLabel_16 = new GridBagConstraints();
+		gbc_lblNewLabel_16.gridwidth = 2;
+		gbc_lblNewLabel_16.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_16.gridx = 1;
+		gbc_lblNewLabel_16.gridy = 0;
+		panel_6.add(lblNewLabel_16, gbc_lblNewLabel_16);
 		
 		textField_1 = new JTextField();
-		panel_6.add(textField_1);
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridwidth = 2;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_1.anchor = GridBagConstraints.NORTH;
+		gbc_textField_1.gridx = 1;
+		gbc_textField_1.gridy = 1;
+		panel_6.add(textField_1, gbc_textField_1);
 		textField_1.setColumns(10);
-		
-		lblNewLabel_16 = new JLabel("Cliente");
-		lblNewLabel_16.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_6.add(lblNewLabel_16);
-		
-		textField_2 = new JTextField();
-		panel_6.add(textField_2);
-		textField_2.setColumns(10);
-		
-		lblNewLabel_20 = new JLabel("Observaciones");
-		lblNewLabel_20.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_6.add(lblNewLabel_20);
-		
-		textArea = new JTextArea();
-		panel_6.add(textArea);
-		
-		btnNewButton = new JButton("Cancelar");
-		panel_6.add(btnNewButton);
-		
-		btnNewButton_3 = new JButton("Finalizar");
-		panel_6.add(btnNewButton_3);
 		
 		scrollPane_3 = new JScrollPane();
 		pnl_ventas.add(scrollPane_3, BorderLayout.CENTER);
