@@ -82,6 +82,7 @@ import java.awt.TextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.Component;
+import java.awt.Font;
 
 
 public class Main extends JFrame {
@@ -106,6 +107,7 @@ public class Main extends JFrame {
     private ProveedorDao proveedorDao=new ProveedorDao();
     private ControlFormatos controlFormato=new ControlFormatos();
     private ProductoDao productoDao=new ProductoDao();
+    private VentaDao ventaDao=new VentaDao();
     
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
@@ -146,12 +148,22 @@ public class Main extends JFrame {
     private JButton btnProductoDescarga;
     private JTextField textField;
     private JTextField textVentasCodProd;
-    private JTextField textField_3;
     private JLabel label;
     private JLabel label_1;
-    private JPanel panel_6;
+    private JPanel pnlVentasLadoDerecho;
     private JScrollPane scrollPane_3;
     private JTable tblVentas;
+    private JLabel lblVentasTotal;
+    private JLabel lblTotalpagar;
+    private JPanel panel_6;
+    private JTextField textField_1;
+    private JLabel lblNewLabel_16;
+    private JLabel lblNewLabel_19;
+    private JTextField textField_2;
+    private JLabel lblNewLabel_20;
+    private JTextArea textArea;
+    private JButton btnNewButton;
+    private JButton btnNewButton_3;
 	
     /**
 	 * Launch the application. 
@@ -175,7 +187,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1237, 573);
+		setBounds(100, 100, 1304, 607);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -226,11 +238,16 @@ public class Main extends JFrame {
 				//proveedorDao.ListarProveedorTable(tblProveedores);
 				
 				
-				
+				tabPane_Vistas.remove(tabPane_Vistas.indexOfTab("Ventas"));
 				productoDao.ListarProductoTable(tblProductos);
 				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
 				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
+				
+				
+				
+				
+				
 			}
 		});
 		btnProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
@@ -326,6 +343,10 @@ public class Main extends JFrame {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnVentas.setBackground(new Color(174,214, 241));
+				
+				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
+				pnl_ventas.setLayout(new BorderLayout(0, 0));
+				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Ventas"));
 		 		textVentasCodProd.requestFocus();
 
 			}
@@ -689,6 +710,7 @@ public class Main extends JFrame {
 			public void focusLost(FocusEvent e) {if (!textVentasCodProd.getText().equalsIgnoreCase("")) {
 				productoDao.agregarProductoProCodigo(textVentasCodProd.getText(), tblVentas);
 				textVentasCodProd.setText("");
+				ventaDao.totalizar(tblVentas,lblTotalpagar);
 				textVentasCodProd.requestFocus();
 			}// JOptionPane.showMessageDialog(null, "El bastior ya se encuentra registrado en la base de datos","Duplicado",JOptionPane.ERROR_MESSAGE);
                 return;
@@ -715,6 +737,7 @@ public class Main extends JFrame {
 				if (	textVentasCodProd.getText().length()>10) {
 					productoDao.agregarProductoProCodigo(textVentasCodProd.getText(), tblVentas);
 					textVentasCodProd.setText("");
+					ventaDao.totalizar(tblVentas, lblTotalpagar);
 					textVentasCodProd.requestFocus();
 				}
 				
@@ -730,25 +753,68 @@ public class Main extends JFrame {
 		panel_5.add(label);
 		
 		JButton btnNewButton_2 = new JButton("Vender");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pnlVentasLadoDerecho.setVisible(true);
+				
+				
+				
+			}
+		});
 		panel_5.add(btnNewButton_2);
 		
 		label_1 = new JLabel("");
 		panel_5.add(label_1);
 		
-		JLabel lblNewLabel_16 = new JLabel("Total");
-		lblNewLabel_16.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel_5.add(lblNewLabel_16);
+		 lblVentasTotal = new JLabel("Total");
+		lblVentasTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel_5.add(lblVentasTotal);
 		
-		textField_3 = new JTextField();
-		textField_3.setFocusable(false);
-		textField_3.setEnabled(false);
-		panel_5.add(textField_3);
-		textField_3.setColumns(10);
+		lblTotalpagar = new JLabel("0,00");
+		lblTotalpagar.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTotalpagar.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		panel_5.add(lblTotalpagar);
+		
+		pnlVentasLadoDerecho = new JPanel();
+		pnlVentasLadoDerecho.setVisible(false);
+		pnlVentasLadoDerecho.setMinimumSize(new Dimension(200, 200));
+		pnlVentasLadoDerecho.setPreferredSize(new Dimension(200, 200));
+		pnl_ventas.add(pnlVentasLadoDerecho, BorderLayout.EAST);
+		pnlVentasLadoDerecho.setLayout(new FlowLayout(FlowLayout.TRAILING, 4, 4));
 		
 		panel_6 = new JPanel();
-		panel_6.setMinimumSize(new Dimension(200, 200));
-		panel_6.setPreferredSize(new Dimension(200, 200));
-		pnl_ventas.add(panel_6, BorderLayout.EAST);
+		pnlVentasLadoDerecho.add(panel_6);
+		panel_6.setLayout(new GridLayout(7, 1, 5, 5));
+		
+		lblNewLabel_19 = new JLabel("RUC");
+		lblNewLabel_19.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_19.setHorizontalTextPosition(SwingConstants.LEADING);
+		panel_6.add(lblNewLabel_19);
+		
+		textField_1 = new JTextField();
+		panel_6.add(textField_1);
+		textField_1.setColumns(10);
+		
+		lblNewLabel_16 = new JLabel("Cliente");
+		lblNewLabel_16.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_6.add(lblNewLabel_16);
+		
+		textField_2 = new JTextField();
+		panel_6.add(textField_2);
+		textField_2.setColumns(10);
+		
+		lblNewLabel_20 = new JLabel("Observaciones");
+		lblNewLabel_20.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_6.add(lblNewLabel_20);
+		
+		textArea = new JTextArea();
+		panel_6.add(textArea);
+		
+		btnNewButton = new JButton("Cancelar");
+		panel_6.add(btnNewButton);
+		
+		btnNewButton_3 = new JButton("Finalizar");
+		panel_6.add(btnNewButton_3);
 		
 		scrollPane_3 = new JScrollPane();
 		pnl_ventas.add(scrollPane_3, BorderLayout.CENTER);
@@ -767,7 +833,11 @@ public class Main extends JFrame {
 	                     JButton botones=(JButton)value;
 	                     if (botones.getName().equals("btnEliminarVenta")) {
 							//JOptionPane.showMessageDialog(null, "Elimino");
-	                    	 productoDao.eliminarFilaJTable(row, tblVentas);textVentasCodProd.requestFocus();
+	                    	 productoDao.eliminarFilaJTable(row, tblVentas);
+	                    	 //ventaDao.totalizar(tblVentas, textVentasTotal);
+	                    	 ventaDao.totalizar(tblVentas, lblTotalpagar);
+	                    	 
+	                    	 textVentasCodProd.requestFocus();
 						}
 	                 }
 	             }
