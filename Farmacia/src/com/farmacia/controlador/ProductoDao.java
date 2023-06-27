@@ -330,49 +330,48 @@ public class ProductoDao {
     
 	
 	 public void agregarProductoProCodigo(String key,JTable tblVentas){
-	        ArrayList<Producto> result = new ArrayList<Producto>();
-	        String sql = "SELECT * FROM Producto"
+		 String sql = "SELECT * FROM Producto"
 	        		+ " WHERE codProducto=? ";
 	        modelo = (DefaultTableModel) tblVentas.getModel();
-	       // modelo.setRowCount(0);
+	       
 	        Object[] ob = new Object[5];
-	        try{
-	            PreparedStatement ps = con.prepareStatement(sql);
-	            ps.setInt(1,  Integer.parseInt(key));
-	            
-	            ResultSet rs = ps.executeQuery();
-	            JButton button=new JButton("ELiminar");
-	            button.setName("btnEliminarVenta");
-	            button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
-	            while(rs.next()){
-	            	ob[0]=rs.getInt("codProducto");
-	            	ob[1]= rs.getString("nombreProducto");
-	            	 
-	            	
-	            	ob[2]=rs.getDouble("precioVenta");
-	            	 
-	            	ob[3]=rs.getDouble("precioVenta");
-	            	
-	            	ob[4]=button;
-	            	
-	            	
-	               
-	            	 modelo.addRow(ob);
-	            	 
-	            }
-	            tblVentas.setDefaultRenderer(Object.class,new RenderTabla());
-	           
-	            tblVentas.setModel(modelo);
-	            tblVentas.setRowHeight(30);
-	        }catch(Exception e){
-	            e.printStackTrace();
-	        }finally{
-	            /*try {
-	                con.close();
-	            } catch (SQLException e) {
-	                System.out.println(e.toString());
-	            }*/
-	        }    
+	        
+	        
+		 if (!this.existeProducto(key, tblVentas)) {
+			  try{
+		            PreparedStatement ps = con.prepareStatement(sql);
+		            ps.setInt(1,  Integer.parseInt(key));
+		            
+		            ResultSet rs = ps.executeQuery();
+		            JButton button=new JButton("ELiminar");
+		            button.setName("btnEliminarVenta");
+		            button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
+		            while(rs.next()){
+		            	ob[0]=rs.getInt("codProducto");
+		            	ob[1]= rs.getString("nombreProducto");
+		            	 
+		            	
+		            	ob[2]=rs.getDouble("precioVenta");
+		            	 
+		            	ob[3]=1;
+		            	
+		            	ob[4]=button;
+		            	
+		            	
+		               
+		            	 modelo.addRow(ob);
+		            	 
+		            }
+		            tblVentas.setDefaultRenderer(Object.class,new RenderTabla());
+		           
+		            tblVentas.setModel(modelo);
+		            tblVentas.setRowHeight(30);
+		        }catch(Exception e){
+		            e.printStackTrace();
+		        }  
+		}		 
+	       
+	       
 	       
 	    }
     public void eliminarFilaJTable(int fila, JTable  tblVentas) {
@@ -380,4 +379,21 @@ public class ProductoDao {
     	dtm.removeRow(fila); 
     	 tblVentas.setModel(dtm);
     }
+    
+    private boolean existeProducto(String key,JTable tblVentas) {
+    	boolean flag=false;
+    	int valor=Integer.parseInt(key);
+    	for (int i = 0; i < tblVentas.getRowCount(); i++) {
+    	int j=Integer.parseInt(tblVentas.getValueAt(i, 0).toString());
+    	if (valor==j) {
+    	
+    	int cantidad=Integer.parseInt(tblVentas.getValueAt(i, 3).toString());
+    	tblVentas.setValueAt((cantidad+1), i, 3);
+    	flag=true;
+    	break;
+		}
+    	}
+    	return flag;
+    }
+    
 }
