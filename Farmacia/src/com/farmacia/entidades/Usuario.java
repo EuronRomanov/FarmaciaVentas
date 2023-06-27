@@ -36,6 +36,20 @@ package com.farmacia.entidades;
 			this.administrador = administrador;
 			this.cedula = cedula;
 		}
+		
+		
+
+
+		public Usuario(int codUsuario, String nombre, int estado, int administrador, String cedula) {
+			super();
+			this.codUsuario = codUsuario;
+			this.nombre = nombre;
+			this.estado = estado;
+			this.administrador = administrador;
+			this.cedula = cedula;
+		}
+
+
 
 
 		public int getCodUsuario() {
