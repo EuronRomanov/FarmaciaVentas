@@ -114,4 +114,14 @@ public class ControlFormatos {
 		return Date.from(localDate.atStartOfDay()
 				.atZone(ZoneId.systemDefault()).toInstant());
 	}
+	
+	
+	public boolean controlarCedula(String cedula) {
+		if (cedula.length()==10) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 }
