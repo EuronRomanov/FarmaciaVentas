@@ -45,6 +45,7 @@ import javax.swing.text.MaskFormatter;
 import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Proveedor;
+import com.farmacia.entidades.Usuario;
 import com.farmacia.utils.ControlFormatos;
 import com.farmacia.utils.GenerdorDocumentos;
 
@@ -96,7 +97,7 @@ public class Main extends JFrame {
 	JPanel pnl_factura = new JPanel();
 	JPanel pnl_consultas = new JPanel();
     
-    private JPanel pnl_vendedores = new JPanel();
+    private JPanel pnl_usuarios = new JPanel();
     private JPanel pnl_producto = new JPanel();
     private JPanel pnl_categoria = new JPanel();
     private JPanel pnl_proveedor = new JPanel();
@@ -109,6 +110,7 @@ public class Main extends JFrame {
     private ControlFormatos controlFormato=new ControlFormatos();
     private ProductoDao productoDao=new ProductoDao();
     private VentaDao ventaDao=new VentaDao();
+    private UsuarioDao usuarioDao=new UsuarioDao();
     
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
@@ -164,17 +166,23 @@ public class Main extends JFrame {
     JTextArea textVentasObservaciones;
     private JLabel lblNewLabel_22;
     private JLabel lblNewLabel_23;
-    private JTextField textField;
-    private JTextField textField_1;
+    private JTextField textVendedorUsuario;
+    private JTextField textVendedorPassword;
     private JLabel lblNewLabel_25;
-    private JTextField textField_2;
-    private JComboBox comboBox;
-    private JComboBox comboBox_1;
+    private JTextField textVendedorCedula;
+    private JComboBox cmbVendedorEstado;
+    private JComboBox cmbVendedorAdmin;
     private JLabel lblNewLabel_26;
     private JLabel lblNewLabel_27;
     private JTextField textVendedorCodigo;
     private JScrollPane scrollPane_4;
-    private JTable tblVendedores;
+    private JTable tblUsuarios;
+    private JTextField textVendedorBuscar;
+    private JButton btnVendedorBuscar;
+    private JButton btnVendedorCancelar;
+    private JButton btnVendedorEliminar;
+    private JButton btnVendedorModificar;
+    private JButton btnVendendorAgregar;
 	
     /**
 	 * Launch the application. 
@@ -283,10 +291,17 @@ public class Main extends JFrame {
 		JButton btnUsuario = new JButton("Usuarios");
 		btnUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*tabPane_Vistas.addTab("Vendedores", null, pnl_vendedores, null);
-				tabPane_Vistas.setBackgroundAt(2, new Color(214, 214, 214));*/
-				flagAdministrador=true;
-				//tabPane_Vistas.setSelectedIndex(2);
+				eliminarTab("Productos");
+				eliminarTab("Ventas");
+				eliminarTab("Categorias");
+				eliminarTab("Proveedores");
+				tabPane_Vistas.addTab("Usuarios", null, pnl_usuarios, null);
+				tabPane_Vistas.setBackgroundAt(2, new Color(214, 214, 214));
+				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Usuarios"));
+				
+				usuarioDao.listarUsuarioTable(tblUsuarios);
+				
+				
 			}
 		});
 		btnUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -350,6 +365,8 @@ public class Main extends JFrame {
 		JButton btnVentas = new JButton("Ventas");
 		btnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				eliminarTab("Categorias");
+				eliminarTab("Proveedores");
 				eliminarTab("Productos");
 				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
@@ -954,121 +971,168 @@ public class Main extends JFrame {
 		tblVentas.getColumnModel().getColumn(3).setPreferredWidth(127);
 		tblVentas.getColumnModel().getColumn(4).setPreferredWidth(95);
 		scrollPane_3.setViewportView(tblVentas);
-		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
-		 GridBagLayout gbl_pnl_vendedores = new GridBagLayout();
-		 gbl_pnl_vendedores.columnWidths = new int[]{88, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		 gbl_pnl_vendedores.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		 gbl_pnl_vendedores.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		 gbl_pnl_vendedores.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		 pnl_vendedores.setLayout(gbl_pnl_vendedores);
+		 tabPane_Vistas.add("Usuarios", pnl_usuarios);
+		 GridBagLayout gbl_pnl_usuarios = new GridBagLayout();
+		 gbl_pnl_usuarios.columnWidths = new int[]{88, 88, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		 gbl_pnl_usuarios.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		 gbl_pnl_usuarios.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		 gbl_pnl_usuarios.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		 pnl_usuarios.setLayout(gbl_pnl_usuarios);
 		 
 		 lblNewLabel_22 = new JLabel("Nombre Y Apellidos");
 		 GridBagConstraints gbc_lblNewLabel_22 = new GridBagConstraints();
-		 gbc_lblNewLabel_22.anchor = GridBagConstraints.EAST;
+		 gbc_lblNewLabel_22.anchor = GridBagConstraints.WEST;
 		 gbc_lblNewLabel_22.insets = new Insets(0, 0, 5, 5);
 		 gbc_lblNewLabel_22.gridx = 0;
 		 gbc_lblNewLabel_22.gridy = 0;
-		 pnl_vendedores.add(lblNewLabel_22, gbc_lblNewLabel_22);
+		 pnl_usuarios.add(lblNewLabel_22, gbc_lblNewLabel_22);
 		 
-		 textField = new JTextField();
-		 GridBagConstraints gbc_textField = new GridBagConstraints();
-		 gbc_textField.insets = new Insets(0, 0, 5, 5);
-		 gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		 gbc_textField.gridx = 1;
-		 gbc_textField.gridy = 0;
-		 pnl_vendedores.add(textField, gbc_textField);
-		 textField.setColumns(10);
+		 textVendedorUsuario = new JTextField();
+		 textVendedorUsuario.addKeyListener(new KeyAdapter() {
+		 	@Override
+		 	public void keyTyped(KeyEvent e) {
+		 		int key=e.getKeyChar();
+				
+				
+				if (controlFormato.validarSoloLetras(key)) {
+					e.consume();
+				}
+		 	}
+		 });
+		 GridBagConstraints gbc_textVendedorUsuario = new GridBagConstraints();
+		 gbc_textVendedorUsuario.insets = new Insets(0, 0, 5, 5);
+		 gbc_textVendedorUsuario.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_textVendedorUsuario.gridx = 1;
+		 gbc_textVendedorUsuario.gridy = 0;
+		 pnl_usuarios.add(textVendedorUsuario, gbc_textVendedorUsuario);
+		 textVendedorUsuario.setColumns(10);
 		 
 		 lblNewLabel_26 = new JLabel("Estado");
 		 GridBagConstraints gbc_lblNewLabel_26 = new GridBagConstraints();
 		 gbc_lblNewLabel_26.insets = new Insets(0, 0, 5, 5);
-		 gbc_lblNewLabel_26.anchor = GridBagConstraints.EAST;
-		 gbc_lblNewLabel_26.gridx = 2;
+		 gbc_lblNewLabel_26.anchor = GridBagConstraints.WEST;
+		 gbc_lblNewLabel_26.gridx = 3;
 		 gbc_lblNewLabel_26.gridy = 0;
-		 pnl_vendedores.add(lblNewLabel_26, gbc_lblNewLabel_26);
+		 pnl_usuarios.add(lblNewLabel_26, gbc_lblNewLabel_26);
 		 
-		 comboBox = new JComboBox();
-		 comboBox.setModel(new DefaultComboBoxModel(new String[] {"Activo", "Desactivado"}));
-		 GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		 gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		 gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		 gbc_comboBox.gridx = 3;
-		 gbc_comboBox.gridy = 0;
-		 pnl_vendedores.add(comboBox, gbc_comboBox);
+		 cmbVendedorEstado = new JComboBox();
+		 cmbVendedorEstado.setModel(new DefaultComboBoxModel(new String[] {"Activo", "Desactivado"}));
+		 GridBagConstraints gbc_cmbVendedorEstado = new GridBagConstraints();
+		 gbc_cmbVendedorEstado.insets = new Insets(0, 0, 5, 5);
+		 gbc_cmbVendedorEstado.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_cmbVendedorEstado.gridx = 4;
+		 gbc_cmbVendedorEstado.gridy = 0;
+		 pnl_usuarios.add(cmbVendedorEstado, gbc_cmbVendedorEstado);
 		 
 		 lblNewLabel_23 = new JLabel("Contraseña");
 		 GridBagConstraints gbc_lblNewLabel_23 = new GridBagConstraints();
-		 gbc_lblNewLabel_23.anchor = GridBagConstraints.EAST;
+		 gbc_lblNewLabel_23.anchor = GridBagConstraints.WEST;
 		 gbc_lblNewLabel_23.insets = new Insets(0, 0, 5, 5);
 		 gbc_lblNewLabel_23.gridx = 0;
 		 gbc_lblNewLabel_23.gridy = 2;
-		 pnl_vendedores.add(lblNewLabel_23, gbc_lblNewLabel_23);
+		 pnl_usuarios.add(lblNewLabel_23, gbc_lblNewLabel_23);
 		 
-		 textField_1 = new JTextField();
-		 GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		 gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		 gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		 gbc_textField_1.gridx = 1;
-		 gbc_textField_1.gridy = 2;
-		 pnl_vendedores.add(textField_1, gbc_textField_1);
-		 textField_1.setColumns(10);
+		 textVendedorPassword = new JTextField();
+		 GridBagConstraints gbc_textVendedorPassword = new GridBagConstraints();
+		 gbc_textVendedorPassword.insets = new Insets(0, 0, 5, 5);
+		 gbc_textVendedorPassword.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_textVendedorPassword.gridx = 1;
+		 gbc_textVendedorPassword.gridy = 2;
+		 pnl_usuarios.add(textVendedorPassword, gbc_textVendedorPassword);
+		 textVendedorPassword.setColumns(10);
 		 
 		 lblNewLabel_27 = new JLabel("Administrador");
 		 GridBagConstraints gbc_lblNewLabel_27 = new GridBagConstraints();
 		 gbc_lblNewLabel_27.insets = new Insets(0, 0, 5, 5);
-		 gbc_lblNewLabel_27.anchor = GridBagConstraints.EAST;
-		 gbc_lblNewLabel_27.gridx = 2;
+		 gbc_lblNewLabel_27.anchor = GridBagConstraints.WEST;
+		 gbc_lblNewLabel_27.gridx = 3;
 		 gbc_lblNewLabel_27.gridy = 2;
-		 pnl_vendedores.add(lblNewLabel_27, gbc_lblNewLabel_27);
+		 pnl_usuarios.add(lblNewLabel_27, gbc_lblNewLabel_27);
 		 
-		 comboBox_1 = new JComboBox();
-		 comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Si", "No"}));
-		 GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
-		 gbc_comboBox_1.insets = new Insets(0, 0, 5, 5);
-		 gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
-		 gbc_comboBox_1.gridx = 3;
-		 gbc_comboBox_1.gridy = 2;
-		 pnl_vendedores.add(comboBox_1, gbc_comboBox_1);
+		 cmbVendedorAdmin = new JComboBox();
+		 cmbVendedorAdmin.setModel(new DefaultComboBoxModel(new String[] {"No", "Si"}));
+		 GridBagConstraints gbc_cmbVendedorAdmin = new GridBagConstraints();
+		 gbc_cmbVendedorAdmin.insets = new Insets(0, 0, 5, 5);
+		 gbc_cmbVendedorAdmin.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_cmbVendedorAdmin.gridx = 4;
+		 gbc_cmbVendedorAdmin.gridy = 2;
+		 pnl_usuarios.add(cmbVendedorAdmin, gbc_cmbVendedorAdmin);
 		 
 		 lblNewLabel_25 = new JLabel("Cedula");
 		 GridBagConstraints gbc_lblNewLabel_25 = new GridBagConstraints();
-		 gbc_lblNewLabel_25.anchor = GridBagConstraints.EAST;
+		 gbc_lblNewLabel_25.anchor = GridBagConstraints.WEST;
 		 gbc_lblNewLabel_25.insets = new Insets(0, 0, 5, 5);
 		 gbc_lblNewLabel_25.gridx = 0;
 		 gbc_lblNewLabel_25.gridy = 4;
-		 pnl_vendedores.add(lblNewLabel_25, gbc_lblNewLabel_25);
-		 
-		 textField_2 = new JTextField();
-		 GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		 gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		 gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		 gbc_textField_2.gridx = 1;
-		 gbc_textField_2.gridy = 4;
-		 pnl_vendedores.add(textField_2, gbc_textField_2);
-		 textField_2.setColumns(10);
+		 pnl_usuarios.add(lblNewLabel_25, gbc_lblNewLabel_25);
 		 
 		 textVendedorCodigo = new JTextField();
 		 textVendedorCodigo.setVisible(false);
+		 
+		 textVendedorCedula = new JTextField();
+		 textVendedorCedula.addKeyListener(new KeyAdapter() {
+		 	@Override
+		 	public void keyTyped(KeyEvent e) {
+		 		int key=e.getKeyChar();
+				
+				
+				if (controlFormato.validarNumerosEnteros(key) ||textVendedorCedula.getText().length()>9 ) {
+					e.consume();
+				}
+		 	}
+		 });
+		 GridBagConstraints gbc_textVendedorCedula = new GridBagConstraints();
+		 gbc_textVendedorCedula.insets = new Insets(0, 0, 5, 5);
+		 gbc_textVendedorCedula.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_textVendedorCedula.gridx = 1;
+		 gbc_textVendedorCedula.gridy = 4;
+		 pnl_usuarios.add(textVendedorCedula, gbc_textVendedorCedula);
+		 textVendedorCedula.setColumns(10);
 		 GridBagConstraints gbc_textVendedorCodigo = new GridBagConstraints();
 		 gbc_textVendedorCodigo.insets = new Insets(0, 0, 5, 5);
 		 gbc_textVendedorCodigo.fill = GridBagConstraints.HORIZONTAL;
-		 gbc_textVendedorCodigo.gridx = 3;
+		 gbc_textVendedorCodigo.gridx = 4;
 		 gbc_textVendedorCodigo.gridy = 4;
-		 pnl_vendedores.add(textVendedorCodigo, gbc_textVendedorCodigo);
+		 pnl_usuarios.add(textVendedorCodigo, gbc_textVendedorCodigo);
 		 textVendedorCodigo.setColumns(10);
 		 
 		 scrollPane_4 = new JScrollPane();
 		 GridBagConstraints gbc_scrollPane_4 = new GridBagConstraints();
 		 gbc_scrollPane_4.gridheight = 9;
-		 gbc_scrollPane_4.gridwidth = 5;
+		 gbc_scrollPane_4.gridwidth = 6;
 		 gbc_scrollPane_4.insets = new Insets(0, 0, 0, 5);
 		 gbc_scrollPane_4.fill = GridBagConstraints.BOTH;
 		 gbc_scrollPane_4.gridx = 0;
 		 gbc_scrollPane_4.gridy = 6;
-		 pnl_vendedores.add(scrollPane_4, gbc_scrollPane_4);
+		 pnl_usuarios.add(scrollPane_4, gbc_scrollPane_4);
 		 
-		 tblVendedores = new JTable();
-		 tblVendedores.setModel(new DefaultTableModel(
+		 tblUsuarios = new JTable();
+		 tblUsuarios.addMouseListener(new MouseAdapter() {
+		 	@Override
+		 	public void mouseClicked(MouseEvent e) {
+		 		
+		 		limpiarCamposUsuario();
+	        	int fila = tblUsuarios.rowAtPoint(e.getPoint());
+	           
+	         if(fila>=0)  {
+	        	 String key= tblUsuarios.getValueAt(fila, 0).toString();
+	        	 Usuario usuario=usuarioDao.searchUsuarioId(key);
+	        	 textVendedorUsuario.setText(usuario.getNombre());
+	     		textVendedorCedula.setText(usuario.getCedula());
+	     		
+	     		textVendedorCodigo.setText(String.valueOf(usuario.getCodUsuario()) );
+	     		cmbVendedorAdmin.setSelectedIndex(usuario.getAdministrador());
+	     		cmbVendedorEstado.setSelectedIndex(usuario.getEstado());
+	     		
+	     		btnVendendorAgregar.setEnabled(false);
+	     		btnVendedorModificar.setEnabled(true);
+	     		btnVendedorEliminar.setEnabled(true);
+	     		btnVendedorCancelar.setEnabled(true);
+	     		btnVendedorCancelar.setVisible(true);
+	         }
+		 	}
+		 });
+		 tblUsuarios.setModel(new DefaultTableModel(
 		 	new Object[][] {
 		 	},
 		 	new String[] {
@@ -1082,7 +1146,123 @@ public class Main extends JFrame {
 		 		return columnEditables[column];
 		 	}
 		 });
-		 scrollPane_4.setViewportView(tblVendedores);
+		 scrollPane_4.setViewportView(tblUsuarios);
+		 
+		 textVendedorBuscar = new JTextField();
+		 GridBagConstraints gbc_textVendedorBuscar = new GridBagConstraints();
+		 gbc_textVendedorBuscar.gridwidth = 5;
+		 gbc_textVendedorBuscar.insets = new Insets(0, 0, 5, 5);
+		 gbc_textVendedorBuscar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_textVendedorBuscar.gridx = 7;
+		 gbc_textVendedorBuscar.gridy = 6;
+		 pnl_usuarios.add(textVendedorBuscar, gbc_textVendedorBuscar);
+		 textVendedorBuscar.setColumns(10);
+		 
+		 btnVendedorBuscar = new JButton("Buscar");
+		 GridBagConstraints gbc_btnVendedorBuscar = new GridBagConstraints();
+		 gbc_btnVendedorBuscar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_btnVendedorBuscar.gridwidth = 5;
+		 gbc_btnVendedorBuscar.insets = new Insets(0, 0, 5, 5);
+		 gbc_btnVendedorBuscar.gridx = 7;
+		 gbc_btnVendedorBuscar.gridy = 7;
+		 pnl_usuarios.add(btnVendedorBuscar, gbc_btnVendedorBuscar);
+		 
+		 btnVendendorAgregar = new JButton("Agregar");
+		 btnVendendorAgregar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		if (!controlFormato.hayEspaciosVacios(textVendedorUsuario.getText(),textVendedorCedula.getText(),
+		 				textVendedorPassword.getText()) && controlFormato.controlarCedula(textVendedorCedula.getText()) ) {
+		 			int estado=cmbVendedorEstado.getSelectedIndex();
+		 			int administrador=cmbVendedorAdmin.getSelectedIndex();
+		 			usuarioDao.registrarUsuario(new Usuario(textVendedorUsuario.getText(),textVendedorPassword.getText(),  estado,  administrador, textVendedorCedula.getText()));
+				    limpiarCamposUsuario();
+		 			usuarioDao.listarUsuarioTable(tblUsuarios);
+		 		}else {
+		 			JOptionPane.showMessageDialog(null, "Se detectó un campo vacio o cedula no tiene 10 dígitos");
+		 		}
+		 	
+		 	}
+		 });
+		 GridBagConstraints gbc_btnVendendorAgregar = new GridBagConstraints();
+		 gbc_btnVendendorAgregar.anchor = GridBagConstraints.SOUTH;
+		 gbc_btnVendendorAgregar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_btnVendendorAgregar.gridwidth = 5;
+		 gbc_btnVendendorAgregar.insets = new Insets(0, 0, 5, 5);
+		 gbc_btnVendendorAgregar.gridx = 7;
+		 gbc_btnVendendorAgregar.gridy = 11;
+		 pnl_usuarios.add(btnVendendorAgregar, gbc_btnVendendorAgregar);
+		 
+		 btnVendedorModificar = new JButton("Modificar");
+		 btnVendedorModificar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		if (!controlFormato.hayEspaciosVacios(textVendedorUsuario.getText(),textVendedorCedula.getText()) && controlFormato.controlarCedula(textVendedorCedula.getText()) ) {
+		 			int estado=cmbVendedorEstado.getSelectedIndex();
+		 			int administrador=cmbVendedorAdmin.getSelectedIndex();
+		 			usuarioDao.editUsuario(new Usuario(Integer.parseInt(textVendedorCodigo.getText()),textVendedorUsuario.getText(),  estado,  administrador, textVendedorCedula.getText()),textVendedorPassword.getText());
+				    limpiarCamposUsuario();
+		 			usuarioDao.listarUsuarioTable(tblUsuarios);
+		 		}else {
+		 			JOptionPane.showMessageDialog(null, "Se detectó un campo vacio o cedula no tiene 10 dígitos");
+		 		}
+		 	
+		 	}
+		 });
+		 btnVendedorModificar.setEnabled(false);
+		 GridBagConstraints gbc_btnVendedorModificar = new GridBagConstraints();
+		 gbc_btnVendedorModificar.anchor = GridBagConstraints.SOUTH;
+		 gbc_btnVendedorModificar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_btnVendedorModificar.gridwidth = 5;
+		 gbc_btnVendedorModificar.insets = new Insets(0, 0, 5, 5);
+		 gbc_btnVendedorModificar.gridx = 7;
+		 gbc_btnVendedorModificar.gridy = 12;
+		 pnl_usuarios.add(btnVendedorModificar, gbc_btnVendedorModificar);
+		 
+		 btnVendedorEliminar = new JButton("Eliminar");
+		 btnVendedorEliminar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		if (!controlFormato.hayEspaciosVacios(textVendedorCodigo.getText())) {
+					usuarioDao.deleteUsuario(Integer.parseInt(textVendedorCodigo.getText()));
+					limpiarCamposUsuario();
+					usuarioDao.listarUsuarioTable(tblUsuarios);
+					btnVendendorAgregar.setEnabled(true);
+		     		btnVendedorModificar.setEnabled(false);
+		     		btnVendedorEliminar.setEnabled(false);
+		     		btnVendedorCancelar.setEnabled(false);
+		     		btnVendedorCancelar.setVisible(false);
+				}
+		 	}
+		 });
+		 btnVendedorEliminar.setEnabled(false);
+		 GridBagConstraints gbc_btnVendedorEliminar = new GridBagConstraints();
+		 gbc_btnVendedorEliminar.anchor = GridBagConstraints.SOUTH;
+		 gbc_btnVendedorEliminar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_btnVendedorEliminar.gridwidth = 5;
+		 gbc_btnVendedorEliminar.insets = new Insets(0, 0, 5, 5);
+		 gbc_btnVendedorEliminar.gridx = 7;
+		 gbc_btnVendedorEliminar.gridy = 13;
+		 pnl_usuarios.add(btnVendedorEliminar, gbc_btnVendedorEliminar);
+		 
+		 btnVendedorCancelar = new JButton("Cancelar");
+		 btnVendedorCancelar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		limpiarCamposUsuario();
+		 		btnVendendorAgregar.setEnabled(true);
+	     		btnVendedorModificar.setEnabled(false);
+	     		btnVendedorEliminar.setEnabled(false);
+	     		btnVendedorCancelar.setEnabled(false);
+	     		btnVendedorCancelar.setVisible(false);
+		 		
+		 	}
+		 });
+		 btnVendedorCancelar.setVisible(false);
+		 GridBagConstraints gbc_btnVendedorCancelar = new GridBagConstraints();
+		 gbc_btnVendedorCancelar.anchor = GridBagConstraints.SOUTH;
+		 gbc_btnVendedorCancelar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_btnVendedorCancelar.gridwidth = 5;
+		 gbc_btnVendedorCancelar.insets = new Insets(0, 0, 0, 5);
+		 gbc_btnVendedorCancelar.gridx = 7;
+		 gbc_btnVendedorCancelar.gridy = 14;
+		 pnl_usuarios.add(btnVendedorCancelar, gbc_btnVendedorCancelar);
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
@@ -1307,7 +1487,7 @@ public class Main extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					
-					limpiarCamposProveedor();;
+					limpiarCamposProveedor();
 		        	int fila = tblProveedores.rowAtPoint(e.getPoint());
 		           
 		         if(fila>=0)  {
@@ -2258,7 +2438,17 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 		
 
 	}
-	 protected void eliminarTab(String tab) {
+	 protected void limpiarCamposUsuario() {
+		// TODO Auto-generated method stub
+		textVendedorUsuario.setText("");
+		textVendedorCedula.setText("");
+		textVendedorPassword.setText("");
+		textVendedorCodigo.setText("");
+		cmbVendedorAdmin.setSelectedIndex(0);
+		cmbVendedorEstado.setSelectedIndex(0);
+	}
+
+	protected void eliminarTab(String tab) {
 		int i=tabPane_Vistas.indexOfTab(tab);
 		 if (i>=0) {
 			 tabPane_Vistas.remove(i);
@@ -2363,7 +2553,7 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 		 flagAdministrador=true;
 		 tabPane_Vistas.removeAll();
 		
-		 tabPane_Vistas.add("Vendedores", pnl_vendedores);
+		 tabPane_Vistas.add("Vendedores", pnl_usuarios);
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
