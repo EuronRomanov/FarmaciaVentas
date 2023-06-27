@@ -35,7 +35,7 @@ public class UsuarioDao {
 	 * 
 	 * insetar
 	 */
-	 public boolean RegistrarUsuario(Usuario cl){
+	 public boolean registrarUsuario(Usuario cl){
 	        String sql = "INSERT INTO Usuario (nombre,password,estado,administrador,cedula) VALUES (?,?,?,?,?)";
 	        try {
 	            
@@ -52,11 +52,11 @@ public class UsuarioDao {
 	            JOptionPane.showMessageDialog(null, e.toString());
 	            return false;
 	        } finally{
-	            try {
+	          /*  try {
 	                con.close();
 	            } catch (SQLException e) {
 	                System.out.println(e.toString());
-	            }
+	            }*/
 	        }
 	    }
 	
@@ -119,11 +119,11 @@ public class UsuarioDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }    
         return result;
     }
@@ -132,37 +132,47 @@ public class UsuarioDao {
      * update the @client
      * @param client
      */
-    public void editUsuario(Usuario Usuario,String newPassword){
-        String sql = "UPDATE Usuario SET nombre=? "
-        		+ "password=?,"
-        		+ "estado=?,"
-        		+ "administrador=?,"
-        		+ "cedula=? WHERE codUsuario=?";
+    public void editUsuario(Usuario usuario,String newPassword){
+        String sql = "";
         String nwp="";
         try{
         	if (newPassword.length()<1) {
-        		nwp=Usuario.getPassword();
+        		sql = "UPDATE Usuario SET nombre=? ,"
+                		+ "estado=?,"
+                		+ "administrador=?,"
+                		+ "cedula=? WHERE codUsuario=?";
 			} else {
-				nwp=this.calculateHash("SHA3-512", newPassword);
+				
+				sql = "UPDATE Usuario SET nombre=?,"
+		        		+ "estado=?,"
+		        		+ "administrador=?,"
+		        		+ "cedula=? ,"
+		        		+ "password=? WHERE codUsuario=?";
 			}
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, Usuario.getNombre());
-            ps.setString(2, nwp);
-            ps.setString(3, Usuario.getCedula());
-            ps.setInt(4, Usuario.getAdministrador());
-            ps.setInt(5, Usuario.getCodUsuario());
+            ps.setString(1, usuario.getNombre());
+            ps.setInt(2, usuario.getEstado());
+            ps.setInt(3, usuario.getAdministrador());
+            ps.setString(4, usuario.getCedula());
             
-            ps.setInt(6, Usuario.getCodUsuario());
+            if (newPassword.length()<1) {
+            	
+                 ps.setInt(5, usuario.getCodUsuario());
+            }else {
+            	 ps.setString(5, calculateHash("SHA3-512", newPassword));
+                 ps.setInt(6, usuario.getCodUsuario());
+            }
+           
 
             ps.executeUpdate();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
@@ -180,26 +190,59 @@ public class UsuarioDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            try {
+            /*try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
-            }
+            }*/
         }
     }
     
-    
-    public void ListarUsuarioTable(JTable tblUsuario) {
+  
+   public Usuario searchUsuarioId(String key){
+	   Usuario usuario=null;
+       String sql = "SELECT * FROM Usuario WHERE codUsuario=?";
+       try{
+           PreparedStatement ps = con.prepareStatement(sql);
+           ps.setString(1,  key );
+           ResultSet rs = ps.executeQuery();
+
+           while(rs.next()){
+            usuario = new Usuario(rs.getInt("codUsuario"),
+           			 rs.getString("nombre"), 
+           			rs.getString("password"), 
+           			 rs.getInt("estado"), 
+           			  rs.getInt("administrador"), 
+           			 rs.getString("cedula"));
+           	
+           	
+           	
+              
+             
+           }
+       }catch(Exception e){
+           e.printStackTrace();
+       }finally{
+          /* try {
+               con.close();
+           } catch (SQLException e) {
+               System.out.println(e.toString());
+           }*/
+       }    
+       return  usuario;
+   }
+    public void listarUsuarioTable(JTable tblUsuario) {
         List<Usuario> ListarCl = this.ListarUsuario();
         modelo = (DefaultTableModel) tblUsuario.getModel();
-        Object[] ob = new Object[2];
+        modelo.setRowCount(0);
+        Object[] ob = new Object[5];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodUsuario();
             ob[1] = ListarCl.get(i).getNombre();
-            ob[2] = ListarCl.get(i).getPassword();
-            ob[3] = ListarCl.get(i).getAdministrador();
-            ob[4] = ListarCl.get(i).getEstado();
-            ob[5] = ListarCl.get(i).getCedula();
+           
+            ob[2] = esEstado(ListarCl.get(i).getEstado());
+            ob[3] = esAdministrador(ListarCl.get(i).getAdministrador()) ;
+            ob[4] = ListarCl.get(i).getCedula();
            
             modelo.addRow(ob);
         }
@@ -207,7 +250,43 @@ public class UsuarioDao {
 
     }
     
-    private static String calculateHash(String algorithm, String content)  {
+    private String  esAdministrador(int admin) {
+		String estado="";
+		
+		switch (admin) {
+		case 0:
+			estado="No";
+			break;
+		case 1:
+			estado="Si";
+			break;
+		default:
+			break;
+		}
+		return estado;
+	}
+
+
+
+	private String esEstado(int key) {
+String estado="";
+		
+		switch (key) {
+		case 0:
+			estado="Activo";
+			break;
+		case 1:
+			estado="Deshabilitado";
+			break;
+		default:
+			break;
+		}
+		return estado;
+	}
+
+
+
+	private static String calculateHash(String algorithm, String content)  {
         MessageDigest messageDigest;
 		try {
 			messageDigest = MessageDigest.getInstance(algorithm);
