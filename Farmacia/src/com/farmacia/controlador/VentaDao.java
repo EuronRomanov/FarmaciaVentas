@@ -14,7 +14,7 @@ public class VentaDao {
 		double c=0.0;
 		if (tblVentas.getRowCount()>0) {
 			for (int i = 0; i < tblVentas.getRowCount(); i++) {
-				p=Double.parseDouble(tblVentas.getValueAt(i, 2).toString());
+				p=Double.parseDouble(tblVentas.getValueAt(i, 2).toString())*Double.parseDouble(tblVentas.getValueAt(i, 3).toString());
 				t+=p;
 				lblTotalpagar.setText(getTwoDecimals(String.valueOf(t)));
 			}
