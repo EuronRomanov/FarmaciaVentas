@@ -1159,6 +1159,18 @@ public class Main extends JFrame {
 		 textVendedorBuscar.setColumns(10);
 		 
 		 btnVendedorBuscar = new JButton("Buscar");
+		 btnVendedorBuscar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 		if(textVendedorBuscar.getText().length()>0) {
+					usuarioDao.searchUsuario(textVendedorBuscar.getText(), tblUsuarios);
+				}else {
+					//limpiarTableCategoria();
+					categoriaDao.ListarCategoriaTable(tblUsuarios);
+					//listarCategoriaTable();
+				}
+		 	}
+		 });
 		 GridBagConstraints gbc_btnVendedorBuscar = new GridBagConstraints();
 		 gbc_btnVendedorBuscar.fill = GridBagConstraints.HORIZONTAL;
 		 gbc_btnVendedorBuscar.gridwidth = 5;
