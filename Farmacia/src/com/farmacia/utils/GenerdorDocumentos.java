@@ -101,10 +101,10 @@ public class GenerdorDocumentos {
 		document.open();
 		//FUENTES
 		Font fuenteTitulo=FontFactory.getFont(
-				FontFactory.HELVETICA_BOLD,9,Font.NORMAL,
+				FontFactory.HELVETICA_BOLD,8,Font.NORMAL,
 				BaseColor.BLACK);
 		Font fuenteDescripcion=FontFactory.getFont(
-				FontFactory.HELVETICA_BOLD,9,Font.NORMAL,
+				FontFactory.HELVETICA_BOLD,7,Font.NORMAL,
 				BaseColor.BLACK);
 		
 		//SALTO LINEA
@@ -138,7 +138,7 @@ public class GenerdorDocumentos {
 		 
 		 PdfPTable encabezadoCliente=new PdfPTable(2);
 			encabezadoTicket.setWidthPercentage(100);
-			float[] medidaCeldaCliente= {20f,80f};
+			float[] medidaCeldaCliente= {35f,65f};
 			encabezadoTicket.setWidths(medidaCeldaCliente);
 			
 			try {
@@ -159,13 +159,112 @@ public class GenerdorDocumentos {
 						datoCliente.setBorder(0);
 						 encabezadoCliente.addCell(nombreCliente);
 						 encabezadoCliente.addCell(datoCliente);
+						 
+						 
+						 PdfPCell documentoCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
+						 documentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
+						 documentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
+						 documentoCliente.setBorder(0);
+							PdfPCell datoDocumentoCliente=new PdfPCell(new Phrase(rs.getString("nombre"), fuenteDescripcion));
+							datoDocumentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
+							datoDocumentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
+							datoDocumentoCliente.setBorder(0);
+							 encabezadoCliente.addCell(documentoCliente);
+							 encabezadoCliente.addCell(datoDocumentoCliente);
 					}
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 			document.add(encabezadoCliente);
+			
+			//dato del detalle d la venta
+			 PdfPTable ventas=new PdfPTable(5);
+			 ventas.setWidthPercentage(100);
+			 float[] medidaCeldaVentas= {15f,20f,15f,15f,15f};
+			 ventas.setWidths(medidaCeldaVentas);
+			
+			 
+			 PdfPCell cantiidad=new PdfPCell(new Phrase("Cant", fuenteTitulo));
+			 cantiidad.setVerticalAlignment(Element.ALIGN_CENTER);
+			 cantiidad.setHorizontalAlignment(Element.ALIGN_LEFT);
+			 cantiidad.setBorder(0);
+			
+			 PdfPCell medida=new PdfPCell(new Phrase("UM", fuenteTitulo));
+			 medida.setVerticalAlignment(Element.ALIGN_CENTER);
+			 medida.setHorizontalAlignment(Element.ALIGN_LEFT);
+			 medida.setBorder(0);
+			 
+			 PdfPCell precio=new PdfPCell(new Phrase("PRECIO", fuenteTitulo));
+			 precio.setVerticalAlignment(Element.ALIGN_CENTER);
+			 precio.setHorizontalAlignment(Element.ALIGN_LEFT);
+			 precio.setBorder(0);
+			 
+			 PdfPCell itbis=new PdfPCell(new Phrase("ITBIS", fuenteTitulo));
+			 itbis.setVerticalAlignment(Element.ALIGN_CENTER);
+			 itbis.setHorizontalAlignment(Element.ALIGN_LEFT);
+			 itbis.setBorder(0);
+			 
+			 PdfPCell total=new PdfPCell(new Phrase("Total", fuenteTitulo));
+			 total.setVerticalAlignment(Element.ALIGN_CENTER);
+			 total.setHorizontalAlignment(Element.ALIGN_LEFT);
+			 total.setBorder(0);
+			 
+			 ventas.addCell(cantiidad);
+			 ventas.addCell(medida);
+			 ventas.addCell(itbis);
+			 ventas.addCell(precio);
+			 ventas.addCell(total);
+			 document.add(ventas);
+			 
+			 
+			 //consulta de producto
+			 
+			 try {
+				 String query="";
+					
+					Statement st= con.createStatement();
+					ResultSet rs=st.executeQuery(query);
+					while(rs.next()) {
+						 PdfPCell cantiidadDato=new PdfPCell(new Phrase(rs.getString("nombre"), fuenteDescripcion));
+						 cantiidadDato.setVerticalAlignment(Element.ALIGN_CENTER);
+						 cantiidadDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						 cantiidadDato.setBorder(0);
+						
+						 PdfPCell medidaDato=new PdfPCell(new Phrase(rs.getString("nombre"), fuenteDescripcion));
+						 medidaDato.setVerticalAlignment(Element.ALIGN_CENTER);
+						 medidaDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						 medidaDato.setBorder(0);
+						 
+						 PdfPCell precioDato=new PdfPCell(new Phrase(rs.getString("nombre"), fuenteDescripcion));
+						 precioDato.setVerticalAlignment(Element.ALIGN_CENTER);
+						 precioDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						 precioDato.setBorder(0);
+						 
+						 PdfPCell itbisDato=new PdfPCell(new Phrase(rs.getString("nombre"), fuenteDescripcion));
+						 itbisDato.setVerticalAlignment(Element.ALIGN_CENTER);
+						 itbisDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						 itbisDato.setBorder(0);
+						 
+						 PdfPCell totalDato=new PdfPCell(new Phrase(rs.getString("nombre"), fuenteDescripcion));
+						 totalDato.setVerticalAlignment(Element.ALIGN_CENTER);
+						 totalDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						 totalDato.setBorder(0);
+						 
+						 ventas.addCell(cantiidadDato);
+						 ventas.addCell(medidaDato);
+						 ventas.addCell(itbisDato);
+						 ventas.addCell(precioDato);
+						 ventas.addCell(totalDato);
+					}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		 
+			 
+			 //DATOS PIE  DE PAGINA
+			 
+			 document.add(ventas);
 		 document.close();
 	} catch (Exception e) {
 		// TODO: handle exception
