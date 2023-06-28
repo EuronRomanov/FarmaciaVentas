@@ -95,27 +95,30 @@ public class UsuarioDao {
      * @param key
      * @return list of client whose name contains the @key
      */
-    public ArrayList<Usuario> searchUsuario(String key){
-        ArrayList<Usuario> result = new ArrayList<Usuario>();
+    public void searchUsuario(String key,JTable tblUsuario){
+       
         String sql = "SELECT * FROM Usuario WHERE nombre LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
-
+            modelo = (DefaultTableModel) tblUsuario.getModel();
+            modelo.setRowCount(0);
+            Object[] ob = new Object[5];
             while(rs.next()){
-            	Usuario Usuario = new Usuario(rs.getInt("codUsuario"),
-            			 rs.getString("nombre"), 
-            			rs.getString("password"), 
-            			 rs.getInt("estado"), 
-            			  rs.getInt("administrador"), 
-            			 rs.getString("cedula"));
             	
-            	
-            	
+            	 ob[0] = rs.getInt("codUsuario");
+                 ob[1] = rs.getString("nombre");
+                
+                 ob[2] = esEstado(rs.getInt("estado"));
+                 ob[3] = esAdministrador( rs.getInt("administrador")) ;
+                 ob[4] = rs.getString("cedula");
+                
+                 modelo.addRow(ob);
                
-                result.add(Usuario);
+               
             }
+            tblUsuario.setModel(modelo);
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -125,7 +128,7 @@ public class UsuarioDao {
                 System.out.println(e.toString());
             }*/
         }    
-        return result;
+        
     }
     
     /**
