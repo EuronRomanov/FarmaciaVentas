@@ -89,14 +89,14 @@ public class FacturaDao {
 	           while (rs.next()) {               
 	              
 	               
-	               Factura cl=new Factura(rs.getInt("codProveedor"),
+	               Factura cl=new Factura(rs.getInt("codFactura"),
 	            		   LocalDateTime.parse(rs.getTimestamp("fecha").toString(),parser), 
 	            		   rs.getString("ruc"),
 	            		   rs.getString("cedula"), 
 	            		   rs.getString("n_cliente"), 
 	            		   rs.getString("observacion"),
 	            		   rs.getDouble("subtotal"), 
-	            		   rs.getDouble("ruc"), 
+	            		   rs.getDouble("total"), 
 	            		   rs.getString("nombre"));
 	               
 	               
@@ -251,9 +251,9 @@ public class FacturaDao {
         List<Factura> ListarCl = this.listarFacturas();
         modelo = (DefaultTableModel) tblFacturas.getModel();
         modelo.setRowCount(0);
-        JButton button=new JButton("Detalle");
+        JButton button=new JButton("");
         button.setName("btnFacturaDetalle");
-        button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
+        button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-lupa.png")));
         
         Object[] ob = new Object[10];
         for (int i = 0; i < ListarCl.size(); i++) {
