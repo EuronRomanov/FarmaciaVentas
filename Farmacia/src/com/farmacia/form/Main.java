@@ -46,6 +46,7 @@ import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Proveedor;
 import com.farmacia.entidades.Usuario;
+import com.farmacia.entidades.Factura;
 import com.farmacia.utils.ControlFormatos;
 import com.farmacia.utils.GenerdorDocumentos;
 
@@ -951,7 +952,14 @@ public class Main extends JFrame {
 		JButton btnVentasFinalizar = new JButton("Finalizar");
 		btnVentasFinalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Factura factura=new Factura(textVentasRuc.getText(),
+						textVentasCedula.getText(),
+						textVentasCliente.getText(), 
+						textVentasObservaciones.getText(),
+						0, 
+						Double.parseDouble(lblTotalpagar.getText().replaceAll(",", ".")),
+						1) ;
+				ventaDao.registarVenta(factura, tblVentas);
 				limpiarCamposVentas();
 			}
 		});
@@ -2639,7 +2647,7 @@ public class Main extends JFrame {
 			scrollPane_5 = new JScrollPane();
 			GridBagConstraints gbc_scrollPane_5 = new GridBagConstraints();
 			gbc_scrollPane_5.gridheight = 10;
-			gbc_scrollPane_5.gridwidth = 5;
+			gbc_scrollPane_5.gridwidth = 7;
 			gbc_scrollPane_5.insets = new Insets(0, 0, 0, 5);
 			gbc_scrollPane_5.fill = GridBagConstraints.BOTH;
 			gbc_scrollPane_5.gridx = 0;
@@ -2651,11 +2659,11 @@ public class Main extends JFrame {
 				new Object[][] {
 				},
 				new String[] {
-					"C\u00F3digo", "Fecha", "RUC", "Cedula", "Cliente", "Observaci\u00F3n", "SubTotal", "Total", "Vendedor","Detalle"
+					"C\u00F3digo", "Fecha", "RUC", "Cedula", "Cliente", "Observaci\u00F3n", "SubTotal", "Total", "Vendedor", "Detalle"
 				}
 			) {
 				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false, false, false, false, false,false
+					false, false, false, false, false, false, false, false, false, false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
@@ -2691,6 +2699,7 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaAgregar, gbc_btnFacturaAgregar);
 			
 			btnFacturaModificar = new JButton("Modificar");
+			btnFacturaModificar.setEnabled(false);
 			GridBagConstraints gbc_btnFacturaModificar = new GridBagConstraints();
 			gbc_btnFacturaModificar.fill = GridBagConstraints.BOTH;
 			gbc_btnFacturaModificar.insets = new Insets(0, 0, 5, 0);
@@ -2699,6 +2708,7 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaModificar, gbc_btnFacturaModificar);
 			
 			btnFacturaEliminar = new JButton("Eliminar");
+			btnFacturaEliminar.setEnabled(false);
 			GridBagConstraints gbc_btnFacturaEliminar = new GridBagConstraints();
 			gbc_btnFacturaEliminar.fill = GridBagConstraints.BOTH;
 			gbc_btnFacturaEliminar.insets = new Insets(0, 0, 5, 0);
@@ -2707,6 +2717,7 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaEliminar, gbc_btnFacturaEliminar);
 			
 			btnFacturaCancelar = new JButton("Cancelar");
+			btnFacturaCancelar.setVisible(false);
 			GridBagConstraints gbc_btnFacturaCancelar = new GridBagConstraints();
 			gbc_btnFacturaCancelar.fill = GridBagConstraints.BOTH;
 			gbc_btnFacturaCancelar.gridx = 7;
