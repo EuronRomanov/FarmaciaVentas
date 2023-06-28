@@ -111,6 +111,7 @@ public class Main extends JFrame {
     private ProductoDao productoDao=new ProductoDao();
     private VentaDao ventaDao=new VentaDao();
     private UsuarioDao usuarioDao=new UsuarioDao();
+    private FacturaDao facturaDao=new FacturaDao();
     
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
@@ -183,6 +184,31 @@ public class Main extends JFrame {
     private JButton btnVendedorEliminar;
     private JButton btnVendedorModificar;
     private JButton btnVendendorAgregar;
+    private JLabel lblNewLabel_24;
+    private JTextField textFacturaFecha;
+    private JTextField textFacturaRuc;
+    private JLabel lblNewLabel_29;
+    private JTextField textFacturaCedula;
+    private JTextField textFacturaCliente;
+    private JTextField textFacturaObservacion;
+    private JTextField textFacturaSubtotal;
+    private JTextField textFacturaTotal;
+    private JComboBox cmbFacturaVendedores;
+    private JLabel lblNewLabel_30;
+    private JLabel lblNewLabel_31;
+    private JLabel lblNewLabel_32;
+    private JLabel lblNewLabel_33;
+    private JLabel lblNewLabel_34;
+    private JLabel lblNewLabel_35;
+    private JTextField textFacturaCodigo;
+    private JScrollPane scrollPane_5;
+    private JTable tblFacturas;
+    private JButton btnFacturaCancelar;
+    private JButton btnFacturaEliminar;
+    private JButton btnFacturaModificar;
+    private JButton btnFacturaAgregar;
+    private JTextField textField;
+    private JButton btnFacturaBuscar;
 	
     /**
 	 * Launch the application. 
@@ -322,6 +348,22 @@ public class Main extends JFrame {
 		gridPanel.add(btnUsuario);
 		
 		JButton btnFactura = new JButton("Facturas");
+		btnFactura.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarTab("Productos");
+				eliminarTab("Ventas");
+				eliminarTab("Categorias");
+				eliminarTab("Proveedores");
+				
+				tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
+				pnl_ventas.setLayout(new BorderLayout(0, 0));
+				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Facturas"));
+				facturaDao.cargarListaVededores(cmbFacturaVendedores);
+				facturaDao.ListarFacturaTable(tblFacturas);
+				
+				
+			}
+		});
 		btnFactura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnFactura.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_32.png")));
 		btnFactura.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/payment_icon_48.png")));
@@ -1166,7 +1208,7 @@ public class Main extends JFrame {
 					usuarioDao.searchUsuario(textVendedorBuscar.getText(), tblUsuarios);
 				}else {
 					//limpiarTableCategoria();
-					categoriaDao.ListarCategoriaTable(tblUsuarios);
+					usuarioDao.listarUsuarioTable(tblUsuarios);
 					//listarCategoriaTable();
 				}
 		 	}
@@ -1711,7 +1753,6 @@ public class Main extends JFrame {
 			 gbc_btnProveedorRegresarProducto.gridx = 1;
 			 gbc_btnProveedorRegresarProducto.gridy = 13;
 			 pnl_proveedor.add(btnProveedorRegresarProducto, gbc_btnProveedorRegresarProducto);
-tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			
 			
 			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
@@ -2446,6 +2487,217 @@ tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
 			panel_3.add(btnProductoCancelar, gbc_btnProductoCancelar);
 			
 			tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+			tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
+			GridBagLayout gbl_pnl_factura = new GridBagLayout();
+			gbl_pnl_factura.columnWidths = new int[]{70, 145, 0, 0, 138, 0, 0, 0, 0};
+			gbl_pnl_factura.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+			gbl_pnl_factura.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+			gbl_pnl_factura.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+			pnl_factura.setLayout(gbl_pnl_factura);
+			lblNewLabel_24 = new JLabel("Fecha Compra");
+			GridBagConstraints gbc_lblNewLabel_24 = new GridBagConstraints();
+			gbc_lblNewLabel_24.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_24.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_24.gridx = 0;
+			gbc_lblNewLabel_24.gridy = 0;
+			pnl_factura.add(lblNewLabel_24, gbc_lblNewLabel_24);
+			textFacturaFecha = new JTextField();
+			GridBagConstraints gbc_textFacturaFecha = new GridBagConstraints();
+			gbc_textFacturaFecha.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaFecha.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaFecha.gridx = 1;
+			gbc_textFacturaFecha.gridy = 0;
+			pnl_factura.add(textFacturaFecha, gbc_textFacturaFecha);
+			textFacturaFecha.setColumns(10);
+			lblNewLabel_30 = new JLabel("Observación");
+			GridBagConstraints gbc_lblNewLabel_30 = new GridBagConstraints();
+			gbc_lblNewLabel_30.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_30.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_30.gridx = 3;
+			gbc_lblNewLabel_30.gridy = 0;
+			pnl_factura.add(lblNewLabel_30, gbc_lblNewLabel_30);
+			textFacturaObservacion = new JTextField();
+			GridBagConstraints gbc_textFacturaObservacion = new GridBagConstraints();
+			gbc_textFacturaObservacion.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaObservacion.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaObservacion.gridx = 4;
+			gbc_textFacturaObservacion.gridy = 0;
+			pnl_factura.add(textFacturaObservacion, gbc_textFacturaObservacion);
+			textFacturaObservacion.setColumns(10);
+			lblNewLabel_29 = new JLabel("RUC");
+			GridBagConstraints gbc_lblNewLabel_29 = new GridBagConstraints();
+			gbc_lblNewLabel_29.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_29.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_29.gridx = 0;
+			gbc_lblNewLabel_29.gridy = 1;
+			pnl_factura.add(lblNewLabel_29, gbc_lblNewLabel_29);
+			textFacturaRuc = new JTextField();
+			GridBagConstraints gbc_textFacturaRuc = new GridBagConstraints();
+			gbc_textFacturaRuc.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaRuc.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaRuc.gridx = 1;
+			gbc_textFacturaRuc.gridy = 1;
+			pnl_factura.add(textFacturaRuc, gbc_textFacturaRuc);
+			textFacturaRuc.setColumns(10);
+			lblNewLabel_31 = new JLabel("Subtotal");
+			GridBagConstraints gbc_lblNewLabel_31 = new GridBagConstraints();
+			gbc_lblNewLabel_31.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_31.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_31.gridx = 3;
+			gbc_lblNewLabel_31.gridy = 1;
+			pnl_factura.add(lblNewLabel_31, gbc_lblNewLabel_31);
+			textFacturaSubtotal = new JTextField();
+			GridBagConstraints gbc_textFacturaSubtotal = new GridBagConstraints();
+			gbc_textFacturaSubtotal.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaSubtotal.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaSubtotal.gridx = 4;
+			gbc_textFacturaSubtotal.gridy = 1;
+			pnl_factura.add(textFacturaSubtotal, gbc_textFacturaSubtotal);
+			textFacturaSubtotal.setColumns(10);
+			lblNewLabel_34 = new JLabel("Cedula");
+			GridBagConstraints gbc_lblNewLabel_34 = new GridBagConstraints();
+			gbc_lblNewLabel_34.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_34.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_34.gridx = 0;
+			gbc_lblNewLabel_34.gridy = 2;
+			pnl_factura.add(lblNewLabel_34, gbc_lblNewLabel_34);
+			textFacturaCedula = new JTextField();
+			GridBagConstraints gbc_textFacturaCedula = new GridBagConstraints();
+			gbc_textFacturaCedula.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaCedula.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaCedula.gridx = 1;
+			gbc_textFacturaCedula.gridy = 2;
+			pnl_factura.add(textFacturaCedula, gbc_textFacturaCedula);
+			textFacturaCedula.setColumns(10);
+			lblNewLabel_32 = new JLabel("Total");
+			GridBagConstraints gbc_lblNewLabel_32 = new GridBagConstraints();
+			gbc_lblNewLabel_32.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_32.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_32.gridx = 3;
+			gbc_lblNewLabel_32.gridy = 2;
+			pnl_factura.add(lblNewLabel_32, gbc_lblNewLabel_32);
+			textFacturaTotal = new JTextField();
+			GridBagConstraints gbc_textFacturaTotal = new GridBagConstraints();
+			gbc_textFacturaTotal.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaTotal.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaTotal.gridx = 4;
+			gbc_textFacturaTotal.gridy = 2;
+			pnl_factura.add(textFacturaTotal, gbc_textFacturaTotal);
+			textFacturaTotal.setColumns(10);
+			lblNewLabel_35 = new JLabel("Cliente");
+			GridBagConstraints gbc_lblNewLabel_35 = new GridBagConstraints();
+			gbc_lblNewLabel_35.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_35.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_35.gridx = 0;
+			gbc_lblNewLabel_35.gridy = 3;
+			pnl_factura.add(lblNewLabel_35, gbc_lblNewLabel_35);
+			textFacturaCliente = new JTextField();
+			GridBagConstraints gbc_textFacturaCliente = new GridBagConstraints();
+			gbc_textFacturaCliente.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaCliente.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaCliente.gridx = 1;
+			gbc_textFacturaCliente.gridy = 3;
+			pnl_factura.add(textFacturaCliente, gbc_textFacturaCliente);
+			textFacturaCliente.setColumns(10);
+			lblNewLabel_33 = new JLabel("Vendedor");
+			GridBagConstraints gbc_lblNewLabel_33 = new GridBagConstraints();
+			gbc_lblNewLabel_33.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_33.anchor = GridBagConstraints.EAST;
+			gbc_lblNewLabel_33.gridx = 3;
+			gbc_lblNewLabel_33.gridy = 3;
+			pnl_factura.add(lblNewLabel_33, gbc_lblNewLabel_33);
+			cmbFacturaVendedores = new JComboBox();
+			GridBagConstraints gbc_cmbFacturaVendedores = new GridBagConstraints();
+			gbc_cmbFacturaVendedores.insets = new Insets(0, 0, 5, 5);
+			gbc_cmbFacturaVendedores.fill = GridBagConstraints.HORIZONTAL;
+			gbc_cmbFacturaVendedores.gridx = 4;
+			gbc_cmbFacturaVendedores.gridy = 3;
+			pnl_factura.add(cmbFacturaVendedores, gbc_cmbFacturaVendedores);
+			textFacturaCodigo = new JTextField();
+			textFacturaCodigo.setVisible(false);
+			GridBagConstraints gbc_textFacturaCodigo = new GridBagConstraints();
+			gbc_textFacturaCodigo.insets = new Insets(0, 0, 5, 5);
+			gbc_textFacturaCodigo.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textFacturaCodigo.gridx = 4;
+			gbc_textFacturaCodigo.gridy = 4;
+			pnl_factura.add(textFacturaCodigo, gbc_textFacturaCodigo);
+			textFacturaCodigo.setColumns(10);
+			scrollPane_5 = new JScrollPane();
+			GridBagConstraints gbc_scrollPane_5 = new GridBagConstraints();
+			gbc_scrollPane_5.gridheight = 10;
+			gbc_scrollPane_5.gridwidth = 5;
+			gbc_scrollPane_5.insets = new Insets(0, 0, 0, 5);
+			gbc_scrollPane_5.fill = GridBagConstraints.BOTH;
+			gbc_scrollPane_5.gridx = 0;
+			gbc_scrollPane_5.gridy = 6;
+			pnl_factura.add(scrollPane_5, gbc_scrollPane_5);
+			
+			tblFacturas = new JTable();
+			tblFacturas.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"C\u00F3digo", "Fecha", "RUC", "Cedula", "Cliente", "Observaci\u00F3n", "SubTotal", "Total", "Vendedor","Detalle"
+				}
+			) {
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false, false, false, false, false,false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			});
+			tblFacturas.getColumnModel().getColumn(0).setPreferredWidth(60);
+			tblFacturas.getColumnModel().getColumn(5).setPreferredWidth(63);
+			tblFacturas.getColumnModel().getColumn(7).setPreferredWidth(68);
+			scrollPane_5.setViewportView(tblFacturas);
+			
+			textField = new JTextField();
+			GridBagConstraints gbc_textField = new GridBagConstraints();
+			gbc_textField.insets = new Insets(0, 0, 5, 0);
+			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textField.gridx = 7;
+			gbc_textField.gridy = 6;
+			pnl_factura.add(textField, gbc_textField);
+			textField.setColumns(10);
+			
+			btnFacturaBuscar = new JButton("Buscar");
+			GridBagConstraints gbc_btnFacturaBuscar = new GridBagConstraints();
+			gbc_btnFacturaBuscar.insets = new Insets(0, 0, 5, 0);
+			gbc_btnFacturaBuscar.gridx = 7;
+			gbc_btnFacturaBuscar.gridy = 7;
+			pnl_factura.add(btnFacturaBuscar, gbc_btnFacturaBuscar);
+			
+			btnFacturaAgregar = new JButton("Agregar");
+			GridBagConstraints gbc_btnFacturaAgregar = new GridBagConstraints();
+			gbc_btnFacturaAgregar.fill = GridBagConstraints.BOTH;
+			gbc_btnFacturaAgregar.insets = new Insets(0, 0, 5, 0);
+			gbc_btnFacturaAgregar.gridx = 7;
+			gbc_btnFacturaAgregar.gridy = 12;
+			pnl_factura.add(btnFacturaAgregar, gbc_btnFacturaAgregar);
+			
+			btnFacturaModificar = new JButton("Modificar");
+			GridBagConstraints gbc_btnFacturaModificar = new GridBagConstraints();
+			gbc_btnFacturaModificar.fill = GridBagConstraints.BOTH;
+			gbc_btnFacturaModificar.insets = new Insets(0, 0, 5, 0);
+			gbc_btnFacturaModificar.gridx = 7;
+			gbc_btnFacturaModificar.gridy = 13;
+			pnl_factura.add(btnFacturaModificar, gbc_btnFacturaModificar);
+			
+			btnFacturaEliminar = new JButton("Eliminar");
+			GridBagConstraints gbc_btnFacturaEliminar = new GridBagConstraints();
+			gbc_btnFacturaEliminar.fill = GridBagConstraints.BOTH;
+			gbc_btnFacturaEliminar.insets = new Insets(0, 0, 5, 0);
+			gbc_btnFacturaEliminar.gridx = 7;
+			gbc_btnFacturaEliminar.gridy = 14;
+			pnl_factura.add(btnFacturaEliminar, gbc_btnFacturaEliminar);
+			
+			btnFacturaCancelar = new JButton("Cancelar");
+			GridBagConstraints gbc_btnFacturaCancelar = new GridBagConstraints();
+			gbc_btnFacturaCancelar.fill = GridBagConstraints.BOTH;
+			gbc_btnFacturaCancelar.gridx = 7;
+			gbc_btnFacturaCancelar.gridy = 15;
+			pnl_factura.add(btnFacturaCancelar, gbc_btnFacturaCancelar);
 		
 		
 
