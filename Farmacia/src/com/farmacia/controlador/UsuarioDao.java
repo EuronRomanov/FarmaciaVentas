@@ -243,7 +243,6 @@ public class UsuarioDao {
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodUsuario();
             ob[1] = ListarCl.get(i).getNombre();
-           
             ob[2] = esEstado(ListarCl.get(i).getEstado());
             ob[3] = esAdministrador(ListarCl.get(i).getAdministrador()) ;
             ob[4] = ListarCl.get(i).getCedula();
