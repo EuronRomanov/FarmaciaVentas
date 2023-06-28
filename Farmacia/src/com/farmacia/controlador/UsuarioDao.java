@@ -97,10 +97,11 @@ public class UsuarioDao {
      */
     public void searchUsuario(String key,JTable tblUsuario){
        
-        String sql = "SELECT * FROM Usuario WHERE nombre LIKE ?";
+        String sql = "SELECT * FROM Usuario WHERE nombre LIKE ? OR cedula LIKE ? ";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
+            ps.setString(2, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
             modelo = (DefaultTableModel) tblUsuario.getModel();
             modelo.setRowCount(0);
