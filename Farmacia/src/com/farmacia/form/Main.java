@@ -2691,6 +2691,22 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaBuscar, gbc_btnFacturaBuscar);
 			
 			btnFacturaAgregar = new JButton("Agregar");
+			btnFacturaAgregar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					eliminarTab("Categoria");
+					eliminarTab("Proveedor");
+					eliminarTab("Productos");
+					eliminarTab("Caja");
+					eliminarTab("Usuarios");
+					eliminarTab("Facturas");
+					
+					
+					tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
+					pnl_ventas.setLayout(new BorderLayout(0, 0));
+					tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Ventas"));
+			 		textVentasCodProd.requestFocus();
+				}
+			});
 			GridBagConstraints gbc_btnFacturaAgregar = new GridBagConstraints();
 			gbc_btnFacturaAgregar.fill = GridBagConstraints.BOTH;
 			gbc_btnFacturaAgregar.insets = new Insets(0, 0, 5, 0);
