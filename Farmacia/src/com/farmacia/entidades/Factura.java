@@ -12,6 +12,9 @@ public class Factura {
     private double subtotal;
     private double total;
     private int  codUsuario;
+    private String usuario;
+    
+    
 	public Factura() {
 		super();
 	}
@@ -27,6 +30,36 @@ public class Factura {
 		this.subtotal = subtotal;
 		this.total = total;
 		this.codUsuario = codUsuario;
+	}
+	
+	
+	
+	public Factura(String ruc, String cedula, String n_cliente, String obervacion, double subtotal, double total,
+			int codUsuario) {
+		super();
+		this.ruc = ruc;
+		this.cedula = cedula;
+		this.n_cliente = n_cliente;
+		this.obervacion = obervacion;
+		this.subtotal = subtotal;
+		this.total = total;
+		this.codUsuario = codUsuario;
+	}
+	
+	
+	
+	public Factura(int codFactura, LocalDateTime fecha, String ruc, String cedula, String n_cliente, String obervacion,
+			double subtotal, double total, String usuario) {
+		super();
+		this.codFactura = codFactura;
+		this.fecha = fecha;
+		this.ruc = ruc;
+		this.cedula = cedula;
+		this.n_cliente = n_cliente;
+		this.obervacion = obervacion;
+		this.subtotal = subtotal;
+		this.total = total;
+		this.usuario = usuario;
 	}
 	public int getCodFactura() {
 		return codFactura;
@@ -81,6 +114,12 @@ public class Factura {
 	}
 	public void setCodUsuario(int codUsuario) {
 		this.codUsuario = codUsuario;
+	}
+	public String getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
     
     

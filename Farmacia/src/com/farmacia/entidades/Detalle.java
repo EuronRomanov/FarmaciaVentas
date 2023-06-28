@@ -17,6 +17,15 @@ public class Detalle {
 		this.v_total = v_total;
 		this.codFactura = codFactura;
 	}
+	
+	
+	public Detalle(int cantidad, int codProducto, double v_total, int codFactura) {
+		super();
+		this.cantidad = cantidad;
+		this.codProducto = codProducto;
+		this.v_total = v_total;
+		this.codFactura = codFactura;
+	}
 	public int getCodCarrito() {
 		return codCarrito;
 	}
