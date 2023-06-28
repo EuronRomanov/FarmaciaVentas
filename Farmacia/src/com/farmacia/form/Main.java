@@ -283,8 +283,12 @@ public class Main extends JFrame {
 				//proveedorDao.ListarProveedorTable(tblProveedores);
 				
 				
-				
 				eliminarTab("Ventas");
+				eliminarTab("Categoria");
+				eliminarTab("Proveedor");
+				eliminarTab("Caja");
+				eliminarTab("Facturas");
+				eliminarTab("usuarios");
 				tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
 				productoDao.ListarProductoTable(tblProductos);
@@ -319,10 +323,13 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				eliminarTab("Productos");
 				eliminarTab("Ventas");
-				eliminarTab("Categorias");
-				eliminarTab("Proveedores");
+				eliminarTab("Categoria");
+				eliminarTab("Proveedor");
+				eliminarTab("Caja");
+				eliminarTab("Facturas");
+				
 				tabPane_Vistas.addTab("Usuarios", null, pnl_usuarios, null);
-				tabPane_Vistas.setBackgroundAt(2, new Color(214, 214, 214));
+				tabPane_Vistas.setBackgroundAt(tabPane_Vistas.indexOfTab("Usuarios"), new Color(214, 214, 214));
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Usuarios"));
 				
 				usuarioDao.listarUsuarioTable(tblUsuarios);
@@ -352,8 +359,10 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				eliminarTab("Productos");
 				eliminarTab("Ventas");
-				eliminarTab("Categorias");
-				eliminarTab("Proveedores");
+				eliminarTab("Caja");
+				eliminarTab("Usuarios");
+				eliminarTab("Categoria");
+				eliminarTab("Proveedor");
 				
 				tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
@@ -407,9 +416,14 @@ public class Main extends JFrame {
 		JButton btnVentas = new JButton("Ventas");
 		btnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				eliminarTab("Categorias");
-				eliminarTab("Proveedores");
+				eliminarTab("Categoria");
+				eliminarTab("Proveedor");
 				eliminarTab("Productos");
+				eliminarTab("Caja");
+				eliminarTab("Usuarios");
+				eliminarTab("Facturas");
+				
+				
 				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Ventas"));
