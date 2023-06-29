@@ -352,10 +352,11 @@ public class GenerdorDocumentos {
 	}
 	
 public void generarTicketTest(int idFactura) {
-		
-		Factura factura=new FacturaDao().searchFacturaId(idFactura);
-		List<Detalle>listDetalles=new DetalleDao().listarDetallesId(idFactura);
-		
+	LocalDateTime fecha=LocalDateTime.now();
+		Factura factura=new Factura(1,  fecha, "dsddsd", "", "Pepe Mujica", "",
+				0, 135, "Leonardo Fabio");
+		List<Detalle>listDetalles=new ArrayList();
+		listDetalles.add(new Detalle(1, 4, "Ibuprofeno", 3.5, 4.5));
 		
 		Rectangle r=new Rectangle(210,400);
 		
@@ -400,20 +401,15 @@ public void generarTicketTest(int idFactura) {
 		 document.add(encabezadoTicket);
 		 
 		 
-		 
+		
 		 PdfPTable encabezadoCliente=new PdfPTable(2);
-			encabezadoTicket.setWidthPercentage(100);
+		 encabezadoCliente.setWidthPercentage(100);
 			float[] medidaCeldaCliente= {35f,65f};
-			encabezadoTicket.setWidths(medidaCeldaCliente);
+			encabezadoCliente.setWidths(medidaCeldaCliente);
 			
-			try {
-				String query="";
-				/*int contador=0;
-				Statement st= con.createStatement();
-				ResultSet rs=st.executeQuery(query);
-				while(rs.next()) {
-					contador++;
-					if(contador<=1) {*/
+		
+				
+			
 						PdfPCell nombreCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
 						nombreCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						nombreCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -426,7 +422,7 @@ public void generarTicketTest(int idFactura) {
 						 encabezadoCliente.addCell(datoCliente);
 						 
 						 
-						 PdfPCell documentoCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
+						 PdfPCell documentoCliente=new PdfPCell(new Phrase("Ruc", fuenteTitulo));
 						 documentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						 documentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
 						 documentoCliente.setBorder(0);
@@ -436,11 +432,8 @@ public void generarTicketTest(int idFactura) {
 							datoDocumentoCliente.setBorder(0);
 							 encabezadoCliente.addCell(documentoCliente);
 							 encabezadoCliente.addCell(datoDocumentoCliente);
-					//}
-				//}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+				
+			
 			document.add(encabezadoCliente);
 			
 			//dato del detalle d la venta
@@ -480,17 +473,12 @@ public void generarTicketTest(int idFactura) {
 			 ventas.addCell(itbis);
 			 ventas.addCell(precio);
 			 ventas.addCell(total);
-			// document.add(ventas);
+			 // document.add(ventas);
 			 
 			 
 			 //consulta de producto
 			 
-			 try {
-				 String query="";
-					
-					/*Statement st= con.createStatement();
-					ResultSet rs=st.executeQuery(query);
-					while(rs.next()) {*/
+			
 				 for (Detalle detalle : listDetalles) {
 					
 				
@@ -526,10 +514,7 @@ public void generarTicketTest(int idFactura) {
 						 ventas.addCell(totalDato);
 						 
 				 }	 
-					//}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+			
 			 
 			 
 			 //DATOS PIE  DE PAGINA
@@ -538,14 +523,7 @@ public void generarTicketTest(int idFactura) {
 			 float[] medidaCeldaFooter= {15f,20f};
 			 footer.setWidths(medidaCeldaFooter);
 			 
-			 try {
-				 String query="";
-				/*	int contador=0;
-					Statement st= con.createStatement();
-					ResultSet rs=st.executeQuery(query);
-					while(rs.next()) {
-				 contador++;
-					if(contador<=1) {*/
+			
 						
 						 PdfPCell observacion=new PdfPCell(new Phrase("Observacion", fuenteTitulo));
 						 observacion.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -586,11 +564,8 @@ public void generarTicketTest(int idFactura) {
 						 
 						
 							
-					//}
-					//}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+					
+			
 			 document.add(saltoLinea);
 			 document.add(ventas);
 			 document.add(footer);
