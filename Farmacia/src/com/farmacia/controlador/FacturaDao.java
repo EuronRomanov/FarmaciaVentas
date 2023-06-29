@@ -113,9 +113,9 @@ public class FacturaDao {
      * @param key
      * @return list of client whose name contains the @key
      */
-    public void searchProveedor(String key, JTable tblProveedor){
+    public void searchFactura(String key, JTable tblProveedor){
         ArrayList<Proveedor> result = new ArrayList<Proveedor>();
-        String sql = "SELECT * FROM Proveedor WHERE nombreEmpresa LIKE ?";
+        String sql = "SELECT * FROM factura WHERE n_cliente LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
@@ -156,24 +156,26 @@ public class FacturaDao {
      * buscar por id
      */
     
-    public Proveedor searchProveedorId(int key){
-    	Proveedor proveedor = new Proveedor();
+    public Factura searchFacturaId(int key){
+    	Factura factura= new Factura();
     	
-        String sql = "SELECT * FROM Proveedor WHERE codProveedor=?";
+        String sql = "SELECT * FROM Factura,Usuario WHERE Factura.codUsuario=Usuario.codUsuario AND codFactura=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,  key );
             ResultSet rs = ps.executeQuery();
-
+            DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
             while(rs.next()){
             	
-            	proveedor = new Proveedor(rs.getInt("codProveedor"),
-						rs.getString("nombreEmpresa"),
-						rs.getString("representante"),
-						rs.getString("direccion"),
-						rs.getString("celular"),
-						rs.getString("telefono"),
-						rs.getString("ruc"));
+            	factura = new Factura(rs.getInt("codFactura"),
+	            		   LocalDateTime.parse(rs.getTimestamp("fecha").toString(),parser), 
+	            		   rs.getString("ruc"),
+	            		   rs.getString("cedula"), 
+	            		   rs.getString("n_cliente"), 
+	            		   rs.getString("observacion"),
+	            		   rs.getDouble("subtotal"), 
+	            		   rs.getDouble("total"), 
+	            		   rs.getString("nombre"));;
                
                 
             }
@@ -186,7 +188,7 @@ public class FacturaDao {
                 System.out.println(e.toString());
             }*/
         }    
-        return proveedor;
+        return factura;
     }
     
     
@@ -194,7 +196,7 @@ public class FacturaDao {
      * update the @client
      * @param client
      */
-    public void editProveedor(Proveedor Proveedor){
+    public void editFactura(Proveedor Proveedor){
         String sql = "UPDATE Proveedor SET nombreEmpresa=?, "
         		+ "representante=?,"
         		+ "direccion=?,"
@@ -228,8 +230,8 @@ public class FacturaDao {
      * delete the client whose id is @id
      * @param id
      */
-    public void deleteProveedor(int id){
-        String sql = "DELETE FROM Proveedor WHERE codProveedor=?";
+    public void deleteFactura(int id){
+        String sql = "DELETE FROM Factura WHERE codFactura=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);

@@ -6,6 +6,8 @@ public class Detalle {
     private int codProducto ;
     private  double v_total;
     private  int  codFactura;
+    private String producto;
+    private double precioVenta;
 	public Detalle() {
 		super();
 	}
@@ -25,6 +27,17 @@ public class Detalle {
 		this.codProducto = codProducto;
 		this.v_total = v_total;
 		this.codFactura = codFactura;
+	}
+	
+	
+	
+	public Detalle(int codCarrito, int cantidad, String producto, double v_total, double precioVenta) {
+		super();
+		this.codCarrito = codCarrito;
+		this.cantidad = cantidad;
+		this.producto = producto;
+		this.v_total = v_total;
+		this.precioVenta = precioVenta;
 	}
 	public int getCodCarrito() {
 		return codCarrito;
@@ -55,6 +68,18 @@ public class Detalle {
 	}
 	public void setCodFactura(int codFactura) {
 		this.codFactura = codFactura;
+	}
+	public String getProducto() {
+		return producto;
+	}
+	public void setProducto(String producto) {
+		this.producto = producto;
+	}
+	public double getPrecioVenta() {
+		return precioVenta;
+	}
+	public void setPrecioVenta(double precioVenta) {
+		this.precioVenta = precioVenta;
 	}
     
     

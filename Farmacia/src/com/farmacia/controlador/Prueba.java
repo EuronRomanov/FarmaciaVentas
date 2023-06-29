@@ -13,9 +13,7 @@ public class Prueba {
 		 
 		GenerdorDocumentos generador=new GenerdorDocumentos();
 		//generador.generarPDFs("1999999999999", 13);
-		LocalDateTime hora = LocalDateTime.now();
-        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        System.out.println(hora.format(f));
+		generador.generarTicket(1);
 		
 	}
 
