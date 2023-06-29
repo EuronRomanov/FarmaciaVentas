@@ -12,8 +12,8 @@ public class Prueba {
 		// TODO Auto-generated method stub
 		 
 		GenerdorDocumentos generador=new GenerdorDocumentos();
-		//generador.generarPDFs("1999999999999", 13);
-		generador.generarTicket(1);
+		
+		generador.generarTicketTest(1);
 		
 	}
 
