@@ -1,6 +1,8 @@
 package com.farmacia.utils;
 
 import java.awt.Desktop;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,9 +19,16 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.printing.PDFPageable;
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.controlador.DetalleDao;
@@ -47,6 +56,8 @@ public class GenerdorDocumentos {
 
 	
 	private static Connection con=ConexionBD.conectar();
+	private ControlFormatos formato=new ControlFormatos();
+	private final static Logger LOGGER = Logger.getLogger("mx.hash.impresionpdf.Impresor");
 	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada)  {
 		
 		try {
@@ -99,7 +110,10 @@ public class GenerdorDocumentos {
 
 	
 	public void generarTicket(int idFactura) {
-		
+		LocalDateTime hora = LocalDateTime.now();
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"); 
+        ///hora.format(f)
+        
 		Factura factura=new FacturaDao().searchFacturaId(idFactura);
 		List<Detalle>listDetalles=new DetalleDao().listarDetallesId(idFactura);
 		
@@ -108,7 +122,7 @@ public class GenerdorDocumentos {
 		
 		Document document=new Document(r,9f,9f,7f,7f);
 	try {
-		FileOutputStream archivo=new FileOutputStream("C:/Users/HP/Desktop/ticket.pdf");
+		FileOutputStream archivo=new FileOutputStream("temp/ticket.pdf");
 		PdfWriter.getInstance(document, archivo);
 		document.open();
 		//FUENTES
@@ -149,9 +163,9 @@ public class GenerdorDocumentos {
 		 
 		 
 		 PdfPTable encabezadoCliente=new PdfPTable(2);
-			encabezadoTicket.setWidthPercentage(100);
+		 encabezadoCliente.setWidthPercentage(100);
 			float[] medidaCeldaCliente= {35f,65f};
-			encabezadoTicket.setWidths(medidaCeldaCliente);
+			encabezadoCliente.setWidths(medidaCeldaCliente);
 			
 			try {
 				String query="";
@@ -165,7 +179,7 @@ public class GenerdorDocumentos {
 						nombreCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						nombreCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
 						nombreCliente.setBorder(0);
-						PdfPCell datoCliente=new PdfPCell(new Phrase(factura.getUsuario(), fuenteDescripcion));
+						PdfPCell datoCliente=new PdfPCell(new Phrase(factura.getN_cliente(), fuenteDescripcion));
 						datoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						datoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
 						datoCliente.setBorder(0);
@@ -173,16 +187,51 @@ public class GenerdorDocumentos {
 						 encabezadoCliente.addCell(datoCliente);
 						 
 						 
-						 PdfPCell documentoCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
+						 PdfPCell documentoCliente=new PdfPCell(new Phrase("RUC", fuenteTitulo));
 						 documentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						 documentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
 						 documentoCliente.setBorder(0);
-							PdfPCell datoDocumentoCliente=new PdfPCell(new Phrase(factura.getRuc(), fuenteDescripcion));
-							datoDocumentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
-							datoDocumentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
-							datoDocumentoCliente.setBorder(0);
-							 encabezadoCliente.addCell(documentoCliente);
-							 encabezadoCliente.addCell(datoDocumentoCliente);
+						PdfPCell datoDocumentoCliente=new PdfPCell(new Phrase(factura.getRuc(), fuenteDescripcion));
+						datoDocumentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
+						datoDocumentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
+						datoDocumentoCliente.setBorder(0);
+					    encabezadoCliente.addCell(documentoCliente);
+					    encabezadoCliente.addCell(datoDocumentoCliente);
+							 
+							 
+							 PdfPCell fechaCompra=new PdfPCell(new Phrase("Fecha", fuenteTitulo));
+							 fechaCompra.setVerticalAlignment(Element.ALIGN_CENTER);
+							 fechaCompra.setHorizontalAlignment(Element.ALIGN_LEFT);
+							 fechaCompra.setBorder(0);
+						     PdfPCell datofechaCompra=new PdfPCell(new Phrase(factura.getFecha().toString().replaceFirst("T", " "), fuenteDescripcion));
+						     datofechaCompra.setVerticalAlignment(Element.ALIGN_CENTER);
+						     datofechaCompra.setHorizontalAlignment(Element.ALIGN_LEFT);
+						     datofechaCompra.setBorder(0);
+						     encabezadoCliente.addCell(fechaCompra);
+						     encabezadoCliente.addCell(datofechaCompra); 
+								 
+								 
+								 PdfPCell vendedor=new PdfPCell(new Phrase("Venndedor", fuenteTitulo));
+								 vendedor.setVerticalAlignment(Element.ALIGN_CENTER);
+								 vendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+								 vendedor.setBorder(0);
+								 PdfPCell datoVendedor=new PdfPCell(new Phrase(factura.getUsuario(), fuenteDescripcion));
+								 datoVendedor.setVerticalAlignment(Element.ALIGN_CENTER);
+								 datoVendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+								 datoVendedor.setBorder(0);
+								 encabezadoCliente.addCell(vendedor);
+								 encabezadoCliente.addCell(datoVendedor); 		 
+								 
+								 PdfPCell nFactura=new PdfPCell(new Phrase("Factura N° ", fuenteTitulo));
+								 nFactura.setVerticalAlignment(Element.ALIGN_CENTER);
+								 nFactura.setHorizontalAlignment(Element.ALIGN_LEFT);
+								 nFactura.setBorder(0);
+								 PdfPCell datonFactura=new PdfPCell(new Phrase(formato.darFormatoNumeroCeros(factura.getCodFactura()), fuenteDescripcion));
+								 datonFactura.setVerticalAlignment(Element.ALIGN_CENTER);
+								 datonFactura.setHorizontalAlignment(Element.ALIGN_LEFT);
+								 datonFactura.setBorder(0);
+								 encabezadoCliente.addCell(nFactura);
+								 encabezadoCliente.addCell(datonFactura); 
 					//}
 				//}
 			} catch (Exception e) {
@@ -191,31 +240,28 @@ public class GenerdorDocumentos {
 			document.add(encabezadoCliente);
 			
 			//dato del detalle d la venta
-			 PdfPTable ventas=new PdfPTable(5);
+			 PdfPTable ventas=new PdfPTable(4);
 			 ventas.setWidthPercentage(100);
-			 float[] medidaCeldaVentas= {15f,20f,15f,15f,15f};
+			 float[] medidaCeldaVentas= {15f,30f,20f,15f};
 			 ventas.setWidths(medidaCeldaVentas);
 			
 			 
-			 PdfPCell cantidad=new PdfPCell(new Phrase("Cant", fuenteTitulo));
+			 PdfPCell cantidad=new PdfPCell(new Phrase("Cant.", fuenteTitulo));
 			 cantidad.setVerticalAlignment(Element.ALIGN_CENTER);
 			 cantidad.setHorizontalAlignment(Element.ALIGN_LEFT);
 			 cantidad.setBorder(0);
 			
-			 PdfPCell medida=new PdfPCell(new Phrase("UM", fuenteTitulo));
+			 PdfPCell medida=new PdfPCell(new Phrase("Producto", fuenteTitulo));
 			 medida.setVerticalAlignment(Element.ALIGN_CENTER);
 			 medida.setHorizontalAlignment(Element.ALIGN_LEFT);
 			 medida.setBorder(0);
 			 
-			 PdfPCell precio=new PdfPCell(new Phrase("PRECIO", fuenteTitulo));
+			 PdfPCell precio=new PdfPCell(new Phrase("Precio. U", fuenteTitulo));
 			 precio.setVerticalAlignment(Element.ALIGN_CENTER);
 			 precio.setHorizontalAlignment(Element.ALIGN_LEFT);
 			 precio.setBorder(0);
 			 
-			 PdfPCell itbis=new PdfPCell(new Phrase("ITBIS", fuenteTitulo));
-			 itbis.setVerticalAlignment(Element.ALIGN_CENTER);
-			 itbis.setHorizontalAlignment(Element.ALIGN_LEFT);
-			 itbis.setBorder(0);
+			 
 			 
 			 PdfPCell total=new PdfPCell(new Phrase("Total", fuenteTitulo));
 			 total.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -224,7 +270,7 @@ public class GenerdorDocumentos {
 			 
 			 ventas.addCell(cantidad);
 			 ventas.addCell(medida);
-			 ventas.addCell(itbis);
+			
 			 ventas.addCell(precio);
 			 ventas.addCell(total);
 			// document.add(ventas);
@@ -256,10 +302,7 @@ public class GenerdorDocumentos {
 						 precioDato.setHorizontalAlignment(Element.ALIGN_LEFT);
 						 precioDato.setBorder(0);
 						 
-						 PdfPCell itbisDato=new PdfPCell(new Phrase(String.valueOf(detalle.getCodProducto()), fuenteDescripcion));
-						 itbisDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						 itbisDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 itbisDato.setBorder(0);
+						
 						 
 						 PdfPCell totalDato=new PdfPCell(new Phrase(String.valueOf(detalle.getV_total()), fuenteDescripcion));
 						 totalDato.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -268,7 +311,7 @@ public class GenerdorDocumentos {
 						 
 						 ventas.addCell(cantiidadDato);
 						 ventas.addCell(medidaDato);
-						 ventas.addCell(itbisDato);
+						 
 						 ventas.addCell(precioDato);
 						 ventas.addCell(totalDato);
 						 
@@ -300,7 +343,7 @@ public class GenerdorDocumentos {
 						 observacion.setBorder(0);
 							PdfPCell observacionDato=new PdfPCell(new Phrase(String.valueOf(factura.getObervacion()), fuenteDescripcion));
 							observacionDato.setVerticalAlignment(Element.ALIGN_CENTER);
-							observacionDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+							observacionDato.setHorizontalAlignment(Element.ALIGN_RIGHT);
 							observacionDato.setBorder(0);
 						
 						PdfPCell subTotal=new PdfPCell(new Phrase("SubTotal", fuenteTitulo));
@@ -309,7 +352,7 @@ public class GenerdorDocumentos {
 						subTotal.setBorder(0);
 						PdfPCell subTotalDato=new PdfPCell(new Phrase(String.valueOf(factura.getSubtotal()), fuenteDescripcion));
 						subTotalDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						subTotalDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						subTotalDato.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						subTotalDato.setBorder(0);
 						
 						
@@ -319,7 +362,7 @@ public class GenerdorDocumentos {
 						totalVentas.setBorder(0);
 						PdfPCell totalVentasDato=new PdfPCell(new Phrase(String.valueOf(factura.getTotal()), fuenteDescripcion));
 						totalVentasDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						totalVentasDato.setHorizontalAlignment(Element.ALIGN_LEFT);
+						totalVentasDato.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						totalVentasDato.setBorder(0);
 						
 						
@@ -338,244 +381,44 @@ public class GenerdorDocumentos {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+			
 			 document.add(saltoLinea);
 			 document.add(ventas);
+			 document.add(saltoLinea);
 			 document.add(footer);
 		 document.close();
 		 
 		 
-		 File abrirArchivo=new File("C:/Users/HP/Desktop/ticket.pdf");
-		 Desktop.getDesktop().open(abrirArchivo);
+		 File abrirArchivo=new File("temp/ticket.pdf");
+		// Desktop.getDesktop().open(abrirArchivo);
+		 try {
+			 imprimir(abrirArchivo);
+		} catch (PrinterException | IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error de impresion", "Error", JOptionPane.ERROR_MESSAGE);
+            
+        }
+		
 	} catch (Exception e) {
 		// TODO: handle exception
 	}
 	}
 	
-public void generarTicketTest(int idFactura) {
-	LocalDateTime fecha=LocalDateTime.now();
-		Factura factura=new Factura(1,  fecha, "dsddsd", "", "Pepe Mujica", "",
-				0, 135, "Leonardo Fabio");
-		List<Detalle>listDetalles=new ArrayList();
-		listDetalles.add(new Detalle(1, 4, "Ibuprofeno", 3.5, 4.5));
-		
-		Rectangle r=new Rectangle(210,400);
-		
-		Document document=new Document(r,9f,9f,7f,7f);
-	try {
-		FileOutputStream archivo=new FileOutputStream("C:/Users/HP/Desktop/ticket.pdf");
-		PdfWriter.getInstance(document, archivo);
-		document.open();
-		//FUENTES
-		Font fuenteTitulo=FontFactory.getFont(
-				FontFactory.HELVETICA_BOLD,8,Font.NORMAL,
-				BaseColor.BLACK);
-		Font fuenteDescripcion=FontFactory.getFont(
-				FontFactory.HELVETICA_BOLD,7,Font.NORMAL,
-				BaseColor.BLACK);
-		
-		//SALTO LINEA
-		Paragraph saltoLinea=new Paragraph();
-		saltoLinea.add(new Paragraph(Chunk.NEWLINE));
-		document.add(saltoLinea);
-		
-		PdfPTable encabezadoTicket=new PdfPTable(1);
-		encabezadoTicket.setWidthPercentage(100);
-		float[] medidaCelda= {100f};
-		encabezadoTicket.setWidths(medidaCelda);
-		
-		PdfPCell empresa=new PdfPCell(new Phrase("EMPRESA DEMO", fuenteTitulo));
-		empresa.setVerticalAlignment(Element.ALIGN_CENTER);
-		empresa.setHorizontalAlignment(Element.ALIGN_CENTER);
-		empresa.setBorder(0);
-		PdfPCell direccion=new PdfPCell(new Phrase("Quito Ecuador", fuenteTitulo));
-		 direccion.setVerticalAlignment(Element.ALIGN_CENTER);
-		 direccion.setHorizontalAlignment(Element.ALIGN_CENTER);
-		 direccion.setBorder(0);
-		 PdfPCell rnc= new PdfPCell(new Phrase("RUC: 000000000000", fuenteTitulo));
-		 rnc.setVerticalAlignment(Element.ALIGN_CENTER);
-		 rnc.setHorizontalAlignment(Element.ALIGN_CENTER);
-		 rnc.setBorder(0);
-		 encabezadoTicket.addCell(empresa);
-		 encabezadoTicket.addCell(direccion);
-		 encabezadoTicket.addCell(rnc);
-		 document.add(encabezadoTicket);
-		 
-		 
-		
-		 PdfPTable encabezadoCliente=new PdfPTable(2);
-		 encabezadoCliente.setWidthPercentage(100);
-			float[] medidaCeldaCliente= {35f,65f};
-			encabezadoCliente.setWidths(medidaCeldaCliente);
-			
-		
-				
-			
-						PdfPCell nombreCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
-						nombreCliente.setVerticalAlignment(Element.ALIGN_CENTER);
-						nombreCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
-						nombreCliente.setBorder(0);
-						PdfPCell datoCliente=new PdfPCell(new Phrase(factura.getUsuario(), fuenteDescripcion));
-						datoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
-						datoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
-						datoCliente.setBorder(0);
-						 encabezadoCliente.addCell(nombreCliente);
-						 encabezadoCliente.addCell(datoCliente);
-						 
-						 
-						 PdfPCell documentoCliente=new PdfPCell(new Phrase("Ruc", fuenteTitulo));
-						 documentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
-						 documentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 documentoCliente.setBorder(0);
-							PdfPCell datoDocumentoCliente=new PdfPCell(new Phrase(factura.getRuc(), fuenteDescripcion));
-							datoDocumentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
-							datoDocumentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
-							datoDocumentoCliente.setBorder(0);
-							 encabezadoCliente.addCell(documentoCliente);
-							 encabezadoCliente.addCell(datoDocumentoCliente);
-				
-			
-			document.add(encabezadoCliente);
-			
-			//dato del detalle d la venta
-			 PdfPTable ventas=new PdfPTable(5);
-			 ventas.setWidthPercentage(100);
-			 float[] medidaCeldaVentas= {15f,20f,15f,15f,15f};
-			 ventas.setWidths(medidaCeldaVentas);
-			
-			 
-			 PdfPCell cantidad=new PdfPCell(new Phrase("Cant", fuenteTitulo));
-			 cantidad.setVerticalAlignment(Element.ALIGN_CENTER);
-			 cantidad.setHorizontalAlignment(Element.ALIGN_LEFT);
-			 cantidad.setBorder(0);
-			
-			 PdfPCell medida=new PdfPCell(new Phrase("UM", fuenteTitulo));
-			 medida.setVerticalAlignment(Element.ALIGN_CENTER);
-			 medida.setHorizontalAlignment(Element.ALIGN_LEFT);
-			 medida.setBorder(0);
-			 
-			 PdfPCell precio=new PdfPCell(new Phrase("PRECIO", fuenteTitulo));
-			 precio.setVerticalAlignment(Element.ALIGN_CENTER);
-			 precio.setHorizontalAlignment(Element.ALIGN_LEFT);
-			 precio.setBorder(0);
-			 
-			 PdfPCell itbis=new PdfPCell(new Phrase("ITBIS", fuenteTitulo));
-			 itbis.setVerticalAlignment(Element.ALIGN_CENTER);
-			 itbis.setHorizontalAlignment(Element.ALIGN_LEFT);
-			 itbis.setBorder(0);
-			 
-			 PdfPCell total=new PdfPCell(new Phrase("Total", fuenteTitulo));
-			 total.setVerticalAlignment(Element.ALIGN_CENTER);
-			 total.setHorizontalAlignment(Element.ALIGN_LEFT);
-			 total.setBorder(0);
-			 
-			 ventas.addCell(cantidad);
-			 ventas.addCell(medida);
-			 ventas.addCell(itbis);
-			 ventas.addCell(precio);
-			 ventas.addCell(total);
-			 // document.add(ventas);
-			 
-			 
-			 //consulta de producto
-			 
-			
-				 for (Detalle detalle : listDetalles) {
-					
-				
-						 PdfPCell cantiidadDato=new PdfPCell(new Phrase(String.valueOf(detalle.getCantidad()), fuenteDescripcion));
-						 cantiidadDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						 cantiidadDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 cantiidadDato.setBorder(0);
-						
-						 PdfPCell medidaDato=new PdfPCell(new Phrase(detalle.getProducto(), fuenteDescripcion));
-						 medidaDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						 medidaDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 medidaDato.setBorder(0);
-						 
-						 PdfPCell precioDato=new PdfPCell(new Phrase(String.valueOf(detalle.getPrecioVenta()), fuenteDescripcion));
-						 precioDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						 precioDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 precioDato.setBorder(0);
-						 
-						 PdfPCell itbisDato=new PdfPCell(new Phrase(String.valueOf(detalle.getCodProducto()), fuenteDescripcion));
-						 itbisDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						 itbisDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 itbisDato.setBorder(0);
-						 
-						 PdfPCell totalDato=new PdfPCell(new Phrase(String.valueOf(detalle.getV_total()), fuenteDescripcion));
-						 totalDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						 totalDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						 totalDato.setBorder(0);
-						 
-						 ventas.addCell(cantiidadDato);
-						 ventas.addCell(medidaDato);
-						 ventas.addCell(itbisDato);
-						 ventas.addCell(precioDato);
-						 ventas.addCell(totalDato);
-						 
-				 }	 
-			
-			 
-			 
-			 //DATOS PIE  DE PAGINA
-			 PdfPTable footer=new PdfPTable(2);
-			 footer.setWidthPercentage(100);
-			 float[] medidaCeldaFooter= {15f,20f};
-			 footer.setWidths(medidaCeldaFooter);
-			 
-			
-						
-						 PdfPCell observacion=new PdfPCell(new Phrase("Observacion", fuenteTitulo));
-						 observacion.setVerticalAlignment(Element.ALIGN_CENTER);
-						 observacion.setHorizontalAlignment(Element.ALIGN_RIGHT);
-						 observacion.setBorder(0);
-							PdfPCell observacionDato=new PdfPCell(new Phrase(String.valueOf(factura.getObervacion()), fuenteDescripcion));
-							observacionDato.setVerticalAlignment(Element.ALIGN_CENTER);
-							observacionDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-							observacionDato.setBorder(0);
-						
-						PdfPCell subTotal=new PdfPCell(new Phrase("SubTotal", fuenteTitulo));
-						subTotal.setVerticalAlignment(Element.ALIGN_CENTER);
-						subTotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
-						subTotal.setBorder(0);
-						PdfPCell subTotalDato=new PdfPCell(new Phrase(String.valueOf(factura.getSubtotal()), fuenteDescripcion));
-						subTotalDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						subTotalDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						subTotalDato.setBorder(0);
-						
-						
-						PdfPCell totalVentas=new PdfPCell(new Phrase("Total", fuenteTitulo));
-						totalVentas.setVerticalAlignment(Element.ALIGN_CENTER);
-						totalVentas.setHorizontalAlignment(Element.ALIGN_RIGHT);
-						totalVentas.setBorder(0);
-						PdfPCell totalVentasDato=new PdfPCell(new Phrase(String.valueOf(factura.getTotal()), fuenteDescripcion));
-						totalVentasDato.setVerticalAlignment(Element.ALIGN_CENTER);
-						totalVentasDato.setHorizontalAlignment(Element.ALIGN_LEFT);
-						totalVentasDato.setBorder(0);
-						
-						
-						
-						 footer.addCell(observacion);
-						 footer.addCell(observacionDato);
-						 footer.addCell(subTotal);
-						 footer.addCell(subTotalDato);
-						 footer.addCell(totalVentas);
-						 footer.addCell(totalVentasDato);
-						 
-						
-							
-					
-			
-			 document.add(saltoLinea);
-			 document.add(ventas);
-			 document.add(footer);
-		 document.close();
-		 
-		 
-		 File abrirArchivo=new File("C:/Users/HP/Desktop/ticket.pdf");
-		 Desktop.getDesktop().open(abrirArchivo);
-	} catch (Exception e) {
-		// TODO: handle exception
-	}
-	}
+
+
+public void imprimir(File archivo) throws PrinterException, IOException {
+    // Indicamos el nombre del archivo Pdf que deseamos imprimir
+    PDDocument document = Loader.loadPDF(archivo);
+
+    PrinterJob job = PrinterJob.getPrinterJob();
+
+   // LOGGER.log(Level.INFO, "Mostrando el dialogo de impresion");
+    if (job.printDialog() == true) {            
+        job.setPageable(new PDFPageable(document));
+
+       // LOGGER.log(Level.INFO, "Imprimiendo documento");
+        job.print();
+    }
+    
+    archivo.delete();
+}
 }
