@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.entidades.Factura;
+import com.farmacia.utils.GenerdorDocumentos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,7 +59,7 @@ public class VentaDao {
 			            
 			            
 			            con.commit();
-			                   
+			            new GenerdorDocumentos().generarTicket(facturaId);     
 			} catch (SQLException ex) {
 			  System.err.println("ERROR: " + ex.getMessage());
 			   if(con!=null)
