@@ -2849,7 +2849,7 @@ public class Main extends JFrame {
 		 DefaultTableModel modeloVentas = (DefaultTableModel) tblVentas.getModel();
 		 modeloVentas.setRowCount(0);
 		 lblTotalpagar.setText("0,00");
-		 pnlVentasLadoDerecho.setVisible(false);
+		 pnlVentasLadoDerecho.setVisible(true);
 		 textVentasCodProd.setText("");
 		 textVentasCodProd.requestFocus();
 	 }
