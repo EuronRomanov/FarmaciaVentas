@@ -12,5 +12,7 @@
 	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="librerias/itextpdf-5.5.13.3.jar"/>
 	<classpathentry kind="lib" path="librerias/itext-pdfa-5.5.13.3.jar"/>
+	<classpathentry kind="lib" path="librerias/pdfbox-app-3.0.0-alpha3.jar"/>
+	<classpathentry kind="lib" path="librerias/pdfbox-app-2.0.28.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
