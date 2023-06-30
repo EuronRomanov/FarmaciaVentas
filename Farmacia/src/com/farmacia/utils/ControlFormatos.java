@@ -124,4 +124,16 @@ public class ControlFormatos {
 		}
 		
 	}
+	
+	
+	public String darFormatoNumeroCeros(int valor) {
+		int width = 13;
+		int valorCompare=1000000000;
+		 if (valorCompare<valor) {
+			return String.valueOf(valor);
+		} else {
+             return String.format("%0" + width + "d", valor);
+		}
+       
+	}
 }
