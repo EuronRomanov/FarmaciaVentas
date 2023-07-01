@@ -86,6 +86,7 @@ import java.awt.event.FocusEvent;
 import java.awt.Component;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
+import com.toedter.components.JLocaleChooser;
 
 
 public class Main extends JFrame {
@@ -210,7 +211,7 @@ public class Main extends JFrame {
     private JButton btnFacturaAgregar;
     private JTextField textField;
     private JButton btnFacturaBuscar;
-	
+	private DetalleForm detalleForm ;
     /**
 	 * Launch the application. 
 	 * author : 
@@ -289,7 +290,7 @@ public class Main extends JFrame {
 				eliminarTab("Proveedor");
 				eliminarTab("Caja");
 				eliminarTab("Facturas");
-				eliminarTab("usuarios");
+				eliminarTab("Usuarios");
 				tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
 				productoDao.ListarProductoTable(tblProductos);
@@ -1530,7 +1531,7 @@ public class Main extends JFrame {
 					int key=e.getKeyChar();
 					
 					
-					if (controlFormato.validarNumerosEnteros(key) || textRucProveedor.getText().length()>11) {
+					if (controlFormato.validarNumerosEnteros(key) || textRucProveedor.getText().length()>12) {
 						e.consume();
 					}
 				
@@ -2514,7 +2515,7 @@ public class Main extends JFrame {
 			gbl_pnl_factura.columnWidths = new int[]{70, 145, 0, 0, 138, 0, 0, 0, 0};
 			gbl_pnl_factura.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 			gbl_pnl_factura.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-			gbl_pnl_factura.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+			gbl_pnl_factura.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 			pnl_factura.setLayout(gbl_pnl_factura);
 			lblNewLabel_24 = new JLabel("Fecha Compra");
 			GridBagConstraints gbc_lblNewLabel_24 = new GridBagConstraints();
@@ -2524,6 +2525,7 @@ public class Main extends JFrame {
 			gbc_lblNewLabel_24.gridy = 0;
 			pnl_factura.add(lblNewLabel_24, gbc_lblNewLabel_24);
 			textFacturaFecha = new JTextField();
+			textFacturaFecha.setEditable(false);
 			GridBagConstraints gbc_textFacturaFecha = new GridBagConstraints();
 			gbc_textFacturaFecha.insets = new Insets(0, 0, 5, 5);
 			gbc_textFacturaFecha.fill = GridBagConstraints.HORIZONTAL;
@@ -2645,6 +2647,11 @@ public class Main extends JFrame {
 			pnl_factura.add(textFacturaCodigo, gbc_textFacturaCodigo);
 			textFacturaCodigo.setColumns(10);
 			scrollPane_5 = new JScrollPane();
+			scrollPane_5.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
 			GridBagConstraints gbc_scrollPane_5 = new GridBagConstraints();
 			gbc_scrollPane_5.gridheight = 10;
 			gbc_scrollPane_5.gridwidth = 7;
@@ -2655,6 +2662,52 @@ public class Main extends JFrame {
 			pnl_factura.add(scrollPane_5, gbc_scrollPane_5);
 			
 			tblFacturas = new JTable();
+			tblFacturas.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int column = tblFacturas.getColumnModel().getColumnIndexAtX(e.getX());
+					 int row    = e.getY()/tblFacturas.getRowHeight();
+					 if (row < tblFacturas.getRowCount() && row >= 0  && column < tblFacturas.getColumnCount() && column >= 0)  {
+		                 Object value = tblFacturas.getValueAt(row, column);
+		                 if (value instanceof JButton) {
+		                     //perform a click event
+		                     ((JButton)value).doClick();
+		                     JButton botones=(JButton)value;
+		                     if (botones.getName().equals("btnFacturaDetalle")) {
+		                    	 int fila = tblFacturas.rowAtPoint(e.getPoint());
+		      		           
+		        		         
+		        		        	 int facturaId=Integer.parseInt(tblFacturas.getValueAt(fila, 0).toString()) ;
+		                    	if (detalleForm!=null) {
+		                    		detalleForm.setVisible(true);
+								} else {
+									detalleForm=new DetalleForm();
+									detalleForm.setVisible(true);
+								}
+		                    	detalleForm.setFacturaId(facturaId);
+							}
+		                 }else {
+		                	 limpiarCamposFactura();
+								Factura factura=facturaDao.searchFacturaId(Integer.parseInt(tblFacturas.getValueAt(row, 0).toString()));
+						      textFacturaCodigo.setText(String.valueOf(factura.getCodFactura()) );
+						      textFacturaFecha.setText(factura.getFecha().toString() );
+						      textFacturaRuc.setText(factura.getRuc());
+							  textFacturaCedula.setText(factura.getCedula());
+							  textFacturaCliente.setText(factura.getN_cliente());
+							  textFacturaObservacion.setText(factura.getObervacion());
+							  textFacturaSubtotal.setText(String.valueOf(factura.getSubtotal()) );
+							  textFacturaTotal.setText(String.valueOf(factura.getTotal()) );
+							  cmbFacturaVendedores.setSelectedIndex(buscarIdComboVendedor(factura.getUsuario()));
+							  
+							  btnFacturaAgregar.setEnabled(false);
+							  btnFacturaEliminar.setEnabled(true);
+							  btnFacturaModificar.setEnabled(true);
+							  btnFacturaCancelar.setEnabled(true);
+							  btnFacturaCancelar.setVisible(true);
+		                 }
+		             }
+				}
+			});
 			tblFacturas.setModel(new DefaultTableModel(
 				new Object[][] {
 				},
@@ -2715,6 +2768,10 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaAgregar, gbc_btnFacturaAgregar);
 			
 			btnFacturaModificar = new JButton("Modificar");
+			btnFacturaModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnFacturaModificar.setEnabled(false);
 			GridBagConstraints gbc_btnFacturaModificar = new GridBagConstraints();
 			gbc_btnFacturaModificar.fill = GridBagConstraints.BOTH;
@@ -2724,6 +2781,21 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaModificar, gbc_btnFacturaModificar);
 			
 			btnFacturaEliminar = new JButton("Eliminar");
+			btnFacturaEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println(textFacturaCodigo.getText());
+					if (textFacturaCodigo.getText().length()>0) {
+						facturaDao.deleteFactura(Integer.parseInt(textFacturaCodigo.getText()));
+						limpiarCamposFactura();
+						facturaDao.ListarFacturaTable(tblFacturas);
+						btnFacturaAgregar.setEnabled(true);
+						btnFacturaModificar.setEnabled(false);
+						btnFacturaEliminar.setEnabled(false);
+						btnFacturaCancelar.setVisible(false);
+						btnFacturaCancelar.setEnabled(false);
+					}
+				}
+			});
 			btnFacturaEliminar.setEnabled(false);
 			GridBagConstraints gbc_btnFacturaEliminar = new GridBagConstraints();
 			gbc_btnFacturaEliminar.fill = GridBagConstraints.BOTH;
@@ -2733,6 +2805,16 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaEliminar, gbc_btnFacturaEliminar);
 			
 			btnFacturaCancelar = new JButton("Cancelar");
+			btnFacturaCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					limpiarCamposFactura();
+					
+					btnFacturaAgregar.setEnabled(true);
+					btnFacturaModificar.setEnabled(false);
+					btnFacturaEliminar.setEnabled(false);
+					btnFacturaCancelar.setVisible(false);
+				}
+			});
 			btnFacturaCancelar.setVisible(false);
 			GridBagConstraints gbc_btnFacturaCancelar = new GridBagConstraints();
 			gbc_btnFacturaCancelar.fill = GridBagConstraints.BOTH;
@@ -2743,7 +2825,20 @@ public class Main extends JFrame {
 		
 
 	}
-	 protected void limpiarCamposUsuario() {
+	 protected void limpiarCamposFactura() {
+		 textFacturaCodigo.setText("");
+	      textFacturaFecha.setText("");
+	      textFacturaRuc.setText("");
+		  textFacturaCedula.setText("");
+		  textFacturaCliente.setText("");
+		  textFacturaObservacion.setText("");
+		  textFacturaSubtotal.setText("");
+		  textFacturaTotal.setText("");
+		  cmbFacturaVendedores.setSelectedIndex(0);
+		
+	}
+
+	protected void limpiarCamposUsuario() {
 		// TODO Auto-generated method stub
 		textVendedorUsuario.setText("");
 		textVendedorCedula.setText("");
@@ -2779,6 +2874,19 @@ public class Main extends JFrame {
          for (int i = 0; i < cmbProductoProveedor.getItemCount(); i++) {
 			 Proveedor p=(Proveedor)cmbProductoProveedor.getItemAt(i);
 			 if (p.getCodProveedor()==j) {
+				 y=i;
+				break;
+			}
+		}
+		return y;
+	}
+	
+	protected int buscarIdComboVendedor(String j) {
+
+        int y=-1;
+         for (int i = 0; i < cmbFacturaVendedores.getItemCount(); i++) {
+			 Usuario p=(Usuario)cmbFacturaVendedores.getItemAt(i);
+			 if (p.getNombre().equalsIgnoreCase(j)) {
 				 y=i;
 				break;
 			}
