@@ -15,15 +15,23 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import com.farmacia.controlador.ProductoDao;
+import com.farmacia.controlador.DetalleDao;
 
 public class DetalleForm extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_2;
+	private JTextField textDetalleCantidad;
+	private JTextField textDetalleValor;
 	private JTextField textDetalleCodCarrito;
-	private JTable table;
-
+	private JTable tblDetalles;
+	private JComboBox cmbProductos;
+    private ProductoDao productoDao=new ProductoDao();
+    private DetalleDao detalleDao=new DetalleDao();
+    private int facturaId;
+    private JTextField textField;
 	/**
 	 * Launch the application.
 	 */
@@ -44,7 +52,15 @@ public class DetalleForm extends JFrame {
 	 * Create the frame.
 	 */
 	public DetalleForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				productoDao.cargarListaProductos(cmbProductos);
+				detalleDao.listarDetalleTable(facturaId, tblDetalles);
+				
+			}
+		});
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 702, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -65,14 +81,14 @@ public class DetalleForm extends JFrame {
 		gbc_lblNewLabel.gridy = 0;
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 0;
-		contentPane.add(textField, gbc_textField);
-		textField.setColumns(10);
+		textDetalleCantidad = new JTextField();
+		GridBagConstraints gbc_textDetalleCantidad = new GridBagConstraints();
+		gbc_textDetalleCantidad.insets = new Insets(0, 0, 5, 5);
+		gbc_textDetalleCantidad.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetalleCantidad.gridx = 1;
+		gbc_textDetalleCantidad.gridy = 0;
+		contentPane.add(textDetalleCantidad, gbc_textDetalleCantidad);
+		textDetalleCantidad.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Producto");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
@@ -82,13 +98,13 @@ public class DetalleForm extends JFrame {
 		gbc_lblNewLabel_1.gridy = 0;
 		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
-		JComboBox comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 3;
-		gbc_comboBox.gridy = 0;
-		contentPane.add(comboBox, gbc_comboBox);
+		 cmbProductos = new JComboBox();
+		GridBagConstraints gbc_cmbProductos = new GridBagConstraints();
+		gbc_cmbProductos.insets = new Insets(0, 0, 5, 5);
+		gbc_cmbProductos.fill = GridBagConstraints.HORIZONTAL;
+		gbc_cmbProductos.gridx = 3;
+		gbc_cmbProductos.gridy = 0;
+		contentPane.add(cmbProductos, gbc_cmbProductos);
 		
 		JLabel lblNewLabel_2 = new JLabel("Valor Pagar");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
@@ -98,16 +114,17 @@ public class DetalleForm extends JFrame {
 		gbc_lblNewLabel_2.gridy = 1;
 		contentPane.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
-		textField_2 = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 1;
-		gbc_textField_2.gridy = 1;
-		contentPane.add(textField_2, gbc_textField_2);
-		textField_2.setColumns(10);
+		textDetalleValor = new JTextField();
+		GridBagConstraints gbc_textDetalleValor = new GridBagConstraints();
+		gbc_textDetalleValor.insets = new Insets(0, 0, 5, 5);
+		gbc_textDetalleValor.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetalleValor.gridx = 1;
+		gbc_textDetalleValor.gridy = 1;
+		contentPane.add(textDetalleValor, gbc_textDetalleValor);
+		textDetalleValor.setColumns(10);
 		
 		textDetalleCodCarrito = new JTextField();
+		textDetalleCodCarrito.setVisible(false);
 		GridBagConstraints gbc_textDetalleCodCarrito = new GridBagConstraints();
 		gbc_textDetalleCodCarrito.insets = new Insets(0, 0, 5, 5);
 		gbc_textDetalleCodCarrito.fill = GridBagConstraints.HORIZONTAL;
@@ -116,63 +133,85 @@ public class DetalleForm extends JFrame {
 		contentPane.add(textDetalleCodCarrito, gbc_textDetalleCodCarrito);
 		textDetalleCodCarrito.setColumns(10);
 		
+		textField = new JTextField();
+		textField.setVisible(false);
+		GridBagConstraints textDetalleCodFactura = new GridBagConstraints();
+		textDetalleCodFactura.insets = new Insets(0, 0, 5, 5);
+		textDetalleCodFactura.fill = GridBagConstraints.HORIZONTAL;
+		textDetalleCodFactura.gridx = 3;
+		textDetalleCodFactura.gridy = 2;
+		contentPane.add(textField, textDetalleCodFactura);
+		textField.setColumns(10);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 5;
 		gbc_scrollPane.gridwidth = 4;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 3;
 		contentPane.add(scrollPane, gbc_scrollPane);
 		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		tblDetalles = new JTable();
+		tblDetalles.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"Codigo", "Cantidad", "Producto", "Valor Total"
+				"Codigo",  "Producto", "Cantidad",  "Precio","Valor Total"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
+				false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(111);
-		table.getColumnModel().getColumn(1).setPreferredWidth(147);
-		table.getColumnModel().getColumn(2).setPreferredWidth(241);
-		table.getColumnModel().getColumn(3).setPreferredWidth(153);
-		scrollPane.setViewportView(table);
+		tblDetalles.getColumnModel().getColumn(0).setPreferredWidth(111);
+		tblDetalles.getColumnModel().getColumn(1).setPreferredWidth(147);
+		tblDetalles.getColumnModel().getColumn(2).setPreferredWidth(241);
+		tblDetalles.getColumnModel().getColumn(3).setPreferredWidth(153);
+		scrollPane.setViewportView(tblDetalles);
 		
-		JButton btnNewButton = new JButton("New button");
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton.gridx = 4;
-		gbc_btnNewButton.gridy = 4;
-		contentPane.add(btnNewButton, gbc_btnNewButton);
+		JButton btnDetalleAgregar = new JButton("Agregar");
+		GridBagConstraints gbc_btnDetalleAgregar = new GridBagConstraints();
+		gbc_btnDetalleAgregar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnDetalleAgregar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnDetalleAgregar.gridx = 4;
+		gbc_btnDetalleAgregar.gridy = 4;
+		contentPane.add(btnDetalleAgregar, gbc_btnDetalleAgregar);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton_1.gridx = 4;
-		gbc_btnNewButton_1.gridy = 5;
-		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
+		JButton btnVentasActualizar = new JButton("Actualizar");
+		GridBagConstraints gbc_btnVentasActualizar = new GridBagConstraints();
+		gbc_btnVentasActualizar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnVentasActualizar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnVentasActualizar.gridx = 4;
+		gbc_btnVentasActualizar.gridy = 5;
+		contentPane.add(btnVentasActualizar, gbc_btnVentasActualizar);
 		
-		JButton btnNewButton_2 = new JButton("New button");
-		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton_2.gridx = 4;
-		gbc_btnNewButton_2.gridy = 6;
-		contentPane.add(btnNewButton_2, gbc_btnNewButton_2);
+		JButton btnDetalleEliminar = new JButton("Eliminar");
+		GridBagConstraints gbc_btnDetalleEliminar = new GridBagConstraints();
+		gbc_btnDetalleEliminar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnDetalleEliminar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnDetalleEliminar.gridx = 4;
+		gbc_btnDetalleEliminar.gridy = 6;
+		contentPane.add(btnDetalleEliminar, gbc_btnDetalleEliminar);
 		
-		JButton btnNewButton_3 = new JButton("New button");
-		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
-		gbc_btnNewButton_3.gridx = 4;
-		gbc_btnNewButton_3.gridy = 7;
-		contentPane.add(btnNewButton_3, gbc_btnNewButton_3);
+		JButton btnDetalleCancelar = new JButton("Cancelar");
+		GridBagConstraints gbc_btnDetalleCancelar = new GridBagConstraints();
+		gbc_btnDetalleCancelar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnDetalleCancelar.gridx = 4;
+		gbc_btnDetalleCancelar.gridy = 7;
+		contentPane.add(btnDetalleCancelar, gbc_btnDetalleCancelar);
+	}
+
+	public int getFacturaId() {
+		return facturaId;
+	}
+
+	public void setFacturaId(int facturaId) {
+		this.facturaId = facturaId;
 	}
 
 }
