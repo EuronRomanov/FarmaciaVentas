@@ -114,15 +114,16 @@ public class FacturaDao {
      * @return list of client whose name contains the @key
      */
     public void searchFactura(String key, JTable tblProveedor){
-        ArrayList<Proveedor> result = new ArrayList<Proveedor>();
-        String sql = "SELECT * FROM factura WHERE n_cliente LIKE ?";
+       
+        String sql = "SELECT * FROM Factura,Usuario"
+        		+ "	WHERE Factura.codUsuario=Usuario.codUsuario n_cliente LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
             modelo = (DefaultTableModel) tblProveedor.getModel();
             modelo.setRowCount(0);
-            Object[] ob = new Object[7];
+            Object[] ob = new Object[10];
             while(rs.next()){
             	ob[0] =rs.getInt("codProveedor");
             	ob[1] =rs.getString("nombreEmpresa");
@@ -131,6 +132,9 @@ public class FacturaDao {
             	ob[4] =rs.getString("celular");
             	ob[5] =rs.getString("telefono");
             	ob[6] =rs.getString("ruc");
+            	ob[7] =rs.getString("ruc");
+            	ob[8] =rs.getString("ruc");
+            	ob[9] =rs.getString("ruc");
             	
             	modelo.addRow(ob);
                
@@ -196,23 +200,25 @@ public class FacturaDao {
      * update the @client
      * @param client
      */
-    public void editFactura(Proveedor Proveedor){
-        String sql = "UPDATE Proveedor SET nombreEmpresa=?, "
-        		+ "representante=?,"
-        		+ "direccion=?,"
-        		+ "celular=?,"
-        		+ "telefono=?,"
-        		+ "ruc=? WHERE codProveedor=?";
+    public void editFactura(Factura factura){
+        String sql = "UPDATE Factura SET ruc=?, "
+        		+ "cedula=?,"
+        		+ "n_cliente=?,"
+        		+ "observacion=?,"
+        		+ "subtotal=?,"
+        		+ "total=?,"
+        		+ "codUsuario=? WHERE codFactura=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, Proveedor.getNombreProveedor());
-            ps.setString(2, Proveedor.getRepresentante());
-            ps.setString(3, Proveedor.getDireccion());
-            ps.setString(4, Proveedor.getCelular());
-            ps.setString(5, Proveedor.getTelefono());
-            ps.setString(6, Proveedor.getRuc());
+            ps.setString(1, factura.getRuc());
+            ps.setString(2, factura.getCedula());
+            ps.setString(3, factura.getN_cliente());
+            ps.setString(4, factura.getObervacion());
+            ps.setDouble(5, factura.getSubtotal());
+            ps.setDouble(6, factura.getTotal());
+            ps.setInt(7, factura.getCodUsuario());
             
-            ps.setInt(7, Proveedor.getCodProveedor());
+            ps.setInt(8, factura.getCodFactura());
 
             ps.executeUpdate();
         }catch(Exception e){

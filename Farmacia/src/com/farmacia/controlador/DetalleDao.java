@@ -9,12 +9,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
+import com.farmacia.form.Main;
+import com.farmacia.form.RenderTabla;
 
 public class DetalleDao {
 	private static Connection con=ConexionBD.conectar();
+	private DefaultTableModel modelo = new DefaultTableModel();
 	
 	public List listarDetallesId(int key){
 	       List<Detalle> ListaCl = new ArrayList();
@@ -42,5 +50,29 @@ public class DetalleDao {
 	       }
 	       return ListaCl;
 	   }
+	
+	
+	  public void listarDetalleTable(int key,JTable tblDetalles) {
+	        List<Detalle> ListarCl = this.listarDetallesId(key);
+	        modelo = (DefaultTableModel) tblDetalles.getModel();
+	        modelo.setRowCount(0);
+	       
+	        
+	        Object[] ob = new Object[5];
+	        for (int i = 0; i < ListarCl.size(); i++) {
+	            ob[0] = ListarCl.get(i).getCodCarrito();
+	            ob[1] = ListarCl.get(i).getProducto();
+	            ob[2] = ListarCl.get(i).getCantidad();
+	            ob[3] = ListarCl.get(i).getPrecioVenta();
+	            ob[4] = ListarCl.get(i).getV_total();
+	          
+	            modelo.addRow(ob);
+	        }
+	       
+	        tblDetalles.setModel(modelo);
+	        
+
+	    }
+	    
 	 
 }
