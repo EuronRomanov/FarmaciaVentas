@@ -143,15 +143,15 @@ public class GenerdorDocumentos {
 		float[] medidaCelda= {100f};
 		encabezadoTicket.setWidths(medidaCelda);
 		
-		PdfPCell empresa=new PdfPCell(new Phrase("EMPRESA DEMO", fuenteTitulo));
+		PdfPCell empresa=new PdfPCell(new Phrase("MAS QUE FARMACIA 11", fuenteTitulo));
 		empresa.setVerticalAlignment(Element.ALIGN_CENTER);
 		empresa.setHorizontalAlignment(Element.ALIGN_CENTER);
 		empresa.setBorder(0);
-		PdfPCell direccion=new PdfPCell(new Phrase("Quito Ecuador", fuenteTitulo));
+		PdfPCell direccion=new PdfPCell(new Phrase("Quito-Ecuador", fuenteTitulo));
 		 direccion.setVerticalAlignment(Element.ALIGN_CENTER);
 		 direccion.setHorizontalAlignment(Element.ALIGN_CENTER);
 		 direccion.setBorder(0);
-		 PdfPCell rnc= new PdfPCell(new Phrase("RUC: 000000000000", fuenteTitulo));
+		 PdfPCell rnc= new PdfPCell(new Phrase("RUC: 1724392582001", fuenteTitulo));
 		 rnc.setVerticalAlignment(Element.ALIGN_CENTER);
 		 rnc.setHorizontalAlignment(Element.ALIGN_CENTER);
 		 rnc.setBorder(0);
