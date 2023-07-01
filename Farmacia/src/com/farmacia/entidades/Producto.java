@@ -357,6 +357,24 @@ public class Producto {
 	public void setFormaFarmaceutica(String formaFarmaceutica) {
 		this.formaFarmaceutica = formaFarmaceutica;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	@Override
+	public String toString() {
+		return  nombreProducto ;
+	}
 	
 	
     

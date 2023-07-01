@@ -12,12 +12,14 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.form.Main;
 import com.farmacia.form.RenderTabla;
@@ -395,5 +397,14 @@ public class ProductoDao {
     	}
     	return flag;
     }
+    
+    public void cargarListaProductos(JComboBox cmbDetalleProductos) {
+      	 List<Producto> ListarCl = this.ListarProducto();
+      	cmbDetalleProductos.removeAllItems();
+      	 for (Producto proveedor : ListarCl) {
+      		cmbDetalleProductos.addItem(proveedor);
+   			
+   		}
+      }
     
 }
