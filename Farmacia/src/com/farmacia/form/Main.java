@@ -1969,6 +1969,17 @@ public class Main extends JFrame {
 			pnl_producto.add(lblNewLabel_9, gbc_lblNewLabel_9);
 			
 			textProductoUmedida = new JTextField();
+			textProductoUmedida.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int key=e.getKeyChar();
+					
+					
+					if (controlFormato.validarSoloLetras(key)) {
+						e.consume();
+					}
+				}
+			});
 			GridBagConstraints gbc_textProductoUmedida = new GridBagConstraints();
 			gbc_textProductoUmedida.insets = new Insets(0, 0, 5, 5);
 			gbc_textProductoUmedida.fill = GridBagConstraints.HORIZONTAL;
@@ -2770,6 +2781,21 @@ public class Main extends JFrame {
 			btnFacturaModificar = new JButton("Modificar");
 			btnFacturaModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Factura fac=new Factura();
+					fac.setCodFactura(Integer.parseInt(textFacturaCodigo.getText()));
+						fac.setCedula(textFacturaCedula.getText());
+				     	fac.setN_cliente(textFacturaCliente.getText());
+				       fac.setObervacion(textFacturaObservacion.getText());
+				       fac.setRuc(textFacturaRuc.getText());
+				       fac.setSubtotal(Double.valueOf(textFacturaSubtotal.getText()));
+				       fac.setTotal(Double.valueOf(textFacturaTotal.getText()));
+				       
+				       Usuario usuario=(Usuario)cmbFacturaVendedores.getSelectedItem();
+				    		fac.setCodUsuario(usuario.getCodUsuario());    
+				       facturaDao.editFactura(fac);
+				       
+					limpiarCamposFactura();
+					facturaDao.ListarFacturaTable(tblFacturas); 
 				}
 			});
 			btnFacturaModificar.setEnabled(false);
