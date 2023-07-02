@@ -74,5 +74,30 @@ public class DetalleDao {
 
 	    }
 	    
+	  public Detalle searchDetalleId(int key){
+		  Detalle cl=null;
+	       String sql = "SELECT * FROM Detalle WHERE  codCarrito=?";
+	       try {
+	    	  
+	    	   PreparedStatement ps = con.prepareStatement(sql);
+	            ps.setInt(1,  key );
+	    	   ResultSet rs = ps.executeQuery();
+	           while (rs.next()) {               
+	              
+	               
+	        	    cl=new Detalle(rs.getInt("codCarrito"), 
+	        			   rs.getInt("cantidad"),
+	        			   rs.getInt("codProducto"),
+	        			   rs.getDouble("v_total"),rs.getInt("codFactura"));
+	               
+	        	    
+	               
+	           }
+	       } catch (SQLException e) {
+	           System.out.println(e.toString());
+	       }
+	       return cl;
+	   }
+	
 	 
 }
