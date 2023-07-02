@@ -24,6 +24,10 @@ import com.farmacia.entidades.Usuario;
 import com.farmacia.controlador.DetalleDao;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class DetalleForm extends JFrame {
 
@@ -89,6 +93,29 @@ public class DetalleForm extends JFrame {
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		textDetalleCantidad = new JTextField();
+		textDetalleCantidad.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (!textDetalleCantidad.getText().isEmpty()) {
+					double precio=Double.parseDouble(textDetallePrecio.getText());
+					double cantidad=Double.parseDouble(textDetalleCantidad.getText());
+					textDetalleValor.setText(String.valueOf(precio*cantidad));
+					//textDetalleValor.requestFocus();
+				}
+			}
+		});
+		textDetalleCantidad.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+				
+				
+			}
+		});
 		GridBagConstraints gbc_textDetalleCantidad = new GridBagConstraints();
 		gbc_textDetalleCantidad.insets = new Insets(0, 0, 5, 5);
 		gbc_textDetalleCantidad.fill = GridBagConstraints.HORIZONTAL;
@@ -186,7 +213,8 @@ public class DetalleForm extends JFrame {
 						textDetalleValor.setText(String.valueOf(ca.getV_total()));
 						textDetalleCodFac.setText(String.valueOf(ca.getCodFactura()));
 						cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodProducto()));
-				       
+				       textDetallePrecio.setText(tblDetalles.getValueAt(fila, 3).toString());
+						
 				        btnDetalleAgregar.setEnabled(false);
 				        btnVentasActualizar.setEnabled(true);
 				        btnDetalleEliminar.setEnabled(true);
