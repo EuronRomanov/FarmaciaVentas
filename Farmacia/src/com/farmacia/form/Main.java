@@ -289,7 +289,7 @@ public class Main extends JFrame {
 				eliminarTab("Categoria");
 				eliminarTab("Proveedor");
 				eliminarTab("Caja");
-				eliminarTab("Facturas");
+				eliminarTab("Factura");
 				eliminarTab("Usuarios");
 				tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
@@ -328,7 +328,7 @@ public class Main extends JFrame {
 				eliminarTab("Categoria");
 				eliminarTab("Proveedor");
 				eliminarTab("Caja");
-				eliminarTab("Facturas");
+				eliminarTab("Factura");
 				
 				tabPane_Vistas.addTab("Usuarios", null, pnl_usuarios, null);
 				tabPane_Vistas.setBackgroundAt(tabPane_Vistas.indexOfTab("Usuarios"), new Color(214, 214, 214));
