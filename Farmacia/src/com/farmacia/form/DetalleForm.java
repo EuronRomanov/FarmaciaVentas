@@ -18,7 +18,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.farmacia.controlador.ProductoDao;
+import com.farmacia.entidades.Detalle;
+import com.farmacia.entidades.Producto;
+import com.farmacia.entidades.Usuario;
 import com.farmacia.controlador.DetalleDao;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class DetalleForm extends JFrame {
 
@@ -31,7 +36,9 @@ public class DetalleForm extends JFrame {
     private ProductoDao productoDao=new ProductoDao();
     private DetalleDao detalleDao=new DetalleDao();
     private int facturaId;
-    private JTextField textField;
+    private JTextField textDetalleCodFac;
+    private JButton btnDetalleCancelar, btnDetalleAgregar, btnVentasActualizar,btnDetalleEliminar;
+    private JTextField textDetallePrecio;
 	/**
 	 * Launch the application.
 	 */
@@ -133,15 +140,25 @@ public class DetalleForm extends JFrame {
 		contentPane.add(textDetalleCodCarrito, gbc_textDetalleCodCarrito);
 		textDetalleCodCarrito.setColumns(10);
 		
-		textField = new JTextField();
-		textField.setVisible(false);
-		GridBagConstraints textDetalleCodFactura = new GridBagConstraints();
-		textDetalleCodFactura.insets = new Insets(0, 0, 5, 5);
-		textDetalleCodFactura.fill = GridBagConstraints.HORIZONTAL;
-		textDetalleCodFactura.gridx = 3;
-		textDetalleCodFactura.gridy = 2;
-		contentPane.add(textField, textDetalleCodFactura);
-		textField.setColumns(10);
+		textDetalleCodFac = new JTextField();
+		textDetalleCodFac.setVisible(false);
+		
+		textDetallePrecio = new JTextField();
+		textDetallePrecio.setVisible(false);
+		GridBagConstraints gbc_textDetallePrecio = new GridBagConstraints();
+		gbc_textDetallePrecio.insets = new Insets(0, 0, 5, 5);
+		gbc_textDetallePrecio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetallePrecio.gridx = 1;
+		gbc_textDetallePrecio.gridy = 2;
+		contentPane.add(textDetallePrecio, gbc_textDetallePrecio);
+		textDetallePrecio.setColumns(10);
+		GridBagConstraints gbc_textDetalleCodFac = new GridBagConstraints();
+		gbc_textDetalleCodFac.insets = new Insets(0, 0, 5, 5);
+		gbc_textDetalleCodFac.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetalleCodFac.gridx = 3;
+		gbc_textDetalleCodFac.gridy = 2;
+		contentPane.add(textDetalleCodFac, gbc_textDetalleCodFac);
+		textDetalleCodFac.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -154,6 +171,29 @@ public class DetalleForm extends JFrame {
 		contentPane.add(scrollPane, gbc_scrollPane);
 		
 		tblDetalles = new JTable();
+		tblDetalles.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int fila = tblDetalles.rowAtPoint(e.getPoint());
+		           
+		         if(fila>=0)  {
+		        	 limpiarCamposDetalle();
+		        	 String key= tblDetalles.getValueAt(fila, 0).toString();
+				        Detalle ca=detalleDao.searchDetalleId(Integer.parseInt(key));
+				      
+				        textDetalleCantidad.setText(String.valueOf(ca.getCantidad()) );
+						textDetalleCodCarrito.setText(String.valueOf(ca.getCodCarrito()));
+						textDetalleValor.setText(String.valueOf(ca.getV_total()));
+						textDetalleCodFac.setText(String.valueOf(ca.getCodFactura()));
+						cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodProducto()));
+				       
+				        btnDetalleAgregar.setEnabled(false);
+				        btnVentasActualizar.setEnabled(true);
+				        btnDetalleEliminar.setEnabled(true);
+				        btnDetalleCancelar.setVisible(true);
+		         }
+			}
+		});
 		tblDetalles.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -174,7 +214,9 @@ public class DetalleForm extends JFrame {
 		tblDetalles.getColumnModel().getColumn(3).setPreferredWidth(153);
 		scrollPane.setViewportView(tblDetalles);
 		
-		JButton btnDetalleAgregar = new JButton("Agregar");
+		
+		
+		 btnDetalleAgregar = new JButton("Agregar");
 		GridBagConstraints gbc_btnDetalleAgregar = new GridBagConstraints();
 		gbc_btnDetalleAgregar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleAgregar.insets = new Insets(0, 0, 5, 0);
@@ -182,7 +224,7 @@ public class DetalleForm extends JFrame {
 		gbc_btnDetalleAgregar.gridy = 4;
 		contentPane.add(btnDetalleAgregar, gbc_btnDetalleAgregar);
 		
-		JButton btnVentasActualizar = new JButton("Actualizar");
+		 btnVentasActualizar = new JButton("Actualizar");
 		GridBagConstraints gbc_btnVentasActualizar = new GridBagConstraints();
 		gbc_btnVentasActualizar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnVentasActualizar.insets = new Insets(0, 0, 5, 0);
@@ -190,7 +232,7 @@ public class DetalleForm extends JFrame {
 		gbc_btnVentasActualizar.gridy = 5;
 		contentPane.add(btnVentasActualizar, gbc_btnVentasActualizar);
 		
-		JButton btnDetalleEliminar = new JButton("Eliminar");
+		 btnDetalleEliminar = new JButton("Eliminar");
 		GridBagConstraints gbc_btnDetalleEliminar = new GridBagConstraints();
 		gbc_btnDetalleEliminar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleEliminar.insets = new Insets(0, 0, 5, 0);
@@ -198,12 +240,22 @@ public class DetalleForm extends JFrame {
 		gbc_btnDetalleEliminar.gridy = 6;
 		contentPane.add(btnDetalleEliminar, gbc_btnDetalleEliminar);
 		
-		JButton btnDetalleCancelar = new JButton("Cancelar");
+		 btnDetalleCancelar = new JButton("Cancelar");
 		GridBagConstraints gbc_btnDetalleCancelar = new GridBagConstraints();
 		gbc_btnDetalleCancelar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleCancelar.gridx = 4;
 		gbc_btnDetalleCancelar.gridy = 7;
 		contentPane.add(btnDetalleCancelar, gbc_btnDetalleCancelar);
+	}
+
+	protected void limpiarCamposDetalle() {
+		// TODO Auto-generated method stub
+		textDetalleCantidad.setText("");
+		textDetalleCodCarrito.setText("");
+		textDetalleValor.setText("");
+		textDetalleCodFac.setText("");
+		cmbProductos.setSelectedIndex(0);
+		
 	}
 
 	public int getFacturaId() {
@@ -214,4 +266,16 @@ public class DetalleForm extends JFrame {
 		this.facturaId = facturaId;
 	}
 
+	protected int buscarIdComboProducto(int j) {
+
+        int y=-1;
+         for (int i = 0; i < cmbProductos.getItemCount(); i++) {
+			 Producto p=(Producto)cmbProductos.getItemAt(i);
+			 if (p.getCodProducto()==j) {
+				 y=i;
+				break;
+			}
+		}
+		return y;
+	}
 }

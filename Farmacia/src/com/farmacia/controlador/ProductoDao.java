@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +43,8 @@ public class ProductoDao {
 	 * insetar
 	 */
 	 public boolean registrarProducto(Producto cl){
+		 PreparedStatement stmtDetalle=null;
+		 ResultSet rs = null;
 	        String sql = "INSERT INTO Producto (nombreProducto,"
 	        		+ "codigobarra,"
 	        		+ "precioCompra,"
@@ -56,8 +59,8 @@ public class ProductoDao {
 	        		+ "codCategoria,"
 	        		+ "codProveedor) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	        try {
-	            
-	            PreparedStatement ps = con.prepareStatement(sql);
+	        	con.setAutoCommit(false);
+	            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 	            
 	            ps.setString(1, cl.getNombreProducto());
 	           ps.setString(2, cl.getCodigobarra());
@@ -73,10 +76,34 @@ public class ProductoDao {
 	           ps.setInt(12, cl.getCodCategoria());
 	           ps.setInt(13, cl.getCodProveedor());
 	            
-	            ps.execute();
+	            ps.executeUpdate();
+	            // get candidate id
+	            rs = ps.getGeneratedKeys();
+	            int productoId = 0;
+	            if(rs.next())
+	            	productoId = rs.getInt(1);
+	            
+	            
+	            int width = 13;
+	            stmtDetalle = con.prepareStatement("UPDATE Producto SET codigobarra=? WHERE codProducto=?");
+	            stmtDetalle.setString(1,String.format("%0" + width + "d",productoId));
+	            stmtDetalle.setInt(2,productoId);
+            	stmtDetalle.executeUpdate();
+	            
+	            con.commit();
 	            return true;
 	        } catch (SQLException e) {
 	            JOptionPane.showMessageDialog(null, e.toString());
+	            if(con!=null)
+				 {
+				 System.out.println("Rollback");
+				try {
+				  //deshace todos los cambios realizados en los datos
+				  con.rollback();
+				 } catch (SQLException ex1) {
+				      System.err.println( "No se pudo deshacer" + ex1.getMessage() );    
+				 }
+				}
 	            return false;
 	        }finally{
 	            /*try {
