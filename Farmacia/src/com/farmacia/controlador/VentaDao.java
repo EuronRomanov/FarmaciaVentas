@@ -21,6 +21,7 @@ public class VentaDao {
 	public void registarVenta(Factura factura,JTable productos) {
         PreparedStatement stmtFactura =null;
         PreparedStatement stmtDetalle=null; 
+         
         ResultSet rs = null;
 		 try {
 			            //se deshabilita el modo de confirmación automática

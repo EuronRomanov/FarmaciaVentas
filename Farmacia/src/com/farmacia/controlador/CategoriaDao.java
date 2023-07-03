@@ -64,7 +64,7 @@ public class CategoriaDao {
 	 
 	 public List ListarCategoria(){
 	       List<Categoria> ListaCl = new ArrayList();
-	       String sql = "SELECT * FROM Categoria order by codCategoria";
+	       String sql = "SELECT * FROM Categoria WHERE disposicion=1  order by codCategoria";
 	       try {
 	           
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -95,7 +95,7 @@ public class CategoriaDao {
          String datos[]=new String[2];
          
         ArrayList<Categoria> result = new ArrayList<Categoria>();
-        String sql = "SELECT * FROM Categoria WHERE nombreCategoria LIKE ?";
+        String sql = "SELECT * FROM Categoria WHERE disposicion=1 AND nombreCategoria  LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
@@ -132,7 +132,7 @@ public class CategoriaDao {
     public Categoria searchCategoriaId(int key){
     	Categoria categoria = new Categoria();
     	
-        String sql = "SELECT * FROM Categoria WHERE codCategoria=?";
+        String sql = "SELECT * FROM Categoria WHERE disposicion=1 AND codCategoria=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,  key );
@@ -184,7 +184,7 @@ public class CategoriaDao {
      * @param id
      */
     public void deleteCategoria(int id){
-        String sql = "DELETE FROM Categoria WHERE codCategoria=?";
+        String sql = "UPDATE categoria SET disposicion=0 WHERE codCategoria=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);

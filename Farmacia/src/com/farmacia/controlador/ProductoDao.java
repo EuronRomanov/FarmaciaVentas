@@ -124,7 +124,7 @@ public class ProductoDao {
 	       List<Producto> ListaCl = new ArrayList();
 	       String sql = "SELECT * FROM Producto,Categoria,Proveedor "
 	       		+ "WHERE Producto.codCategoria=Categoria.codCategoria "
-	       		+ "AND Producto.codProveedor=Proveedor.codProveedor";
+	       		+ "AND Producto.codProveedor=Proveedor.codProveedor AND Producto.disposicion=1";
 	       try {
 	           
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -169,6 +169,7 @@ public class ProductoDao {
         String sql = "SELECT * FROM Producto,Categoria,Proveedor"
         		+ " WHERE Producto.codCategoria=Categoria.codCategoria "
         		+ "AND Producto.codProveedor=Proveedor.codProveedor"
+        		+ "AND Producto.disposicion=1"
         		+ " AND Producto.nombreProducto LIKE ? OR Producto.formaFarmaceutica LIKE ?";
         modelo = (DefaultTableModel) tblProducto.getModel();
         modelo.setRowCount(0);
@@ -266,7 +267,7 @@ public class ProductoDao {
      * @param id
      */
     public void deleteProducto(int id){
-        String sql = "DELETE FROM Producto WHERE codProducto=?";
+        String sql = "UPDATE producto SET disposicion=0 WHERE codProducto=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
@@ -317,7 +318,7 @@ public class ProductoDao {
 
 	public Producto searchProductoId(int key ) {
 		 
-	        String sql = "SELECT * FROM Producto WHERE codProducto=?";
+	        String sql = "SELECT * FROM Producto WHERE disposicion=1 AND codProducto=?";
 	        Producto producto =null;
 	        try{
 	            PreparedStatement ps = con.prepareStatement(sql);
@@ -360,7 +361,7 @@ public class ProductoDao {
 	
 	 public void agregarProductoProCodigo(String key,JTable tblVentas){
 		 String sql = "SELECT * FROM Producto"
-	        		+ " WHERE codProducto=? ";
+	        		+ " WHERE  disposicion=1 AND codProducto=? ";
 	        modelo = (DefaultTableModel) tblVentas.getModel();
 	       
 	        Object[] ob = new Object[5];

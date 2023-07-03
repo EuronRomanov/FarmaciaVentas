@@ -97,7 +97,7 @@ public class UsuarioDao {
      */
     public void searchUsuario(String key,JTable tblUsuario){
        
-        String sql = "SELECT * FROM Usuario WHERE nombre LIKE ? OR cedula LIKE ? ";
+        String sql = "SELECT * FROM Usuario WHERE disposicion=1 AND nombre LIKE ? OR cedula LIKE ? ";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
@@ -185,7 +185,7 @@ public class UsuarioDao {
      * @param id
      */
     public void deleteUsuario(int id){
-        String sql = "DELETE FROM Usuario WHERE codUsuario=?";
+        String sql = "UPDATE Usuario SET disposicion=0 WHERE codUsuario=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
@@ -205,7 +205,7 @@ public class UsuarioDao {
   
    public Usuario searchUsuarioId(String key){
 	   Usuario usuario=null;
-       String sql = "SELECT * FROM Usuario WHERE codUsuario=?";
+       String sql = "SELECT * FROM Usuario WHERE disposicion=1  AND codUsuario=?";
        try{
            PreparedStatement ps = con.prepareStatement(sql);
            ps.setString(1,  key );

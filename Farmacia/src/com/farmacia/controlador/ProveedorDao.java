@@ -72,7 +72,7 @@ public class ProveedorDao {
 	 
 	 public List ListarProveedor(){
 	       List<Proveedor> ListaCl = new ArrayList();
-	       String sql = "SELECT * FROM Proveedor";
+	       String sql = "SELECT * FROM Proveedor WHERE disposicion=1" ;
 	       try {
 	           
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -102,7 +102,7 @@ public class ProveedorDao {
      */
     public void searchProveedor(String key, JTable tblProveedor){
         ArrayList<Proveedor> result = new ArrayList<Proveedor>();
-        String sql = "SELECT * FROM Proveedor WHERE nombreEmpresa LIKE ?";
+        String sql = "SELECT * FROM Proveedor WHERE disposicion=1 AND nombreEmpresa LIKE ?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
@@ -146,7 +146,7 @@ public class ProveedorDao {
     public Proveedor searchProveedorId(int key){
     	Proveedor proveedor = new Proveedor();
     	
-        String sql = "SELECT * FROM Proveedor WHERE codProveedor=?";
+        String sql = "SELECT * FROM Proveedor WHERE disposicion=1 AND codProveedor=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,  key );
@@ -216,7 +216,7 @@ public class ProveedorDao {
      * @param id
      */
     public void deleteProveedor(int id){
-        String sql = "DELETE FROM Proveedor WHERE codProveedor=?";
+        String sql = "UPDATE Proveedor  SET disposicion=0 WHERE codProveedor=?";
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
