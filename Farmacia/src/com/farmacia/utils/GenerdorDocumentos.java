@@ -61,14 +61,12 @@ public class GenerdorDocumentos {
 	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada)  {
 		
 		try {
-			//BufferedWriter writer=Files.newBufferedWriter(Paths.get(carpetaSeleccionada.getAbsolutePath()+File.separator+"codigo.pdf"));
-
-			//String h=Paths.get(carpetaSeleccionada.getAbsolutePath()+File.separator+"codigo.pdf").toString();
+			
 			LocalDateTime hora = LocalDateTime.now();
 	        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-	        //System.out.println(hora.format(f));
+	     
 			String h=carpetaSeleccionada.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/codigo"+hora.format(f)+".pdf";
-			//System.out.println("Desde metodo "+h);
+			
 			Document doc=new Document(PageSize.A4);
 			
 			PdfWriter pdf=PdfWriter.getInstance(doc, new FileOutputStream(h));
@@ -405,6 +403,62 @@ public class GenerdorDocumentos {
 	
 
 
+	
+	public void generarReporteVentas(String dest)  {
+	    Document document = new Document();
+		LocalDateTime hora = LocalDateTime.now();
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+     
+		String h=dest.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/codigo"+hora.format(f)+".pdf";
+		
+	    try {
+	    	PdfWriter.getInstance(document, new FileOutputStream(h));
+	    document.open();
+	    PdfPTable table = new PdfPTable(5);
+	    table.setWidths(new int[]{1, 2, 1, 1, 1});
+	    table.addCell(createCell("Cod", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Prodcto", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Precio", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Cantidad", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Total", 2, 1, Element.ALIGN_LEFT));
+	    String[][] data = {
+	        {"ABC123", "The descriptive text may be more than one line and the text should wrap automatically", "$5.00", "10", "$50.00"},
+	        {"QRS557", "Another description", "$100.00", "15", "$1,500.00"},
+	    };
+	    for (String[] row : data) {
+	        table.addCell(createCell(row[0], 1, 1, Element.ALIGN_LEFT));
+	        table.addCell(createCell(row[1], 1, 1, Element.ALIGN_LEFT));
+	        table.addCell(createCell(row[2], 1, 1, Element.ALIGN_RIGHT));
+	        table.addCell(createCell(row[3], 1, 1, Element.ALIGN_RIGHT));
+	        table.addCell(createCell(row[4], 1, 1, Element.ALIGN_RIGHT));
+	    }
+	    table.addCell(createCell("Total", 2, 4, Element.ALIGN_LEFT));
+	    table.addCell(createCell("$1,552.00", 2, 1, Element.ALIGN_RIGHT));
+	    document.add(table);
+	    document.close();
+	    } catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	public PdfPCell createCell(String content, float borderWidth, int colspan, int alignment) {
+	    PdfPCell cell = new PdfPCell(new Phrase(content));
+	    cell.setBorderWidth(borderWidth);
+	    cell.setColspan(colspan);
+	    cell.setHorizontalAlignment(alignment);
+	    return cell;
+	}
+	
 public void imprimir(File archivo) throws PrinterException, IOException {
     // Indicamos el nombre del archivo Pdf que deseamos imprimir
     PDDocument document = Loader.loadPDF(archivo);
