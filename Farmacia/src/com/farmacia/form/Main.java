@@ -212,6 +212,7 @@ public class Main extends JFrame {
     private JTextField textField;
     private JButton btnFacturaBuscar;
 	private DetalleForm detalleForm ;
+	private JComboBox comboBox;
     /**
 	 * Launch the application. 
 	 * author : 
@@ -283,14 +284,14 @@ public class Main extends JFrame {
 				//listarCategoriaTable();
 				//limpiarTableProveedor();
 				//proveedorDao.ListarProveedorTable(tblProveedores);
+				tabPane_Vistas.removeAll();
 				
-				
-				eliminarTab("Ventas");
+				/*eliminarTab("Ventas");
 				eliminarTab("Categoria");
 				eliminarTab("Proveedor");
 				eliminarTab("Caja");
 				eliminarTab("Factura");
-				eliminarTab("Usuarios");
+				eliminarTab("Usuarios");*/
 				tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
 				productoDao.ListarProductoTable(tblProductos);
@@ -323,13 +324,13 @@ public class Main extends JFrame {
 		JButton btnUsuario = new JButton("Usuarios");
 		btnUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				eliminarTab("Productos");
+				/*eliminarTab("Productos");
 				eliminarTab("Ventas");
 				eliminarTab("Categoria");
 				eliminarTab("Proveedor");
 				eliminarTab("Caja");
-				eliminarTab("Factura");
-				
+				eliminarTab("Factura");*/
+				tabPane_Vistas.removeAll();
 				tabPane_Vistas.addTab("Usuarios", null, pnl_usuarios, null);
 				tabPane_Vistas.setBackgroundAt(tabPane_Vistas.indexOfTab("Usuarios"), new Color(214, 214, 214));
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Usuarios"));
@@ -359,13 +360,13 @@ public class Main extends JFrame {
 		JButton btnFactura = new JButton("Facturas");
 		btnFactura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				eliminarTab("Productos");
+				/*eliminarTab("Productos");
 				eliminarTab("Ventas");
 				eliminarTab("Caja");
 				eliminarTab("Usuarios");
 				eliminarTab("Categoria");
-				eliminarTab("Proveedor");
-				
+				eliminarTab("Proveedor");*/
+				tabPane_Vistas.removeAll();
 				tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Facturas"));
@@ -418,13 +419,13 @@ public class Main extends JFrame {
 		JButton btnVentas = new JButton("Ventas");
 		btnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				eliminarTab("Categoria");
+				/*eliminarTab("Categoria");
 				eliminarTab("Proveedor");
 				eliminarTab("Productos");
 				eliminarTab("Caja");
 				eliminarTab("Usuarios");
-				eliminarTab("Facturas");
-				
+				eliminarTab("Facturas");*/
+				tabPane_Vistas.removeAll();
 				
 				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
@@ -769,7 +770,21 @@ public class Main extends JFrame {
 		panel_2.add(btnVolverCategoriaProducto, gbc_btnVolverCategoriaProducto);
 		
 		
+		tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
+		GridBagLayout gbl_pnl_caja = new GridBagLayout();
+		gbl_pnl_caja.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_pnl_caja.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_pnl_caja.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_pnl_caja.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		pnl_caja.setLayout(gbl_pnl_caja);
 		
+		comboBox = new JComboBox();
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 1;
+		gbc_comboBox.gridy = 0;
+		pnl_caja.add(comboBox, gbc_comboBox);
 		
 		/*
 		 * ---------------categorias------------
@@ -2849,6 +2864,7 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaCancelar, gbc_btnFacturaCancelar);
 		
 		
+			
 
 	}
 	 protected void limpiarCamposFactura() {
@@ -2989,21 +3005,9 @@ public class Main extends JFrame {
 	 }
 	 
 	 public void cambiarAdministrador() {
-		 flagAdministrador=true;
+		 
 		 tabPane_Vistas.removeAll();
 		
-		 tabPane_Vistas.add("Vendedores", pnl_usuarios);
-
-			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
-			
-			//tabPane_Vistas.add("Proveedor",pnl_proveedor);
-			tabPane_Vistas.addTab("Factura", null, pnl_factura, null);
-			
-			
-			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
-		
-			tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
-			
-			//tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+		 tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 	 }
 }
