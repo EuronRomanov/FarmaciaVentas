@@ -136,4 +136,18 @@ public class ControlFormatos {
 		}
        
 	}
+	
+	public String redondearDosDecimales(double valor) {
+		return String.valueOf(Math.round(valor * 100.0) / 100.0);
+	}
+	
+	public boolean validarSiNumeroDecimal(String valor) {
+		try {
+			Double.valueOf(valor);
+			return true;
+		} catch (NumberFormatException e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
 }
