@@ -212,7 +212,8 @@ public class Main extends JFrame {
     private JTextField textField;
     private JButton btnFacturaBuscar;
 	private DetalleForm detalleForm ;
-	private JComboBox comboBox;
+	private JComboBox cmbReporteListas;
+	private JButton btnVentasGenerar;
     /**
 	 * Launch the application. 
 	 * author : 
@@ -221,6 +222,8 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Login login=new Login();
+					
 					Main frame = new Main();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -430,6 +433,7 @@ public class Main extends JFrame {
 				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Ventas"));
+				pnlVentasLadoDerecho.setVisible(false);
 		 		textVentasCodProd.requestFocus();
 			}
 		});
@@ -778,13 +782,36 @@ public class Main extends JFrame {
 		gbl_pnl_caja.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		pnl_caja.setLayout(gbl_pnl_caja);
 		
-		comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 1;
-		gbc_comboBox.gridy = 0;
-		pnl_caja.add(comboBox, gbc_comboBox);
+		cmbReporteListas = new JComboBox();
+		cmbReporteListas.setModel(new DefaultComboBoxModel(new String[] {"Seleccionar Reporte", "Ventas del Día", "Inventario"}));
+		cmbReporteListas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GenerdorDocumentos generador=new GenerdorDocumentos();
+				switch (cmbReporteListas.getSelectedIndex()) {
+				case 1:
+					JFileChooser selectCarpeta=new JFileChooser();
+					selectCarpeta.setCurrentDirectory(new File("."));
+					selectCarpeta.setDialogTitle("Seleccionar la carpeta para guardar los archivos");
+					selectCarpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					selectCarpeta.setAcceptAllFileFilterUsed(false);
+					if (selectCarpeta.showOpenDialog(contentPane)==JFileChooser.APPROVE_OPTION) {
+						generador.generarReporteVentas(selectCarpeta.getSelectedFile().toPath().toString());
+					}
+				
+					break;
+				case 2:
+				break;
+				default:
+					break;
+				}
+			}
+		});
+		GridBagConstraints gbc_cmbReporteListas = new GridBagConstraints();
+		gbc_cmbReporteListas.insets = new Insets(0, 0, 5, 5);
+		gbc_cmbReporteListas.fill = GridBagConstraints.HORIZONTAL;
+		gbc_cmbReporteListas.gridx = 1;
+		gbc_cmbReporteListas.gridy = 0;
+		pnl_caja.add(cmbReporteListas, gbc_cmbReporteListas);
 		
 		/*
 		 * ---------------categorias------------
@@ -864,6 +891,21 @@ public class Main extends JFrame {
 		label = new JLabel("");
 		panel_5.add(label);
 		
+		btnVentasGenerar = new JButton("Generar Factura");
+		btnVentasGenerar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+			
+			if (!lblTotalpagar.getText().equalsIgnoreCase("0,00")) {
+				pnlVentasLadoDerecho.setVisible(true);
+				textVentasCodProd.setEditable(false);				
+			}else {
+				textVentasCodProd.requestFocus();
+			}
+			}
+		});
+		panel_5.add(btnVentasGenerar);
+		
 		label_1 = new JLabel("");
 		panel_5.add(label_1);
 		
@@ -901,6 +943,12 @@ public class Main extends JFrame {
 		panel_6.add(lblNewLabel_16, gbc_lblNewLabel_16);
 		
 		textVentasCliente = new JTextField();
+		textVentasCliente.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//textVentasCodProd.requestFocus();
+			}
+		});
 		GridBagConstraints gbc_textVentasCliente = new GridBagConstraints();
 		gbc_textVentasCliente.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textVentasCliente.gridwidth = 3;
@@ -920,6 +968,12 @@ public class Main extends JFrame {
 		panel_6.add(lblNewLabel_19, gbc_lblNewLabel_19);
 		
 		textVentasRuc = new JTextField();
+		textVentasRuc.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//textVentasCodProd.requestFocus();
+			}
+		});
 		GridBagConstraints gbc_textVentasRuc = new GridBagConstraints();
 		gbc_textVentasRuc.gridwidth = 3;
 		gbc_textVentasRuc.insets = new Insets(0, 0, 5, 0);
@@ -938,6 +992,12 @@ public class Main extends JFrame {
 		panel_6.add(lblNewLabel_20, gbc_lblNewLabel_20);
 		
 		textVentasCedula = new JTextField();
+		textVentasCedula.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//textVentasCodProd.requestFocus();
+			}
+		});
 		GridBagConstraints gbc_textVentasCedula = new GridBagConstraints();
 		gbc_textVentasCedula.gridwidth = 3;
 		gbc_textVentasCedula.insets = new Insets(0, 0, 5, 0);
@@ -956,6 +1016,12 @@ public class Main extends JFrame {
 		panel_6.add(lblNewLabel_21, gbc_lblNewLabel_21);
 		
 		textVentasObservaciones = new JTextArea();
+		textVentasObservaciones.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//textVentasCodProd.requestFocus();
+			}
+		});
 		GridBagConstraints gbc_textVentasObservaciones = new GridBagConstraints();
 		gbc_textVentasObservaciones.gridwidth = 3;
 		gbc_textVentasObservaciones.gridheight = 3;
@@ -977,6 +1043,8 @@ public class Main extends JFrame {
 						1) ;
 				ventaDao.registarVenta(factura, tblVentas);
 				limpiarCamposVentas();
+				pnlVentasLadoDerecho.setVisible(false);
+				textVentasCodProd.setEditable(true);
 			}
 		});
 		GridBagConstraints gbc_btnVentasFinalizar = new GridBagConstraints();
@@ -992,6 +1060,8 @@ public class Main extends JFrame {
 		btnVentasCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarCamposVentas();
+				 textVentasCodProd.setEditable(true);
+				 pnlVentasLadoDerecho.setVisible(false);
 			}
 		});
 		GridBagConstraints gbc_btnVentasCancelar = new GridBagConstraints();
@@ -1024,6 +1094,8 @@ public class Main extends JFrame {
 	                    	 ventaDao.totalizar(tblVentas, lblTotalpagar);
 	                    	 if (tblVentas.getRowCount()==0) {
 								pnlVentasLadoDerecho.setVisible(false);
+								textVentasCodProd.setEditable(true);
+								textVentasCodProd.requestFocus();
 							}
 	                    	 textVentasCodProd.requestFocus();
 						}
@@ -2384,27 +2456,34 @@ public class Main extends JFrame {
 								textProductoPcompra.getText(),
 								textProductoCantidad.getText(),
 								textProductoUmedida.getText(),
-								textProductoPresentacion.getText())) {
+								textProductoPresentacion.getText()) ) {
 
-							Producto producto=new Producto(textProductoNombre.getText(), 
-									textProductoCodBarra.getText(),
-									Double.valueOf( textProductoPcompra.getText()),
-									Double.valueOf( textProductoPventa.getText()), 
-									Integer.parseInt(textProductoCantidad.getText()),
-									textProductoUmedida.getText(),
-									Double.valueOf(textProductoPresentacion.getText()), 
-									textProductoMarca.getText(),
-									controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()), 
-									textProductoObservacion.getText(),
-									textProductoFormFarmaceutica.getText(),
-									c.getCodCategoria(), 
-									p.getCodProveedor());
+								if (controlFormato.validarSiNumeroDecimal(textProductoPcompra.getText())
+										&& controlFormato.validarSiNumeroDecimal(textProductoPventa.getText())
+										&& controlFormato.validarSiNumeroDecimal(textProductoPresentacion.getText())) {
+									Producto producto=new Producto(textProductoNombre.getText(), 
+											textProductoCodBarra.getText(),
+											Double.valueOf( textProductoPcompra.getText()),
+											Double.valueOf( textProductoPventa.getText()), 
+											Integer.parseInt(textProductoCantidad.getText()),
+											textProductoUmedida.getText(),
+											Double.valueOf(textProductoPresentacion.getText()), 
+											textProductoMarca.getText(),
+											controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()), 
+											textProductoObservacion.getText(),
+											textProductoFormFarmaceutica.getText(),
+											c.getCodCategoria(), 
+											p.getCodProveedor());
+									
+									
+									
+									productoDao.registrarProducto(producto);
+									limpiarCamposProducto();
+									productoDao.ListarProductoTable(tblProductos);
+								} else {
+									JOptionPane.showMessageDialog(null, "Formato de numero decimal incorrecto");
+								}
 							
-							
-							
-							productoDao.registrarProducto(producto);
-							limpiarCamposProducto();
-							productoDao.ListarProductoTable(tblProductos);
 							
 						}else {
 							JOptionPane.showMessageDialog(null, "Hay un campo vacio");
@@ -2446,9 +2525,10 @@ public class Main extends JFrame {
 								textProductoPresentacion.getText())) {
 							
 							
-							
-							
-							Producto producto=new Producto();
+							if (controlFormato.validarSiNumeroDecimal(textProductoPcompra.getText())
+									&& controlFormato.validarSiNumeroDecimal(textProductoPventa.getText())
+									&& controlFormato.validarSiNumeroDecimal(textProductoPresentacion.getText())) {
+								Producto producto=new Producto();
 							      producto.setCodProducto(Integer.parseInt(textProductoCodigo.getText()));    
 							      producto.setNombreProducto(textProductoNombre.getText());	
 							      producto.setPrecioCompra(Double.valueOf( textProductoPcompra.getText()));
@@ -2467,6 +2547,11 @@ public class Main extends JFrame {
 							productoDao.editProducto(producto);
 							limpiarCamposProducto();
 							productoDao.ListarProductoTable(tblProductos);
+							}else {
+								JOptionPane.showMessageDialog(null, "Formato decimal esta mal");
+							}
+							
+						
 							
 						}else {
 							JOptionPane.showMessageDialog(null, "Hay un campo vacio");
@@ -3000,6 +3085,7 @@ public class Main extends JFrame {
 		 modeloVentas.setRowCount(0);
 		 lblTotalpagar.setText("0,00");
 		 pnlVentasLadoDerecho.setVisible(true);
+		
 		 textVentasCodProd.setText("");
 		 textVentasCodProd.requestFocus();
 	 }
