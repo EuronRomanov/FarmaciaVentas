@@ -72,7 +72,7 @@ public class Login {
 		frame.setVisible(true);
 		
 		frame.setBounds(100, 100, 542, 386);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		
@@ -153,6 +153,7 @@ public class Login {
 		panel_body.add(lblpassword, gbc_lblpassword);
 		
 		textPassword = new JPasswordField();
+		textPassword.setPreferredSize(new Dimension(30, 26));
 		textUsuario.setPreferredSize(new Dimension(30, 26));
 		textPassword.setMinimumSize(new Dimension(50, 26));
 		GridBagConstraints gbc_textPassword = new GridBagConstraints();
