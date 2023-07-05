@@ -414,28 +414,33 @@ public class GenerdorDocumentos {
 	    try {
 	    	PdfWriter.getInstance(document, new FileOutputStream(h));
 	    document.open();
-	    PdfPTable table = new PdfPTable(5);
-	    table.setWidths(new int[]{1, 2, 1, 1, 1});
+	    PdfPTable table = new PdfPTable(6);
+	    table.setWidths(new int[]{1, 2, 1, 1, 1,1});
 	    table.addCell(createCell("Cod", 2, 1, Element.ALIGN_LEFT));
-	    table.addCell(createCell("Prodcto", 2, 1, Element.ALIGN_LEFT));
-	    table.addCell(createCell("Precio", 2, 1, Element.ALIGN_LEFT));
-	    table.addCell(createCell("Cantidad", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Fecha", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Cliente", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("Vendedor", 2, 1, Element.ALIGN_LEFT));
+	    table.addCell(createCell("SubTotal", 2, 1, Element.ALIGN_LEFT));
 	    table.addCell(createCell("Total", 2, 1, Element.ALIGN_LEFT));
-	    String[][] data = {
-	        {"ABC123", "The descriptive text may be more than one line and the text should wrap automatically", "$5.00", "10", "$50.00"},
-	        {"QRS557", "Another description", "$100.00", "15", "$1,500.00"},
-	    };
-	    for (String[] row : data) {
-	        table.addCell(createCell(row[0], 1, 1, Element.ALIGN_LEFT));
-	        table.addCell(createCell(row[1], 1, 1, Element.ALIGN_LEFT));
-	        table.addCell(createCell(row[2], 1, 1, Element.ALIGN_RIGHT));
-	        table.addCell(createCell(row[3], 1, 1, Element.ALIGN_RIGHT));
-	        table.addCell(createCell(row[4], 1, 1, Element.ALIGN_RIGHT));
+	   
+	    double total=0;
+	    
+	    List<Factura> facturas=new FacturaDao().listarFacturasReporte();
+	    for (Factura factura : facturas) {
+	        table.addCell(createCell(String.valueOf( factura.getCodFactura()), 1, 1, Element.ALIGN_LEFT));
+	        table.addCell(createCell(factura.getFecha().toString().replaceAll("T", " "), 1, 1, Element.ALIGN_LEFT));
+	        table.addCell(createCell(factura.getN_cliente(), 1, 1, Element.ALIGN_RIGHT));
+	        table.addCell(createCell(factura.getUsuario(), 1, 1, Element.ALIGN_RIGHT));
+	        table.addCell(createCell(String.valueOf(factura.getSubtotal()), 1, 1, Element.ALIGN_RIGHT));
+	        double totalC=factura.getTotal();
+	        table.addCell(createCell(String.valueOf(totalC), 1, 1, Element.ALIGN_RIGHT));
+	        total+=totalC;
 	    }
 	    table.addCell(createCell("Total", 2, 4, Element.ALIGN_LEFT));
-	    table.addCell(createCell("$1,552.00", 2, 1, Element.ALIGN_RIGHT));
+	    table.addCell(createCell(new ControlFormatos().redondearDosDecimales(total), 2, 2, Element.ALIGN_RIGHT));
 	    document.add(table);
 	    document.close();
+	    total=0;
 	    } catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
