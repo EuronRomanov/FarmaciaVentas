@@ -21,6 +21,7 @@ import com.farmacia.controlador.ProductoDao;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Usuario;
+import com.farmacia.utils.ControlFormatos;
 import com.farmacia.controlador.DetalleDao;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,6 +44,7 @@ public class DetalleForm extends JFrame {
     private JTextField textDetalleCodFac;
     private JButton btnDetalleCancelar, btnDetalleAgregar, btnVentasActualizar,btnDetalleEliminar;
     private JTextField textDetallePrecio;
+    private ControlFormatos controlFormato=new ControlFormatos();
 	/**
 	 * Launch the application.
 	 */
@@ -99,8 +101,17 @@ public class DetalleForm extends JFrame {
 				if (!textDetalleCantidad.getText().isEmpty()) {
 					double precio=Double.parseDouble(textDetallePrecio.getText());
 					double cantidad=Double.parseDouble(textDetalleCantidad.getText());
-					textDetalleValor.setText(String.valueOf(precio*cantidad));
+					textDetalleValor.setText(new ControlFormatos().redondearDosDecimales(precio*cantidad));
 					//textDetalleValor.requestFocus();
+				}
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int key=e.getKeyChar();
+				
+				
+				if (controlFormato.validarNumerosEnteros(key)) {
+					e.consume();
 				}
 			}
 		});
