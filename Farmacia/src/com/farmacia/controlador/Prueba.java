@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import com.farmacia.utils.ControlFormatos;
 import com.farmacia.utils.GenerdorDocumentos;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -23,10 +24,10 @@ public class Prueba {
 		// TODO Auto-generated method stub
 		 
 		GenerdorDocumentos generador=new GenerdorDocumentos();
+		String valor="2.5";
+		System.out.println(new ControlFormatos().validarSiNumeroDecimal(valor));
 		
-		
-		
-			generador.generarTicket(1);
+			//generador.generarTicket(1);
 			//new Prueba().imprimir();
 		
 	}
