@@ -61,6 +61,19 @@ public class Factura {
 		this.total = total;
 		this.usuario = usuario;
 	}
+	public Factura( LocalDateTime fecha, String ruc, String cedula, String n_cliente, String obervacion,
+			double subtotal, double total, String usuario) {
+		super();
+		this.codFactura = codFactura;
+		this.fecha = fecha;
+		this.ruc = ruc;
+		this.cedula = cedula;
+		this.n_cliente = n_cliente;
+		this.obervacion = obervacion;
+		this.subtotal = subtotal;
+		this.total = total;
+		this.usuario = usuario;
+	}
 	public int getCodFactura() {
 		return codFactura;
 	}
