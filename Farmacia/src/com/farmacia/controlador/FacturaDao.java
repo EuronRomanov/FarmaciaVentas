@@ -108,6 +108,40 @@ public class FacturaDao {
 	       return ListaCl;
 	   }
 	 
+	 public List listarFacturasReporte(){
+	       List<Factura> ListaCl = new ArrayList();
+	       String sql = "SELECT * FROM Factura,Usuario"
+	       		+ " WHERE Factura.codUsuario=Usuario.codUsuario AND DATE(Factura.fecha)=DATE(NOW())";
+	       try {
+	    	   DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+	    	   PreparedStatement ps = con.prepareStatement(sql);
+	    	   ResultSet rs = ps.executeQuery();
+	           while (rs.next()) {               
+	              
+	               
+	               Factura cl=new Factura( rs.getInt("codFactura"),
+	            		   LocalDateTime.parse(rs.getTimestamp("fecha").toString(),parser), 
+	            		   rs.getString("ruc"),
+	            		   rs.getString("cedula"), 
+	            		   rs.getString("n_cliente"), 
+	            		   rs.getString("observacion"),
+	            		   rs.getDouble("subtotal"), 
+	            		   rs.getDouble("total"), 
+	            		   rs.getString("nombre"));
+	               
+	               
+	               ListaCl.add(cl);
+	           }
+	       } catch (SQLException e) {
+	           System.out.println(e.toString());
+	       }
+	       return ListaCl;
+	   }
+	 
+	 
+	 
+	 
+	 
 	/**
      * search all clients in the tblClient whose name contains the @key
      * @param key
