@@ -317,4 +317,8 @@ public class DetalleForm extends JFrame {
 		}
 		return y;
 	}
+
+	
+
+	
 }
