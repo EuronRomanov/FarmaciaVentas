@@ -91,6 +91,7 @@ public class LoginForm extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 //PnlIngresoApp ingreso= new PnlIngresoApp();
 				    pnlMenu.setVisible(false);
+				    
 				    pnlLogin.add(pnlIngresoApp, BorderLayout.CENTER);
 				    pnlIngresoApp.setVisible(true);
 				   
