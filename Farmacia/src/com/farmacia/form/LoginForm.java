@@ -17,11 +17,21 @@ import javax.swing.JButton;
 import java.awt.Insets;
 import java.awt.Font;
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.Window.Type;
 
 public class LoginForm extends JFrame {
 
 	private JPanel contentPane;
 	private PnlLogin pnlLogin=new PnlLogin();
+	private PnlIngresoApp pnlIngresoApp=new PnlIngresoApp();
+	private JPanel pnlMenu = new JPanel();
+	private PnlIngresoDB pnlIngresoDB =new PnlIngresoDB();
+	
 		/**
 	 * Launch the application.
 	 */
@@ -42,6 +52,15 @@ public class LoginForm extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginForm() {
+		setType(Type.UTILITY);
+		setResizable(false);
+		setVisible(true);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+			}
+		});
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 515, 316);
 		
@@ -50,18 +69,34 @@ public class LoginForm extends JFrame {
 
 		setContentPane(pnlLogin);
 		pnlLogin.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		pnlLogin.add(panel, BorderLayout.CENTER);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{100, 0, 55, 123, 0};
-		gbl_panel.rowHeights = new int[]{50, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
+		pnlMenu.setOpaque(false);
+		pnlLogin.add(pnlMenu, BorderLayout.CENTER);
+		/*pnlIngresoApp.setOpaque(false);
+		pnlLogin.add(pnlIngresoApp, BorderLayout.NORTH);
+		pnlIngresoDB.setOpaque(false);
+		pnlLogin.add(pnlIngresoDB, BorderLayout.SOUTH);
+		 pnlIngresoApp.setVisible(false);
+		 pnlIngresoDB.setVisible(false);*/
+		 pnlMenu.setVisible(true);
+		 
+		GridBagLayout gbl_pnlMenu = new GridBagLayout();
+		gbl_pnlMenu.columnWidths = new int[]{100, 0, 55, 123, 0};
+		gbl_pnlMenu.rowHeights = new int[]{50, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_pnlMenu.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_pnlMenu.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		pnlMenu.setLayout(gbl_pnlMenu);
 		
 		JButton btnLoginApp = new JButton("Ingresar a App");
+		btnLoginApp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 //PnlIngresoApp ingreso= new PnlIngresoApp();
+				    pnlMenu.setVisible(false);
+				    pnlLogin.add(pnlIngresoApp, BorderLayout.CENTER);
+				    pnlIngresoApp.setVisible(true);
+				   
+					
+			}
+		});
 		btnLoginApp.setMinimumSize(new Dimension(200, 50));
 		btnLoginApp.setMaximumSize(new Dimension(300, 50));
 		GridBagConstraints gbc_btnLoginApp = new GridBagConstraints();
@@ -69,7 +104,7 @@ public class LoginForm extends JFrame {
 		gbc_btnLoginApp.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLoginApp.gridx = 2;
 		gbc_btnLoginApp.gridy = 3;
-		panel.add(btnLoginApp, gbc_btnLoginApp);
+		pnlMenu.add(btnLoginApp, gbc_btnLoginApp);
 		btnLoginApp.setPreferredSize(new Dimension(200, 50));
 		
 		JLabel lblNewLabel = new JLabel("-O-");
@@ -78,9 +113,19 @@ public class LoginForm extends JFrame {
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 2;
 		gbc_lblNewLabel.gridy = 4;
-		panel.add(lblNewLabel, gbc_lblNewLabel);
+		pnlMenu.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JButton btnNewButton_1 = new JButton("Ingresar a Base Datos");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				   pnlMenu.setVisible(false);
+				   pnlLogin.add(pnlIngresoDB, BorderLayout.CENTER);
+				   pnlIngresoDB.setVisible(true);
+				
+				   
+			}
+		});
 		btnNewButton_1.setMinimumSize(new Dimension(200, 50));
 		btnNewButton_1.setMaximumSize(new Dimension(300, 50));
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
@@ -88,7 +133,7 @@ public class LoginForm extends JFrame {
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton_1.gridx = 2;
 		gbc_btnNewButton_1.gridy = 5;
-		panel.add(btnNewButton_1, gbc_btnNewButton_1);
+		pnlMenu.add(btnNewButton_1, gbc_btnNewButton_1);
 		btnNewButton_1.setPreferredSize(new Dimension(200, 50));
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{424, 0};
@@ -96,6 +141,27 @@ public class LoginForm extends JFrame {
 		gbl_contentPane.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
+		
+		pnlIngresoApp.getBtnLoginCancelar().addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		pnlLogin.add(pnlIngresoApp,BorderLayout.SOUTH);
+		 		pnlLogin.add(pnlMenu,BorderLayout.CENTER);
+		 		pnlIngresoApp.setVisible(false);
+		 		 pnlMenu.setVisible(true);
+		 		  
+		 	}
+		 });
+		pnlIngresoDB.getBtnDBCancelar().addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 		pnlLogin.add(pnlIngresoDB,BorderLayout.SOUTH);
+		 		pnlLogin.add(pnlMenu,BorderLayout.CENTER);
+		 		pnlIngresoDB.setVisible(false);
+		 		 pnlMenu.setVisible(true);
+		 		  
+		 	}
+		 });
+		
 	}
 
 	
