@@ -304,5 +304,40 @@ String estado="";
        
     }
     
-    
+	 public Usuario loginUsuario(String user, String pass){
+		 Usuario usuario=null;
+	       String sql = "SELECT * FROM Usuario WHERE disposicion=1 AND estado=0  AND cedula=? AND password=? ";
+	       try{
+	           PreparedStatement ps = con.prepareStatement(sql);
+	           ps.setString(1,  user );
+	           ps.setString(2,  calculateHash("SHA3-512",pass));
+	           ResultSet rs = ps.executeQuery();
+
+	           while(rs.next()){
+	           /* usuario = new Usuario(rs.getInt("codUsuario"),
+	           			 rs.getString("nombre"), 
+	           			rs.getString("password"), 
+	           			 rs.getInt("estado"), 
+	           			  rs.getInt("administrador"), 
+	           			 rs.getString("cedula"));*/
+	           	
+	            usuario = new Usuario();
+	            usuario.setCodUsuario(rs.getInt("codUsuario"));
+	            usuario.setNombre(rs.getString("nombre"));
+	           
+	             
+	           }
+	       }catch(Exception e){
+	           e.printStackTrace();
+	       }finally{
+	          /* try {
+	               con.close();
+	           } catch (SQLException e) {
+	               System.out.println(e.toString());
+	           }*/
+	       }   
+	       
+	       return usuario;
+	    }
+	    
 }
