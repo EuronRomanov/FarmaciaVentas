@@ -11,20 +11,28 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 import java.awt.Insets;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.Dimension;
 
+import com.farmacia.controlador.UsuarioDao;
+import com.farmacia.entidades.Usuario;
+
 public class PnlIngresoApp extends JPanel {
 	private JTextField textLoginUsuario;
 	private JPasswordField textLoginPassword;
 	private JButton btnLoginCancelar;
 	private JLabel lblLogo;
+	
+	
+	private JButton btnLoginIngresar;
 	/**
 	 * Create the panel.
 	 */
+	
 	public PnlIngresoApp() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 276, 276, 276, 276, 0};
@@ -79,7 +87,13 @@ public class PnlIngresoApp extends JPanel {
 		gbc_textLoginPassword.gridy = 3;
 		add(textLoginPassword, gbc_textLoginPassword);
 		
-		JButton btnLoginIngresar = new JButton("Ingresar");
+		btnLoginIngresar = new JButton("Ingresar");
+		btnLoginIngresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//usuario=usuarioDao.loginUsuario(textLoginUsuario.getText(), String.valueOf(textLoginPassword.getPassword()));
+				
+			}
+		});
 		GridBagConstraints gbc_btnLoginIngresar = new GridBagConstraints();
 		gbc_btnLoginIngresar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLoginIngresar.gridx = 2;
@@ -107,6 +121,18 @@ public class PnlIngresoApp extends JPanel {
 		label.setIcon(new ImageIcon(new ImageIcon(getClass().getResource(rutaImagen)).getImage()
 				.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT)));
 	}
+	
+	public JButton getBtnLoginIngresar() {
+		return btnLoginIngresar;
+	}
+	public JTextField getTextLoginUsuario() {
+		return textLoginUsuario;
+	}
+	public JPasswordField getTextLoginPassword() {
+		return textLoginPassword;
+	}
+	
+	
 	
 
 }
