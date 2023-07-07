@@ -6,6 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.farmacia.controlador.UsuarioDao;
+import com.farmacia.entidades.SesionUsuario;
+
+import com.farmacia.entidades.Usuario;
+
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -31,7 +37,8 @@ public class LoginForm extends JFrame {
 	private PnlIngresoApp pnlIngresoApp=new PnlIngresoApp();
 	private JPanel pnlMenu = new JPanel();
 	private PnlIngresoDB pnlIngresoDB =new PnlIngresoDB();
-	
+	private Usuario usuario=new Usuario();
+	private UsuarioDao usuarioDao=new UsuarioDao();
 		/**
 	 * Launch the application.
 	 */
@@ -152,6 +159,20 @@ public class LoginForm extends JFrame {
 		 		  
 		 	}
 		 });
+		
+		pnlIngresoApp.getBtnLoginIngresar().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Usuario usuario=usuarioDao.loginUsuario(pnlIngresoApp.getTextLoginUsuario().getText(), String.valueOf(pnlIngresoApp.getTextLoginPassword().getPassword()));
+				if (usuario!=null) {
+					SesionUsuario.setCodUsuario(usuario.getCodUsuario());
+					SesionUsuario.setNombreUsuario(usuario.getNombre());
+					desactivarVenta();
+				}
+			
+			}
+		});
+		
+		
 		pnlIngresoDB.getBtnDBCancelar().addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
 		 		
@@ -162,10 +183,20 @@ public class LoginForm extends JFrame {
 		 		  
 		 	}
 		 });
+
+		
 		
 	}
 
-	
-	public void escalarLabel(JLabel label,String rutaImagen) {
+	public PnlIngresoApp getPnlIngresoApp() {
+		return pnlIngresoApp;
 	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	protected void desactivarVenta() {
+		this.dispose();
+	}
+	
 }
