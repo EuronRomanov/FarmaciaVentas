@@ -45,6 +45,8 @@ import javax.swing.text.MaskFormatter;
 import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Proveedor;
+import com.farmacia.entidades.SesionUsuario;
+
 import com.farmacia.entidades.Usuario;
 import com.farmacia.entidades.Factura;
 import com.farmacia.utils.ControlFormatos;
@@ -87,6 +89,9 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.components.JLocaleChooser;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 
 public class Main extends JFrame {
@@ -214,6 +219,7 @@ public class Main extends JFrame {
 	private DetalleForm detalleForm ;
 	private JComboBox cmbReporteListas;
 	private JButton btnVentasGenerar;
+	LoginForm lo=new LoginForm();
     /**
 	 * Launch the application. 
 	 * author : 
@@ -222,10 +228,15 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login login=new Login();
+					//Login login=new Login();
 					
 					Main frame = new Main();
+					
 					frame.setVisible(true);
+					
+						
+					
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -237,6 +248,31 @@ public class Main extends JFrame {
 	 * Create the frame.
 	 */
 	public Main() {
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent e) {
+			}
+			public void windowLostFocus(WindowEvent e) {
+				if (SesionUsuario.getCodUsuario()>0) {
+					lo.dispose();
+					
+				}
+			}
+		});
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				lo.setVisible(true);
+				if (SesionUsuario.getCodUsuario()>0) {
+					lo.dispose();
+					
+				}
+				
+			}
+			@Override
+			public void windowOpened(WindowEvent e) {
+
+			}
+		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1304, 607);
 		
