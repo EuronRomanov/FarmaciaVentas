@@ -1,6 +1,6 @@
 package com.farmacia.entidades;
 
-public class SesionUsuario {
+public final class SesionUsuario {
 private static int codUsuario;
 private static  String nombreUsuario;
 public static int getCodUsuario() {
