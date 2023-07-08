@@ -69,6 +69,8 @@ import javax.swing.JTextField;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import com.farmacia.bd.ConexionBD;
 import com.farmacia.controlador.*;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -92,6 +94,7 @@ import com.toedter.components.JLocaleChooser;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import javax.swing.Box;
 
 
 public class Main extends JFrame {
@@ -219,7 +222,15 @@ public class Main extends JFrame {
 	private DetalleForm detalleForm ;
 	private JComboBox cmbReporteListas;
 	private JButton btnVentasGenerar;
-	LoginForm lo=new LoginForm();
+	private JMenu mnUsuario;
+	private Usuario usuarioLogin=new Usuario();
+	private JLabel lblCodUsuario;
+	private JButton btnProducto,btnUsuario, btnFactura,btnCaja, btnVentas;
+	private JPanel gridPnlMenuIzquierda=new JPanel();
+	private JMenu mnMenuAdministrador;
+	private Component horizontalGlue;
+	//LoginForm lo=new LoginForm();
+	//String nombreUsuario=lo.getNombreUsuario();
     /**
 	 * Launch the application. 
 	 * author : 
@@ -229,13 +240,8 @@ public class Main extends JFrame {
 			public void run() {
 				try {
 					//Login login=new Login();
-					
-					Main frame = new Main();
-					
-					frame.setVisible(true);
-					
-						
-					
+					LoginForm lo=new LoginForm();
+					lo.setVisible(true);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -252,21 +258,30 @@ public class Main extends JFrame {
 			public void windowGainedFocus(WindowEvent e) {
 			}
 			public void windowLostFocus(WindowEvent e) {
-				if (SesionUsuario.getCodUsuario()>0) {
-					lo.dispose();
-					
-				}
+				
 			}
 		});
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				lo.setVisible(true);
-				if (SesionUsuario.getCodUsuario()>0) {
-					lo.dispose();
-					
-				}
+				//
+			mnUsuario.setText(usuarioLogin.getNombre());
+			lblCodUsuario.setText(String.valueOf(usuarioLogin.getCodUsuario()));
+			mnMenuAdministrador.setText(usuarioDao.esAdministradorString(usuarioLogin.getAdministrador()));
 				
+			if (usuarioLogin.getAdministrador()==1) {
+			
+				gridPnlMenuIzquierda.add(btnProducto);
+				gridPnlMenuIzquierda.add(btnUsuario);
+				gridPnlMenuIzquierda.add(btnFactura);
+				
+				/*btnProducto.setVisible(false);
+				btnUsuario.setVisible(false);
+				btnFactura.setVisible(false);*/
+			}
+			gridPnlMenuIzquierda.add(btnVentas);
+			gridPnlMenuIzquierda.add(btnCaja);
+			gridPnlMenuIzquierda.add(lblCodUsuario);
 			}
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -279,13 +294,29 @@ public class Main extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnUsuario = new JMenu("Usuario");
+		 mnUsuario = new JMenu("Usuario");
 		menuBar.add(mnUsuario);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				lblCodUsuario.setText("");
+				mnUsuario.setText("");
+				LoginForm lo=new LoginForm();
+				lo.setVisible(true);
+			}
+		});
 		mntmNewMenuItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mntmNewMenuItem.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
 		mnUsuario.add(mntmNewMenuItem);
+		
+		horizontalGlue = Box.createHorizontalGlue();
+		menuBar.add(horizontalGlue);
+		
+		mnMenuAdministrador = new JMenu("New menu");
+		mnMenuAdministrador.setEnabled(false);
+		menuBar.add(mnMenuAdministrador);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -309,28 +340,19 @@ public class Main extends JFrame {
 		middlePanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		middlePanel.setLayout(new FlowLayout(4,4,4));
 		
-		JPanel gridPanel=new JPanel();
-		gridPanel.setBorder(new EmptyBorder(40, 0, 0, 0));
-		gridPanel.setLayout(new GridLayout(5,1,5,5));
 		
-		middlePanel.add(gridPanel);
+		gridPnlMenuIzquierda.setBorder(new EmptyBorder(40, 0, 0, 0));
+		gridPnlMenuIzquierda.setLayout(new GridLayout(6,1,5,5));
 		
-		JButton btnProducto = new JButton("Producto");
+		middlePanel.add(gridPnlMenuIzquierda);
+		
+		 btnProducto = new JButton("Producto");
 		btnProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//limpiarTableCategoria();
-				//categoriaDao.ListarCategoriaTable(tblCategoria);
-				//listarCategoriaTable();
-				//limpiarTableProveedor();
-				//proveedorDao.ListarProveedorTable(tblProveedores);
+			
 				tabPane_Vistas.removeAll();
 				
-				/*eliminarTab("Ventas");
-				eliminarTab("Categoria");
-				eliminarTab("Proveedor");
-				eliminarTab("Caja");
-				eliminarTab("Factura");
-				eliminarTab("Usuarios");*/
+				
 				tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos"));
 				productoDao.ListarProductoTable(tblProductos);
@@ -358,17 +380,12 @@ public class Main extends JFrame {
 			}
 		});
 		btnProducto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		gridPanel.add(btnProducto);
 		
-		JButton btnUsuario = new JButton("Usuarios");
+		
+		 btnUsuario = new JButton("Usuarios");
 		btnUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*eliminarTab("Productos");
-				eliminarTab("Ventas");
-				eliminarTab("Categoria");
-				eliminarTab("Proveedor");
-				eliminarTab("Caja");
-				eliminarTab("Factura");*/
+				
 				tabPane_Vistas.removeAll();
 				tabPane_Vistas.addTab("Usuarios", null, pnl_usuarios, null);
 				tabPane_Vistas.setBackgroundAt(tabPane_Vistas.indexOfTab("Usuarios"), new Color(214, 214, 214));
@@ -394,17 +411,12 @@ public class Main extends JFrame {
 				btnUsuario.setBackground(new Color(240, 240, 240));
 			}
 		});
-		gridPanel.add(btnUsuario);
 		
-		JButton btnFactura = new JButton("Facturas");
+		
+		 btnFactura = new JButton("Facturas");
 		btnFactura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*eliminarTab("Productos");
-				eliminarTab("Ventas");
-				eliminarTab("Caja");
-				eliminarTab("Usuarios");
-				eliminarTab("Categoria");
-				eliminarTab("Proveedor");*/
+				
 				tabPane_Vistas.removeAll();
 				tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
@@ -430,9 +442,9 @@ public class Main extends JFrame {
 				btnFactura.setBackground(new Color(240, 240, 240));
 			}
 		});
-		gridPanel.add(btnFactura);
 		
-		JButton btnCaja = new JButton("Caja");
+		
+		 btnCaja = new JButton("Caja");
 		btnCaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cambiarAdministrador();
@@ -453,17 +465,12 @@ public class Main extends JFrame {
 				btnCaja.setBackground(new Color(240, 240, 240));
 			}
 		});
-		gridPanel.add(btnCaja);
 		
-		JButton btnVentas = new JButton("Ventas");
+		
+		btnVentas = new JButton("Ventas");
 		btnVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*eliminarTab("Categoria");
-				eliminarTab("Proveedor");
-				eliminarTab("Productos");
-				eliminarTab("Caja");
-				eliminarTab("Usuarios");
-				eliminarTab("Facturas");*/
+				
 				tabPane_Vistas.removeAll();
 				
 				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
@@ -492,7 +499,11 @@ public class Main extends JFrame {
 				btnVentas.setBackground(new Color(240, 240, 240));
 			}
 		});
-		gridPanel.add(btnVentas);
+		
+		
+		lblCodUsuario = new JLabel("CodUsuario");
+		lblCodUsuario.setVisible(false);
+		
 		contentPane.add(middlePanel, BorderLayout.WEST);
 		
 		JPanel centralPanel = new JPanel();
@@ -1076,7 +1087,7 @@ public class Main extends JFrame {
 						textVentasObservaciones.getText(),
 						0, 
 						Double.parseDouble(lblTotalpagar.getText().replaceAll(",", ".")),
-						1) ;
+						Integer.parseInt(lblCodUsuario.getText())) ;
 				ventaDao.registarVenta(factura, tblVentas);
 				limpiarCamposVentas();
 				pnlVentasLadoDerecho.setVisible(false);
@@ -3132,4 +3143,11 @@ public class Main extends JFrame {
 		
 		 tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 	 }
+
+	
+
+	public void setUsuarioLogin(Usuario usuarioLogin) {
+		this.usuarioLogin = usuarioLogin;
+	}
+	 
 }
