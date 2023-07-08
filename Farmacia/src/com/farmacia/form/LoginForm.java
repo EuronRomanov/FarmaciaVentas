@@ -39,6 +39,7 @@ public class LoginForm extends JFrame {
 	private PnlIngresoDB pnlIngresoDB =new PnlIngresoDB();
 	private Usuario usuario=new Usuario();
 	private UsuarioDao usuarioDao=new UsuarioDao();
+	String nombreUsuario;
 		/**
 	 * Launch the application.
 	 */
@@ -162,10 +163,9 @@ public class LoginForm extends JFrame {
 		
 		pnlIngresoApp.getBtnLoginIngresar().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Usuario usuario=usuarioDao.loginUsuario(pnlIngresoApp.getTextLoginUsuario().getText(), String.valueOf(pnlIngresoApp.getTextLoginPassword().getPassword()));
+				 usuario=usuarioDao.loginUsuario(pnlIngresoApp.getTextLoginUsuario().getText(), String.valueOf(pnlIngresoApp.getTextLoginPassword().getPassword()));
 				if (usuario!=null) {
-					SesionUsuario.setCodUsuario(usuario.getCodUsuario());
-					SesionUsuario.setNombreUsuario(usuario.getNombre());
+					
 					desactivarVenta();
 				}
 			
@@ -195,8 +195,22 @@ public class LoginForm extends JFrame {
 	public Usuario getUsuario() {
 		return usuario;
 	}
+	
+	
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
 	protected void desactivarVenta() {
 		this.dispose();
+		Main frame = new Main();
+		frame.setUsuarioLogin(usuario);
+		frame.setVisible(true);
+		
 	}
 	
 }
