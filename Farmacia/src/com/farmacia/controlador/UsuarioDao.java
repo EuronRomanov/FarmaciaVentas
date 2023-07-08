@@ -269,6 +269,21 @@ public class UsuarioDao {
 		return estado;
 	}
 
+    public String  esAdministradorString(int admin) {
+  		String estado="";
+  		
+  		switch (admin) {
+  		case 0:
+  			estado="Vendedor";
+  			break;
+  		case 1:
+  			estado="Administrador";
+  			break;
+  		default:
+  			break;
+  		}
+  		return estado;
+  	}
 
 
 	private String esEstado(int key) {
@@ -314,17 +329,12 @@ String estado="";
 	           ResultSet rs = ps.executeQuery();
 
 	           while(rs.next()){
-	           /* usuario = new Usuario(rs.getInt("codUsuario"),
-	           			 rs.getString("nombre"), 
-	           			rs.getString("password"), 
-	           			 rs.getInt("estado"), 
-	           			  rs.getInt("administrador"), 
-	           			 rs.getString("cedula"));*/
+	           
 	           	
 	            usuario = new Usuario();
 	            usuario.setCodUsuario(rs.getInt("codUsuario"));
 	            usuario.setNombre(rs.getString("nombre"));
-	           
+	            usuario.setAdministrador(rs.getInt("administrador"));
 	             
 	           }
 	       }catch(Exception e){
