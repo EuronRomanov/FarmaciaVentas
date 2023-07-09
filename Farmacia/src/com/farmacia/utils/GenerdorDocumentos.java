@@ -328,12 +328,7 @@ public class GenerdorDocumentos {
 			 
 			 try {
 				 String query="";
-				/*	int contador=0;
-					Statement st= con.createStatement();
-					ResultSet rs=st.executeQuery(query);
-					while(rs.next()) {
-				 contador++;
-					if(contador<=1) {*/
+				
 						
 						 PdfPCell observacion=new PdfPCell(new Phrase("Observacion", fuenteTitulo));
 						 observacion.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -404,12 +399,12 @@ public class GenerdorDocumentos {
 
 
 	
-	public void generarReporteVentas(String dest)  {
+	public void generarReporteVentas(String dest,String administrador)  {
 	    Document document = new Document();
 		LocalDateTime hora = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
      
-		String h=dest.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/codigo"+hora.format(f)+".pdf";
+		String h=dest.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/reporteVenta"+hora.format(f)+".pdf";
 		
 	    try {
 	    	PdfWriter.getInstance(document, new FileOutputStream(h));
