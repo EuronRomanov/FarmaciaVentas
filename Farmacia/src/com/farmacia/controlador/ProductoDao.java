@@ -191,7 +191,7 @@ public class ProductoDao {
             	ob[7]=rs.getDouble("presentacion"); 
             	ob[8]=rs.getString("marca"); 
             	ob[9]=rs.getTimestamp("fechaRegistro").toString();
-            	ob[10]=rs.getDate("fechaCaduca").toString(); 
+            	ob[10]=rs.getDate("fechaCaduca").toString().replaceFirst("T", " "); 
             	ob[11]=rs.getString("observaciones");
             	ob[12]=rs.getString("formaFarmaceutica");
             	ob[13]=rs.getInt("codCategoria");
@@ -300,7 +300,7 @@ public class ProductoDao {
             ob[6] = ListarCl.get(i).getUnidadMedida();
             ob[7] = ListarCl.get(i).getPresentacion();
             ob[8] = ListarCl.get(i).getMarca();
-            ob[9] = ListarCl.get(i).getFechaRegistro().toString();
+            ob[9] = ListarCl.get(i).getFechaRegistro().toString().replaceFirst("T", " ");
             ob[10] = ListarCl.get(i).getFechaCaduca().toString();
             ob[11] = ListarCl.get(i).getObservaciones();
             ob[12] = ListarCl.get(i).getFormaFarmaceutica();
@@ -335,7 +335,7 @@ public class ProductoDao {
 		                      rs.getString("unidadMedida"),
 		                      rs.getDouble("presentacion"), 
 		                      rs.getString("marca"), 
-							LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString(),parser ),
+							LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString().replaceFirst("T", " "),parser ),
 						    LocalDate.parse(rs.getTimestamp("fechaCaduca").toString(),parser ), 
 						    rs.getString("observaciones"),
 						    rs.getString("formaFarmaceutica"),
