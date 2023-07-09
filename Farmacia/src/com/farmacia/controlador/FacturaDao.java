@@ -300,7 +300,7 @@ public class FacturaDao {
         Object[] ob = new Object[10];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodFactura();
-            ob[1] = ListarCl.get(i).getFecha();
+            ob[1] = ListarCl.get(i).getFecha().toString().replaceFirst("T", " ");
             ob[2] = ListarCl.get(i).getRuc();
             ob[3] = ListarCl.get(i).getCedula();
             ob[4] = ListarCl.get(i).getN_cliente();
