@@ -95,6 +95,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import javax.swing.Box;
+import java.awt.Toolkit;
 
 
 public class Main extends JFrame {
@@ -254,6 +255,7 @@ public class Main extends JFrame {
 	 * Create the frame.
 	 */
 	public Main() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent e) {
 			}
@@ -842,7 +844,7 @@ public class Main extends JFrame {
 					selectCarpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					selectCarpeta.setAcceptAllFileFilterUsed(false);
 					if (selectCarpeta.showOpenDialog(contentPane)==JFileChooser.APPROVE_OPTION) {
-						generador.generarReporteVentas(selectCarpeta.getSelectedFile().toPath().toString());
+						generador.generarReporteVentas(selectCarpeta.getSelectedFile().toPath().toString(),mnMenuAdministrador.getText());
 					}
 				
 					break;
