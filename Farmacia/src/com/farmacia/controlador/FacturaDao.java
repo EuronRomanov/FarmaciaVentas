@@ -1,5 +1,6 @@
 package com.farmacia.controlador;
 
+import java.awt.Cursor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -297,7 +298,11 @@ public class FacturaDao {
         button.setName("btnFacturaDetalle");
         button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-lupa.png")));
         
-        Object[] ob = new Object[10];
+        JButton btnImprimirFactura=new JButton("");
+        btnImprimirFactura.setName("btnFacturaImprimir");
+        btnImprimirFactura.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/print-icon.png")));
+       
+        Object[] ob = new Object[11];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodFactura();
             ob[1] = ListarCl.get(i).getFecha().toString().replaceFirst("T", " ");
@@ -309,6 +314,7 @@ public class FacturaDao {
             ob[7] = ListarCl.get(i).getTotal();
             ob[8] = ListarCl.get(i).getUsuario();
             ob[9]=button;
+            ob[10]= btnImprimirFactura;
             modelo.addRow(ob);
         }
         tblFacturas.setDefaultRenderer(Object.class,new RenderTabla());
