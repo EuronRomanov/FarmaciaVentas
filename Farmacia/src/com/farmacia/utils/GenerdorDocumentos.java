@@ -4,9 +4,11 @@ import java.awt.Desktop;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,9 +28,11 @@ import java.util.regex.Matcher;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
+
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.controlador.DetalleDao;
@@ -57,7 +61,7 @@ public class GenerdorDocumentos {
 	
 	private static Connection con=ConexionBD.conectar();
 	private ControlFormatos formato=new ControlFormatos();
-	private final static Logger LOGGER = Logger.getLogger("mx.hash.impresionpdf.Impresor");
+	
 	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada)  {
 		
 		try {
@@ -108,6 +112,7 @@ public class GenerdorDocumentos {
 
 	
 	public void generarTicket(int idFactura) {
+		
 		LocalDateTime hora = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"); 
         ///hora.format(f)
@@ -119,9 +124,14 @@ public class GenerdorDocumentos {
 		Rectangle r=new Rectangle(210,400);
 		
 		Document document=new Document(r,9f,9f,7f,7f);
+		String archivoFactura="temp/ticket"+hora.format(f)+".pdf";
 	try {
-		FileOutputStream archivo=new FileOutputStream("temp/ticket.pdf");
+		FileOutputStream archivo=new FileOutputStream(archivoFactura);
 		PdfWriter.getInstance(document, archivo);
+		
+		
+	      
+		
 		document.open();
 		//FUENTES
 		Font fuenteTitulo=FontFactory.getFont(
@@ -173,6 +183,7 @@ public class GenerdorDocumentos {
 				while(rs.next()) {
 					contador++;
 					if(contador<=1) {*/
+				System.out.println(factura.getN_cliente());
 						PdfPCell nombreCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
 						nombreCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						nombreCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -233,7 +244,7 @@ public class GenerdorDocumentos {
 					//}
 				//}
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 			document.add(encabezadoCliente);
 			
@@ -316,7 +327,7 @@ public class GenerdorDocumentos {
 				 }	 
 					//}
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 			 
 			 
@@ -372,7 +383,7 @@ public class GenerdorDocumentos {
 					//}
 					//}
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 			
 			 document.add(saltoLinea);
@@ -382,10 +393,11 @@ public class GenerdorDocumentos {
 		 document.close();
 		 
 		 
-		 File abrirArchivo=new File("temp/ticket.pdf");
-		// Desktop.getDesktop().open(abrirArchivo);
+		 File abrirArchivo=new File(archivoFactura);
+		//Desktop.getDesktop().open(abrirArchivo);
 		 try {
 			 imprimir(abrirArchivo);
+			
 		} catch (PrinterException | IOException ex) {
             JOptionPane.showMessageDialog(null, "Error de impresion", "Error", JOptionPane.ERROR_MESSAGE);
             
@@ -399,7 +411,7 @@ public class GenerdorDocumentos {
 
 
 	
-	public void generarReporteVentas(String dest,String administrador)  {
+	public void generarReporteVentas(String dest,String administrador,int codUsuario,String fechaInicio,String fechaFin)  {
 	    Document document = new Document();
 		LocalDateTime hora = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -464,15 +476,25 @@ public void imprimir(File archivo) throws PrinterException, IOException {
     PDDocument document = Loader.loadPDF(archivo);
 
     PrinterJob job = PrinterJob.getPrinterJob();
-
+    
    // LOGGER.log(Level.INFO, "Mostrando el dialogo de impresion");
-    if (job.printDialog() == true) {            
+    if (job.printDialog() == true) {    
+    	
         job.setPageable(new PDFPageable(document));
-
+       
        // LOGGER.log(Level.INFO, "Imprimiendo documento");
         job.print();
+        
     }
     
-    archivo.delete();
+    	archivo.delete();
+    
+    
+    
 }
+
+
+
+
+
 }
