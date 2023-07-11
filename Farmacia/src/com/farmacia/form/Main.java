@@ -72,10 +72,7 @@ import java.awt.event.ActionEvent;
 
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.controlador.*;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
@@ -96,6 +93,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import javax.swing.Box;
 import java.awt.Toolkit;
+import com.toedter.calendar.JCalendar;
 
 
 public class Main extends JFrame {
@@ -230,6 +228,13 @@ public class Main extends JFrame {
 	private JPanel gridPnlMenuIzquierda=new JPanel();
 	private JMenu mnMenuAdministrador;
 	private Component horizontalGlue;
+	
+	private GenerdorDocumentos generarDocumento= new GenerdorDocumentos();
+	private JDateChooser textCajaDesde;
+	private JDateChooser textCajaHasta;
+	private JLabel lblCajaDesde;
+	private JLabel lblCajaHasta;
+	private JButton btnNewButton;
 	//LoginForm lo=new LoginForm();
 	//String nombreUsuario=lo.getNombreUsuario();
     /**
@@ -267,6 +272,8 @@ public class Main extends JFrame {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				//
+				
+				ConexionBD.conectar();
 			mnUsuario.setText(usuarioLogin.getNombre());
 			lblCodUsuario.setText(String.valueOf(usuarioLogin.getCodUsuario()));
 			mnMenuAdministrador.setText(usuarioDao.esAdministradorString(usuarioLogin.getAdministrador()));
@@ -825,34 +832,17 @@ public class Main extends JFrame {
 		
 		tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 		GridBagLayout gbl_pnl_caja = new GridBagLayout();
-		gbl_pnl_caja.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_pnl_caja.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_pnl_caja.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_pnl_caja.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_pnl_caja.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_pnl_caja.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_pnl_caja.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_pnl_caja.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		pnl_caja.setLayout(gbl_pnl_caja);
 		
 		cmbReporteListas = new JComboBox();
 		cmbReporteListas.setModel(new DefaultComboBoxModel(new String[] {"Seleccionar Reporte", "Ventas del Día", "Inventario"}));
 		cmbReporteListas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GenerdorDocumentos generador=new GenerdorDocumentos();
-				switch (cmbReporteListas.getSelectedIndex()) {
-				case 1:
-					JFileChooser selectCarpeta=new JFileChooser();
-					selectCarpeta.setCurrentDirectory(new File("."));
-					selectCarpeta.setDialogTitle("Seleccionar la carpeta para guardar los archivos");
-					selectCarpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					selectCarpeta.setAcceptAllFileFilterUsed(false);
-					if (selectCarpeta.showOpenDialog(contentPane)==JFileChooser.APPROVE_OPTION) {
-						generador.generarReporteVentas(selectCarpeta.getSelectedFile().toPath().toString(),mnMenuAdministrador.getText());
-					}
 				
-					break;
-				case 2:
-				break;
-				default:
-					break;
-				}
 			}
 		});
 		GridBagConstraints gbc_cmbReporteListas = new GridBagConstraints();
@@ -861,6 +851,83 @@ public class Main extends JFrame {
 		gbc_cmbReporteListas.gridx = 1;
 		gbc_cmbReporteListas.gridy = 0;
 		pnl_caja.add(cmbReporteListas, gbc_cmbReporteListas);
+		
+		lblCajaDesde = new JLabel("Desde");
+		GridBagConstraints gbc_lblCajaDesde = new GridBagConstraints();
+		gbc_lblCajaDesde.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCajaDesde.gridx = 0;
+		gbc_lblCajaDesde.gridy = 2;
+		pnl_caja.add(lblCajaDesde, gbc_lblCajaDesde);
+		
+		lblCajaHasta = new JLabel("Hasta");
+		GridBagConstraints gbc_lblCajaHasta = new GridBagConstraints();
+		gbc_lblCajaHasta.insets = new Insets(0, 0, 5, 0);
+		gbc_lblCajaHasta.gridx = 2;
+		gbc_lblCajaHasta.gridy = 2;
+		pnl_caja.add(lblCajaHasta, gbc_lblCajaHasta);
+		
+		textCajaDesde = new JDateChooser();
+		textCajaDesde.setDateFormatString("yyyy-MM-dd");
+		GridBagConstraints gbc_textCajaDesde = new GridBagConstraints();
+		gbc_textCajaDesde.insets = new Insets(0, 0, 5, 5);
+		gbc_textCajaDesde.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textCajaDesde.gridx = 0;
+		gbc_textCajaDesde.gridy = 3;
+		pnl_caja.add(textCajaDesde, gbc_textCajaDesde);
+		
+		textCajaHasta = new JDateChooser();
+		GridBagConstraints gbc_textCajaHasta = new GridBagConstraints();
+		gbc_textCajaHasta.insets = new Insets(0, 0, 5, 0);
+		gbc_textCajaHasta.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textCajaHasta.gridx = 2;
+		gbc_textCajaHasta.gridy = 3;
+		pnl_caja.add(textCajaHasta, gbc_textCajaHasta);
+		
+		btnNewButton = new JButton("Consultar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GenerdorDocumentos generador=new GenerdorDocumentos();
+				String arhivoPath="";
+				int opcion=cmbReporteListas.getSelectedIndex();
+				if (opcion>0) {
+					JFileChooser selectCarpeta=new JFileChooser();
+					selectCarpeta.setCurrentDirectory(new File("."));
+					selectCarpeta.setDialogTitle("Seleccionar la carpeta para guardar los archivos");
+					selectCarpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					selectCarpeta.setAcceptAllFileFilterUsed(false);
+					if (selectCarpeta.showOpenDialog(contentPane)==JFileChooser.APPROVE_OPTION) {
+						
+						arhivoPath=selectCarpeta.getSelectedFile().toPath().toString();
+					}
+				}
+				switch (opcion) {
+				case 1:
+					
+					if (textCajaDesde!=null &&textCajaHasta!=null ) {
+						generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
+								Integer.parseInt(lblCodUsuario.getText()),
+								textCajaDesde.toString(),
+								textCajaHasta.toString());
+					} else {
+
+					}
+						
+					
+			
+					break;
+				case 2:
+				break;
+				default:
+					break;
+				}
+				cmbReporteListas.setSelectedIndex(0);
+			}
+		});
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 1;
+		gbc_btnNewButton.gridy = 4;
+		pnl_caja.add(btnNewButton, gbc_btnNewButton);
 		
 		/*
 		 * ---------------categorias------------
@@ -2822,6 +2889,7 @@ public class Main extends JFrame {
 			pnl_factura.add(scrollPane_5, gbc_scrollPane_5);
 			
 			tblFacturas = new JTable();
+			tblFacturas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			tblFacturas.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -2833,11 +2901,12 @@ public class Main extends JFrame {
 		                     //perform a click event
 		                     ((JButton)value).doClick();
 		                     JButton botones=(JButton)value;
-		                     if (botones.getName().equals("btnFacturaDetalle")) {
-		                    	 int fila = tblFacturas.rowAtPoint(e.getPoint());
+		                     int fila = tblFacturas.rowAtPoint(e.getPoint());
 		      		           
-		        		         
-		        		        	 int facturaId=Integer.parseInt(tblFacturas.getValueAt(fila, 0).toString()) ;
+	        		         
+        		        	 int facturaId=Integer.parseInt(tblFacturas.getValueAt(fila, 0).toString()) ;
+		                     if (botones.getName().equals("btnFacturaDetalle")) {
+		                    	 
 		                    	if (detalleForm!=null) {
 		                    		detalleForm.setVisible(true);
 								} else {
@@ -2845,6 +2914,12 @@ public class Main extends JFrame {
 									detalleForm.setVisible(true);
 								}
 		                    	detalleForm.setFacturaId(facturaId);
+							}
+		                     if (botones.getName().equals("btnFacturaImprimir")) {
+								
+		                    	 generarDocumento.generarTicket(facturaId); 
+		                    	
+			      		     
 							}
 		                 }else {
 		                	 limpiarCamposFactura();
@@ -2872,11 +2947,11 @@ public class Main extends JFrame {
 				new Object[][] {
 				},
 				new String[] {
-					"C\u00F3digo", "Fecha", "RUC", "Cedula", "Cliente", "Observaci\u00F3n", "SubTotal", "Total", "Vendedor", "Detalle"
+					"C\u00F3digo", "Fecha", "RUC", "Cedula", "Cliente", "Observaci\u00F3n", "SubTotal", "Total", "Vendedor", "Detalle","Imprimir"
 				}
 			) {
 				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false, false, false, false, false, false
+					false, false, false, false, false, false, false, false, false, false,false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
@@ -2945,6 +3020,7 @@ public class Main extends JFrame {
 				       
 					limpiarCamposFactura();
 					facturaDao.ListarFacturaTable(tblFacturas); 
+					
 				}
 			});
 			btnFacturaModificar.setEnabled(false);
