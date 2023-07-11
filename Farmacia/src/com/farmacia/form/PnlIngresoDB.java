@@ -21,7 +21,7 @@ public class PnlIngresoDB extends JPanel {
 	private JTextField textDBpassword;
 	private JTextField textDBhost;
 	private JTextField textDBpuerto;
-	private JButton btnDBCancelar ;
+	private JButton btnDBCancelar,btnDBconectar,btnDBprobarCon ;
 	private JTextField textDBnombre;
 	/**
 	 * Create the panel.
@@ -128,17 +128,8 @@ public class PnlIngresoDB extends JPanel {
 		gbc_btnDBCancelar.gridy = 5;
 		add(btnDBCancelar, gbc_btnDBCancelar);
 		
-		JButton btnDBconectar = new JButton("Conectar");
-		btnDBconectar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				ConexionBD.obtenerNuevasCredenciales(textDBnombre.getText(), 
-													textDBhost.getText(), 
-													textDBusuario.getText(), 
-													textDBpassword.getText(),
-													textDBpuerto.getText());
-			}
-		});
+		 btnDBconectar = new JButton("Conectar");
+		
 		btnDBconectar.setPreferredSize(new Dimension(113, 23));
 		GridBagConstraints gbc_btnDBconectar = new GridBagConstraints();
 		gbc_btnDBconectar.insets = new Insets(0, 0, 0, 5);
@@ -146,21 +137,8 @@ public class PnlIngresoDB extends JPanel {
 		gbc_btnDBconectar.gridy = 5;
 		add(btnDBconectar, gbc_btnDBconectar);
 		
-		JButton btnDBprobarCon = new JButton("Probar Conexión");
-		btnDBprobarCon.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String mensage="";
-				if (ConexionBD.probarConexion()) {
-					mensage="Hay conexion con la base de datos";
-					
-				} else {
-					mensage= "No hay conexion con la base de datos";
-					
-				}
-				JOptionPane.showMessageDialog(null,mensage);
-				
-			}
-		});
+		 btnDBprobarCon = new JButton("Probar Conexión");
+		
 		GridBagConstraints gbc_btnDBprobarCon = new GridBagConstraints();
 		gbc_btnDBprobarCon.gridx = 3;
 		gbc_btnDBprobarCon.gridy = 5;
@@ -171,6 +149,36 @@ public class PnlIngresoDB extends JPanel {
 	public JButton getBtnDBCancelar() {
 		return btnDBCancelar;
 	}
+	
+	public void limpiarCampos() {
+		textDBnombre.setText(""); 
+		 
+		textDBusuario.setText(""); 
+		textDBpassword.setText("");
+		
+	}
+	public JTextField getTextDBusuario() {
+		return textDBusuario;
+	}
+	public JTextField getTextDBpassword() {
+		return textDBpassword;
+	}
+	public JTextField getTextDBhost() {
+		return textDBhost;
+	}
+	public JTextField getTextDBpuerto() {
+		return textDBpuerto;
+	}
+	public JButton getBtnDBconectar() {
+		return btnDBconectar;
+	}
+	public JTextField getTextDBnombre() {
+		return textDBnombre;
+	}
+	public JButton getBtnDBprobarCon() {
+		return btnDBprobarCon;
+	}
+	
 	
 
 }

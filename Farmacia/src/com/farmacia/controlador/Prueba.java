@@ -18,9 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import com.farmacia.bd.*;
 
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.printing.PDFPageable;
+
 
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
@@ -32,51 +30,6 @@ import java.util.Date;
 public class Prueba {
 	
 	
-	public String getPropValues()  {
-	
-		String propFileName = "C:/Users/HP/git/FarmaciaVentas/Farmacia/src/com/farmacia/utils/.env";
-		InputStream inputStream;
-	    String result=null;
-			try {
-				Properties prop = new Properties();
-				
-				 inputStream = Prueba.class.getResourceAsStream(propFileName);
-				
-	 
-				if (inputStream != null) {
-					prop.load(inputStream);
-				} else {
-					throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-				}
-	 
-				Date time = new Date(System.currentTimeMillis());
-	 
-				// get the property value and print it out
-				String prop1 = prop.getProperty("prop1");
-				String prop2 = prop.getProperty("prop2");
-				String prop3 = prop.getProperty("prop3");
-	 
-	      //after values are loaded you can do anything with them
-	      //here I will set them as System properties
-				System.setProperty("prop1",prop1);
-	      System.setProperty("prop1",prop2);
-	      System.setProperty("prop1",prop3);
-	  	 prop1 = prop.getProperty("prop1");
-		 prop2 = prop.getProperty("prop2");
-		 prop3 = prop.getProperty("prop3");
-	       result=prop1+prop2;
-	      System.out.println(result + "\n Properties Successfully Loaded On " + time);
-	      inputStream.close();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			} catch (Exception e) {
-				System.out.println("Exception: " + e);
-			} finally {
-				
-			}
-			return result;
-		}
 	
 	
 	public static void main(String[] args) {

@@ -7,12 +7,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.farmacia.bd.ConexionBD;
 import com.farmacia.controlador.UsuarioDao;
 import com.farmacia.entidades.SesionUsuario;
 
 import com.farmacia.entidades.Usuario;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -66,7 +69,11 @@ public class LoginForm extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				
+				ConexionBD.conectar();
+			}
+			@Override
+			public void windowOpened(WindowEvent e) {
+				ConexionBD.conectar();
 			}
 		});
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -175,7 +182,7 @@ public class LoginForm extends JFrame {
 		
 		pnlIngresoDB.getBtnDBCancelar().addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
-		 		
+		 		pnlIngresoDB.limpiarCampos();
 		 		pnlLogin.add(pnlIngresoDB,BorderLayout.SOUTH);
 		 		pnlLogin.add(pnlMenu,BorderLayout.CENTER);
 		 		pnlIngresoDB.setVisible(false);
@@ -184,6 +191,42 @@ public class LoginForm extends JFrame {
 		 	}
 		 });
 
+		pnlIngresoDB.getBtnDBconectar().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ConexionBD.obtenerNuevasCredenciales(pnlIngresoDB.getTextDBnombre().getText(), 
+						                        pnlIngresoDB.getTextDBhost().getText(), 
+						                        pnlIngresoDB.getTextDBusuario().getText(), 
+						                        pnlIngresoDB.getTextDBpassword().getText(),
+						                        pnlIngresoDB.getTextDBpuerto().getText());
+				
+				refrescarPagina();
+				ConexionBD.conectar();
+			}
+		});
+		
+		pnlIngresoDB.getBtnDBprobarCon().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String mensage="";
+				if (ConexionBD.probarConexion()) {
+					mensage="Hay conexion con la base de datos";
+					
+				} else {
+					mensage= "No hay conexion con la base de datos";
+					
+				}
+				JOptionPane.showMessageDialog(null,mensage);
+				
+			}
+		});
+		
+	}
+
+	protected void refrescarPagina() {
+		this.setVisible(true);
+		this.dispose();
+		LoginForm frame = new LoginForm();
+		frame.setVisible(true);
 		
 		
 	}
