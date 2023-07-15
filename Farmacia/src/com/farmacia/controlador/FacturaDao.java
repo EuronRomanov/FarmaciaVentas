@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -109,13 +111,31 @@ public class FacturaDao {
 	       return ListaCl;
 	   }
 	 
-	 public List listarFacturasReporte(){
+	 public List listarFacturasReporte(String esAdmin,int codusuario,String fechaInicio,String fechaFin){
 	       List<Factura> ListaCl = new ArrayList();
 	       String sql = "SELECT * FROM Factura,Usuario"
-	       		+ " WHERE Factura.codUsuario=Usuario.codUsuario AND DATE(Factura.fecha)=DATE(NOW())";
+	       		+ " WHERE Factura.codUsuario=Usuario.codUsuario";
+	      
 	       try {
 	    	   DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-	    	   PreparedStatement ps = con.prepareStatement(sql);
+	    	   SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	    	   PreparedStatement ps;
+	    	   if (esAdmin.equalsIgnoreCase("Vendedor")) {
+	    		   sql+=" AND DATE(Factura.fecha)=DATE(NOW()) AND Factura.codUsuario=?";
+	    		   ps = con.prepareStatement(sql);
+		    	   ps.setInt(1,codusuario);
+		    	   
+		    	   
+			} else {
+	                sql+=" AND DATE(Factura.fecha) BETWEEN ? AND ?";
+	               
+	                //Date dateInicio = formatter.parse(fechaInicio);
+	                 ps = con.prepareStatement(sql);
+			    	   ps.setString(1,fechaInicio);
+			    	   ps.setString(2,fechaFin);
+			}
+	    	  
+	    	   
 	    	   ResultSet rs = ps.executeQuery();
 	           while (rs.next()) {               
 	              

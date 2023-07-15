@@ -361,7 +361,7 @@ public class ProductoDao {
 	
 	 public void agregarProductoProCodigo(String key,JTable tblVentas){
 		 String sql = "SELECT * FROM Producto"
-	        		+ " WHERE  disposicion=1 AND codProducto=? ";
+	        		+ " WHERE  disposicion=1 AND cantidad>0 AND codProducto=? ";
 	        modelo = (DefaultTableModel) tblVentas.getModel();
 	       
 	        Object[] ob = new Object[5];
