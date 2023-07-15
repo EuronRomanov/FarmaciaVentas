@@ -373,7 +373,7 @@ public class Producto {
 
 	@Override
 	public String toString() {
-		return  nombreProducto ;
+		return  nombreProducto+" "+this.formaFarmaceutica+" "+this.presentacion+" " +this.unidadMedida;
 	}
 	
 	
