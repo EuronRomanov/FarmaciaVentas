@@ -218,7 +218,7 @@ public class Main extends JFrame {
     private JButton btnFacturaAgregar;
     private JTextField textField;
     private JButton btnFacturaBuscar;
-	private DetalleForm detalleForm ;
+	private DetalleForm detalleForm =new DetalleForm();
 	private JComboBox cmbReporteListas;
 	private JButton btnVentasGenerar;
 	private JMenu mnUsuario;
@@ -263,6 +263,8 @@ public class Main extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent e) {
+				setEnabled(true);
+				detalleForm.dispose();
 			}
 			public void windowLostFocus(WindowEvent e) {
 				
@@ -842,7 +844,11 @@ public class Main extends JFrame {
 		cmbReporteListas.setModel(new DefaultComboBoxModel(new String[] {"Seleccionar Reporte", "Ventas del Día", "Inventario"}));
 		cmbReporteListas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if (cmbReporteListas.getSelectedIndex()==1 && mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) {
+					mostrarComponentesConsultaCaja();
+				}else if(cmbReporteListas.getSelectedIndex()==2) {
+					mostrarComponentesConsultaCaja();
+				}
 			}
 		});
 		GridBagConstraints gbc_cmbReporteListas = new GridBagConstraints();
@@ -853,6 +859,7 @@ public class Main extends JFrame {
 		pnl_caja.add(cmbReporteListas, gbc_cmbReporteListas);
 		
 		lblCajaDesde = new JLabel("Desde");
+		lblCajaDesde.setVisible(false);
 		GridBagConstraints gbc_lblCajaDesde = new GridBagConstraints();
 		gbc_lblCajaDesde.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCajaDesde.gridx = 0;
@@ -860,6 +867,7 @@ public class Main extends JFrame {
 		pnl_caja.add(lblCajaDesde, gbc_lblCajaDesde);
 		
 		lblCajaHasta = new JLabel("Hasta");
+		lblCajaHasta.setVisible(false);
 		GridBagConstraints gbc_lblCajaHasta = new GridBagConstraints();
 		gbc_lblCajaHasta.insets = new Insets(0, 0, 5, 0);
 		gbc_lblCajaHasta.gridx = 2;
@@ -867,6 +875,7 @@ public class Main extends JFrame {
 		pnl_caja.add(lblCajaHasta, gbc_lblCajaHasta);
 		
 		textCajaDesde = new JDateChooser();
+		textCajaDesde.setVisible(false);
 		textCajaDesde.setDateFormatString("yyyy-MM-dd");
 		GridBagConstraints gbc_textCajaDesde = new GridBagConstraints();
 		gbc_textCajaDesde.insets = new Insets(0, 0, 5, 5);
@@ -876,6 +885,8 @@ public class Main extends JFrame {
 		pnl_caja.add(textCajaDesde, gbc_textCajaDesde);
 		
 		textCajaHasta = new JDateChooser();
+		textCajaHasta.setDateFormatString("yyyy-MM-dd");
+		textCajaHasta.setVisible(false);
 		GridBagConstraints gbc_textCajaHasta = new GridBagConstraints();
 		gbc_textCajaHasta.insets = new Insets(0, 0, 5, 0);
 		gbc_textCajaHasta.fill = GridBagConstraints.HORIZONTAL;
@@ -903,24 +914,40 @@ public class Main extends JFrame {
 				switch (opcion) {
 				case 1:
 					
-					if (textCajaDesde!=null &&textCajaHasta!=null ) {
+					if ((textCajaDesde.getDate()==null  || textCajaHasta.getDate()==null && mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) ) {
+						
+						msgbox("Seleccione un rango de fechas");
+					} else {
+						String fInico="",fFin="";
+						if (mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) {
+							fInico=controlFormato.fromDateToLocalDate(textCajaDesde.getDate()).toString();
+							fFin=controlFormato.fromDateToLocalDate(textCajaHasta.getDate()).toString();
+						} 
 						generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
 								Integer.parseInt(lblCodUsuario.getText()),
-								textCajaDesde.toString(),
-								textCajaHasta.toString());
-					} else {
-
+								fInico,fFin);
 					}
 						
 					
 			
 					break;
 				case 2:
+					if ((textCajaDesde.getDate()==null && textCajaHasta.getDate()==null) ) {
+						msgbox("Seleccione un rango de fechas");
+					} else if(textCajaDesde.getDate()!=null && textCajaHasta.getDate()!=null) {
+						String fInico="",fFin="";
+						fInico=controlFormato.fromDateToLocalDate(textCajaDesde.getDate()).toString();
+						fFin=controlFormato.fromDateToLocalDate(textCajaHasta.getDate()).toString();
+						generador.generarReporteProductos(arhivoPath,
+								fInico,
+								fFin);
+					}
 				break;
 				default:
 					break;
 				}
 				cmbReporteListas.setSelectedIndex(0);
+				ocultarComponentesConsultaCaja();
 			}
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -2426,8 +2453,13 @@ public class Main extends JFrame {
 						
 						
 						GenerdorDocumentos generador=new GenerdorDocumentos();
-						if (!controlFormato.hayEspaciosVacios(textProductoCodBarra.getText(),textProductoCantCodBarras.getText())) {
-							generador.generarPDFs(textProductoCodBarra.getText(),Integer.parseInt(textProductoCantCodBarras.getText()) ,selectCarpeta.getSelectedFile().toPath().toString());
+						if (!controlFormato.hayEspaciosVacios(textProductoCodBarra.getText(),
+								textProductoCantCodBarras.getText(),
+								textProductoNombre.getText(),
+								textProductoFormFarmaceutica.getText(),
+								textProductoPresentacion.getText(),textProductoUmedida.getText())) {
+							String nomPro=textProductoNombre.getText()+" "+textProductoFormFarmaceutica.getText()+" "+textProductoPresentacion.getText()+" "+textProductoUmedida.getText();
+							generador.generarPDFs(textProductoCodBarra.getText(),Integer.parseInt(textProductoCantCodBarras.getText()) ,selectCarpeta.getSelectedFile().toPath().toString(),nomPro);
 						}
 						
 					}
@@ -2912,8 +2944,13 @@ public class Main extends JFrame {
 								} else {
 									detalleForm=new DetalleForm();
 									detalleForm.setVisible(true);
+									
+									
 								}
 		                    	detalleForm.setFacturaId(facturaId);
+		                    	setEnabled(false);
+									
+								
 							}
 		                     if (botones.getName().equals("btnFacturaImprimir")) {
 								
@@ -3034,7 +3071,7 @@ public class Main extends JFrame {
 			btnFacturaEliminar = new JButton("Eliminar");
 			btnFacturaEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.out.println(textFacturaCodigo.getText());
+					
 					if (textFacturaCodigo.getText().length()>0) {
 						facturaDao.deleteFactura(Integer.parseInt(textFacturaCodigo.getText()));
 						limpiarCamposFactura();
@@ -3074,10 +3111,33 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaCancelar, gbc_btnFacturaCancelar);
 		
 		
+			detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		
+			 		detalleForm.dispose();
+			 		facturaDao.ListarFacturaTable(tblFacturas);
+			 		habilitarVentana() ;
+			 	}
+			 });
+			
+			
 			
 
 	}
-	 protected void limpiarCamposFactura() {
+	private void mostrarComponentesConsultaCaja() {
+		lblCajaDesde.setVisible(true);
+		lblCajaHasta.setVisible(true);
+		textCajaDesde.setVisible(true);
+		textCajaHasta.setVisible(true);
+	}
+	private void ocultarComponentesConsultaCaja() {
+		lblCajaDesde.setVisible(false);
+		lblCajaHasta.setVisible(false);
+		textCajaDesde.setVisible(false);
+		textCajaHasta.setVisible(false);
+	}
+
+	protected void limpiarCamposFactura() {
 		 textFacturaCodigo.setText("");
 	      textFacturaFecha.setText("");
 	      textFacturaRuc.setText("");
@@ -3227,5 +3287,11 @@ public class Main extends JFrame {
 	public void setUsuarioLogin(Usuario usuarioLogin) {
 		this.usuarioLogin = usuarioLogin;
 	}
-	 
+	private void msgbox(String s){
+		   JOptionPane.showMessageDialog(null, s);
+		}
+	
+	private void habilitarVentana() {
+		 this.setEnabled(true);
+		}
 }
