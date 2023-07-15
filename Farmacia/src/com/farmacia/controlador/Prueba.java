@@ -41,9 +41,9 @@ public class Prueba {
 		
 			//generador.generarTicket(1);
 		//ConexionBD.obtenerNuevasCredenciales("farmacia", "localhost", "root", "root", "3306");
-		try (InputStream input =new FileInputStream("src/com/farmacia/utils/.env")) {
+		/*try (InputStream input =new FileInputStream("src/com/farmacia/utils/.env")) {
 
-            Properties prop = new Properties();
+            Properties prop = new Properties();*/
 
             
            /* prop.setProperty("db.localhost", "localhost");
@@ -53,16 +53,16 @@ public class Prueba {
             prop.setProperty("db.port", "3306");*/
 
            
-           prop.load( input);
+        /*   prop.load( input);
 
             System.out.println(prop.getProperty("db.localhost")+
             		" usuario"+prop.getProperty("db.user"));
 
         } catch (IOException io) {
             io.printStackTrace();
-        }
+        }*/
  
-
+System.out.println(new ControlFormatos().redondearDosDecimales((3*0.7)));
 		
 		
 	}
