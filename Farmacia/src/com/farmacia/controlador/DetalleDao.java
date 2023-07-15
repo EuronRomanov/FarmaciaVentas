@@ -76,7 +76,7 @@ public class DetalleDao {
 	    
 	  public Detalle searchDetalleId(int key){
 		  Detalle cl=null;
-	       String sql = "SELECT * FROM Detalle WHERE  codCarrito=?";
+	       String sql = "SELECT * FROM Detalle,Producto WHERE Detalle.codProducto=Producto.codProducto AND Producto.disposicion=1 AND Detalle.codCarrito=? ";
 	       try {
 	    	  
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -99,5 +99,45 @@ public class DetalleDao {
 	       return cl;
 	   }
 	
-	 
+	 ///elimnar detalle
+	    public void deleteProducto(int id){
+	        String sql = "DELETE FROM Detalle WHERE codCarrito=?";
+	        try{
+	            PreparedStatement ps = con.prepareStatement(sql);
+	            ps.setInt(1, id);
+
+	            ps.executeUpdate();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }finally{
+	           /* try {
+	                con.close();
+	            } catch (SQLException e) {
+	                System.out.println(e.toString());
+	            }*/
+	        }
+	    }
+	    
+	    
+	    
+	    public Detalle existeDetalle(String key,JTable tblDetalles) {
+	    	Detalle detalle=null;
+	    	//int valor=Integer.parseInt(key);
+	    	for (int i = 0; i < tblDetalles.getRowCount(); i++) {
+	    	String j=tblDetalles.getValueAt(i, 1).toString();
+	    	if (key.equals(j)) {
+	    	
+	    	int codCarrito=	Integer.parseInt(tblDetalles.getValueAt(i, 0).toString());
+	    	int cantidad=Integer.parseInt(tblDetalles.getValueAt(i, 2).toString());
+	    	double valor=Double.parseDouble(tblDetalles.getValueAt(i, 4).toString());
+	    	
+	    	detalle=new Detalle();
+	    	detalle.setCodCarrito(codCarrito);
+	    	detalle.setCantidad(cantidad);
+	    	detalle.setV_total(valor);
+	    	break;
+			}
+	    	}
+	    	return detalle;
+	    }
 }
