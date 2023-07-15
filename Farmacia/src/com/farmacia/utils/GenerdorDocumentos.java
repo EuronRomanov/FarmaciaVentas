@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,16 +36,21 @@ import org.apache.pdfbox.printing.PDFPageable;
 
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.controlador.BodegaDao;
 import com.farmacia.controlador.DetalleDao;
 import com.farmacia.controlador.FacturaDao;
+import com.farmacia.controlador.ProductoDao;
+import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
+import com.farmacia.entidades.Producto;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
@@ -62,7 +68,7 @@ public class GenerdorDocumentos {
 	private static Connection con=ConexionBD.conectar();
 	private ControlFormatos formato=new ControlFormatos();
 	
-	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada)  {
+	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada,String nombrePro)  {
 		
 		try {
 			
@@ -70,6 +76,12 @@ public class GenerdorDocumentos {
 	        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 	     
 			String h=carpetaSeleccionada.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/codigo"+hora.format(f)+".pdf";
+			Paragraph paragraph = new Paragraph();
+		    paragraph.add(nombrePro);
+		    paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+		    Paragraph paragraph_10 = new Paragraph();
+		    paragraph_10.add("\n\n");
+		    paragraph_10.setAlignment(Paragraph.ALIGN_CENTER);
 			
 			Document doc=new Document(PageSize.A4);
 			
@@ -90,7 +102,8 @@ public class GenerdorDocumentos {
 				 table.addCell(cell1);
 			}
 			
-			
+		doc.add(paragraph);	
+		doc.add(paragraph_10);	
 		doc.add(table);
 		
 		doc.close();
@@ -177,13 +190,7 @@ public class GenerdorDocumentos {
 			
 			try {
 				String query="";
-				/*int contador=0;
-				Statement st= con.createStatement();
-				ResultSet rs=st.executeQuery(query);
-				while(rs.next()) {
-					contador++;
-					if(contador<=1) {*/
-				System.out.println(factura.getN_cliente());
+				
 						PdfPCell nombreCliente=new PdfPCell(new Phrase("Cliente", fuenteTitulo));
 						nombreCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						nombreCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -196,11 +203,20 @@ public class GenerdorDocumentos {
 						 encabezadoCliente.addCell(datoCliente);
 						 
 						 
-						 PdfPCell documentoCliente=new PdfPCell(new Phrase("RUC", fuenteTitulo));
+						 PdfPCell documentoCliente=new PdfPCell(new Phrase("RUC/CI", fuenteTitulo));
 						 documentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						 documentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
 						 documentoCliente.setBorder(0);
-						PdfPCell datoDocumentoCliente=new PdfPCell(new Phrase(factura.getRuc(), fuenteDescripcion));
+						 String documentoi="";
+						 if (!factura.getRuc().isEmpty()&&!factura.getCedula().isEmpty()) {
+							 documentoi=factura.getRuc()+"/"+factura.getCedula();
+						} else if (!factura.getRuc().isEmpty()&&factura.getCedula().isEmpty()){
+							 documentoi=factura.getRuc();
+						}
+						else if (factura.getRuc().isEmpty()&&!factura.getCedula().isEmpty()){
+							 documentoi=factura.getRuc();
+						}
+						PdfPCell datoDocumentoCliente=new PdfPCell(new Phrase(documentoi, fuenteDescripcion));
 						datoDocumentoCliente.setVerticalAlignment(Element.ALIGN_CENTER);
 						datoDocumentoCliente.setHorizontalAlignment(Element.ALIGN_LEFT);
 						datoDocumentoCliente.setBorder(0);
@@ -432,7 +448,7 @@ public class GenerdorDocumentos {
 	   
 	    double total=0;
 	    
-	    List<Factura> facturas=new FacturaDao().listarFacturasReporte();
+	    List<Factura> facturas=new FacturaDao().listarFacturasReporte( administrador, codUsuario, fechaInicio, fechaFin);
 	    for (Factura factura : facturas) {
 	        table.addCell(createCell(String.valueOf( factura.getCodFactura()), 1, 1, Element.ALIGN_LEFT));
 	        table.addCell(createCell(factura.getFecha().toString().replaceAll("T", " "), 1, 1, Element.ALIGN_LEFT));
@@ -494,7 +510,110 @@ public void imprimir(File archivo) throws PrinterException, IOException {
 }
 
 
+public void generarReporteProductos(String dest,  String fechaInicio, String fechaFin) {
+	 Document doc = new Document();
+		LocalDateTime hora = LocalDateTime.now();
+     DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+     PdfWriter docWriter = null;
+		String h=dest.replaceAll( Matcher.quoteReplacement(File.separator), "/")+"/reporteBodega"+hora.format(f)+".pdf";
+		
+		
+		try {
+			docWriter = PdfWriter.getInstance(doc, new FileOutputStream(h));
+			//special font sizes
+			   Font bfBold12 = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD, new BaseColor(0, 0, 0)); 
+			   Font bf12 = new Font(FontFamily.TIMES_ROMAN, 12);
+			   doc.setPageSize(PageSize.A4);
+		    doc.open();
+		    
+		  //create a paragraph
+		    Paragraph paragraph = new Paragraph("Fechas Consulta "+fechaInicio+" - "+fechaFin);
+		    
+		    List<Producto> productos=new ProductoDao().ListarProducto();
+		    
+		    //specify column widths
+		    float[] columnWidths = {1.5f, 2f, 5f, 2f};
+		    //create PDF table with the given widths
+		    PdfPTable table = new PdfPTable(columnWidths);
+		    // set table width a percentage of the page width
+		    table.setWidthPercentage(90f);
+		    
+		  //insert column headings
+		    insertCell(table, "Está Vencido?", Element.ALIGN_RIGHT, 1, bfBold12);
+		    insertCell(table, "Fecha Caducidad", Element.ALIGN_LEFT, 1, bfBold12);
+		    insertCell(table, "Fecha Ingreso", Element.ALIGN_LEFT, 1, bfBold12);
+		    insertCell(table, "Cantidad", Element.ALIGN_RIGHT, 1, bfBold12);
+		    table.setHeaderRows(1);
+		    
+		 ///irtar productos
+		    for (Producto producto : productos) {
+		    	  //insert an empty row
+			    insertCell(table, "", Element.ALIGN_LEFT, 4, bfBold12);
+			    //create section heading by cell merging
+			    String descripcion = ""+producto.getCodProducto()+" - "+producto.getNombreProducto()+" "+producto.getFormaFarmaceutica()+" "+producto.getPresentacion()+" "+producto.getUnidadMedida();
+			    insertCell(table, descripcion, Element.ALIGN_LEFT, 4, bfBold12);
+				
+			    //buscar movimientos
+			    List<Bodega> movimientos=new BodegaDao().listarDatosBodega(producto.getCodProducto(), fechaInicio, fechaFin);
+			    for (Bodega bodega : movimientos) {
+			    	insertCell(table, bodega.getCaduca(), Element.ALIGN_RIGHT, 1, bf12);
+			        insertCell(table, bodega.getFechaCaducidad().toString(), Element.ALIGN_LEFT, 1, bf12);
+			        insertCell(table, bodega.getFechaIngreso().toString().replaceFirst("T", " "), Element.ALIGN_LEFT, 1, bf12);
+			         
+			       
+			        insertCell(table,String.valueOf( bodega.getCantidadIngresada()), Element.ALIGN_RIGHT, 1, bf12);
+				}
+			    
+			  //merge the cells to create a footer for that section
+			    insertCell(table, "Stock Actual", Element.ALIGN_RIGHT, 3, bfBold12);
+			    insertCell(table, String.valueOf(producto.getCantidad()), Element.ALIGN_RIGHT, 1, bfBold12);
+			}
+		  
+		   
+		  //add the PDF table to the paragraph 
+		    paragraph.add(table);
+		    // add the paragraph to the document
+		    doc.add(paragraph);
+		 } catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally
+		  {
+			   if (doc != null){
+			    //close the document
+			    doc.close();
+			   }
+			   if (docWriter != null){
+			    //close the writer
+			    docWriter.close();
+			   }
+			  }
+	
+}
 
+
+private void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
+	   
+	  //create a new cell with the specified Text and Font
+	  PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
+	  //set the cell alignment
+	  cell.setHorizontalAlignment(align);
+	  //set the cell column span in case you want to merge two or more cells
+	  cell.setColspan(colspan);
+	  //in case there is no text and you wan to create an empty row
+	  if(text.trim().equalsIgnoreCase("")){
+	   cell.setMinimumHeight(10f);
+	  }
+	  //add the call to the table
+	  table.addCell(cell);
+	   
+	 }
 
 
 }
