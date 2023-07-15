@@ -11,6 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.farmacia.controlador.ProductoDao;
+import com.farmacia.controlador.VentaDao;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Usuario;
@@ -29,6 +31,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
 
 public class DetalleForm extends JFrame {
 
@@ -42,9 +47,13 @@ public class DetalleForm extends JFrame {
     private DetalleDao detalleDao=new DetalleDao();
     private int facturaId;
     private JTextField textDetalleCodFac;
-    private JButton btnDetalleCancelar, btnDetalleAgregar, btnVentasActualizar,btnDetalleEliminar;
+    private JButton btnDetalleCancelar, btnDetalleAgregar, btnDetalleActualizar,btnDetalleEliminar;
     private JTextField textDetallePrecio;
     private ControlFormatos controlFormato=new ControlFormatos();
+    private JButton btnCancelar;
+    private JLabel lblValorPagar;
+    private VentaDao ventaDao=new VentaDao();
+   
 	/**
 	 * Launch the application.
 	 */
@@ -65,6 +74,8 @@ public class DetalleForm extends JFrame {
 	 * Create the frame.
 	 */
 	public DetalleForm() {
+		setUndecorated(true);
+		setType(Type.UTILITY);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
@@ -72,8 +83,13 @@ public class DetalleForm extends JFrame {
 				detalleDao.listarDetalleTable(facturaId, tblDetalles);
 				
 			}
+			@Override
+			public void windowClosed(WindowEvent e) {
+				limpiarCamposDetalle();
+				habilitarBotonAgregar();
+			}
 		});
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 702, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -81,9 +97,9 @@ public class DetalleForm extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblNewLabel = new JLabel("Cantidad");
@@ -98,7 +114,7 @@ public class DetalleForm extends JFrame {
 		textDetalleCantidad.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!textDetalleCantidad.getText().isEmpty()) {
+				if (!textDetalleCantidad.getText().isEmpty() && !textDetallePrecio.getText().isEmpty()) {
 					double precio=Double.parseDouble(textDetallePrecio.getText());
 					double cantidad=Double.parseDouble(textDetalleCantidad.getText());
 					textDetalleValor.setText(new ControlFormatos().redondearDosDecimales(precio*cantidad));
@@ -151,15 +167,18 @@ public class DetalleForm extends JFrame {
 		gbc_cmbProductos.gridy = 0;
 		contentPane.add(cmbProductos, gbc_cmbProductos);
 		
-		JLabel lblNewLabel_2 = new JLabel("Valor Pagar");
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel_2.gridx = 0;
-		gbc_lblNewLabel_2.gridy = 1;
-		contentPane.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		 lblValorPagar = new JLabel("Valor Pagar");
+		lblValorPagar.setVisible(false);
+		GridBagConstraints gbc_lblValorPagar = new GridBagConstraints();
+		gbc_lblValorPagar.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValorPagar.anchor = GridBagConstraints.EAST;
+		gbc_lblValorPagar.gridx = 0;
+		gbc_lblValorPagar.gridy = 1;
+		contentPane.add(lblValorPagar, gbc_lblValorPagar);
 		
 		textDetalleValor = new JTextField();
+		textDetalleValor.setEnabled(false);
+		textDetalleValor.setVisible(false);
 		GridBagConstraints gbc_textDetalleValor = new GridBagConstraints();
 		gbc_textDetalleValor.insets = new Insets(0, 0, 5, 5);
 		gbc_textDetalleValor.fill = GridBagConstraints.HORIZONTAL;
@@ -200,7 +219,7 @@ public class DetalleForm extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridheight = 5;
+		gbc_scrollPane.gridheight = 6;
 		gbc_scrollPane.gridwidth = 4;
 		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -218,18 +237,25 @@ public class DetalleForm extends JFrame {
 		        	 limpiarCamposDetalle();
 		        	 String key= tblDetalles.getValueAt(fila, 0).toString();
 				        Detalle ca=detalleDao.searchDetalleId(Integer.parseInt(key));
-				      
-				        textDetalleCantidad.setText(String.valueOf(ca.getCantidad()) );
-						textDetalleCodCarrito.setText(String.valueOf(ca.getCodCarrito()));
-						textDetalleValor.setText(String.valueOf(ca.getV_total()));
-						textDetalleCodFac.setText(String.valueOf(ca.getCodFactura()));
-						cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodProducto()));
-				       textDetallePrecio.setText(tblDetalles.getValueAt(fila, 3).toString());
-						
-				        btnDetalleAgregar.setEnabled(false);
-				        btnVentasActualizar.setEnabled(true);
-				        btnDetalleEliminar.setEnabled(true);
-				        btnDetalleCancelar.setVisible(true);
+				      if (ca!=null) {
+				    	  textDetalleValor.setVisible(true);
+				    	  textDetalleCantidad.setText(String.valueOf(ca.getCantidad()) );
+							textDetalleCodCarrito.setText(String.valueOf(ca.getCodCarrito()));
+							textDetalleValor.setText(String.valueOf(ca.getV_total()));
+							textDetalleCodFac.setText(String.valueOf(ca.getCodFactura()));
+							cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodProducto()));
+					       textDetallePrecio.setText(tblDetalles.getValueAt(fila, 3).toString());
+							
+					        btnDetalleAgregar.setEnabled(false);
+					        btnDetalleActualizar.setEnabled(true);
+					        btnDetalleEliminar.setEnabled(true);
+					        btnCancelar.setVisible(true);
+					       lblValorPagar.setVisible(true);
+					       cmbProductos.setEnabled(false);
+					} else {
+                        msgbox("Ese producto fue borrado");
+					}
+				       
 		         }
 			}
 		});
@@ -256,6 +282,33 @@ public class DetalleForm extends JFrame {
 		
 		
 		 btnDetalleAgregar = new JButton("Agregar");
+		 btnDetalleAgregar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		Producto p=(Producto)cmbProductos.getSelectedItem();
+		 		if (!controlFormato.hayEspaciosVacios(textDetalleCantidad.getText()) ) {
+		 			int codProducto=p.getCodProducto();
+			 		int cantidad=Integer.parseInt(textDetalleCantidad.getText());
+			 		double valor=Double.valueOf(cantidad)*p.getPrecioVenta();
+			 		
+			 		Detalle de=detalleDao.existeDetalle(p.getNombreProducto(),tblDetalles);
+			 		if (de==null && Integer.parseInt(textDetalleCantidad.getText())!=0) {
+			 			ventaDao.agregarDetalle(new Detalle( cantidad,  codProducto, valor,  facturaId));
+					} else if(Integer.parseInt(textDetalleCantidad.getText())!=0){
+						ventaDao.agregarDetalleExistente(new Detalle( de.getCodCarrito(),(cantidad+de.getCantidad()),  codProducto, (valor+de.getV_total()),  facturaId));
+					}
+			 		
+			 		detalleDao.listarDetalleTable(facturaId, tblDetalles);
+			 		limpiarCamposDetalle();
+			 		
+			 		
+			 		 
+				} else {
+					msgbox("Campo Vacio");
+				}
+		 		
+		 		
+		 	}
+		 });
 		GridBagConstraints gbc_btnDetalleAgregar = new GridBagConstraints();
 		gbc_btnDetalleAgregar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleAgregar.insets = new Insets(0, 0, 5, 0);
@@ -263,27 +316,79 @@ public class DetalleForm extends JFrame {
 		gbc_btnDetalleAgregar.gridy = 4;
 		contentPane.add(btnDetalleAgregar, gbc_btnDetalleAgregar);
 		
-		 btnVentasActualizar = new JButton("Actualizar");
-		GridBagConstraints gbc_btnVentasActualizar = new GridBagConstraints();
-		gbc_btnVentasActualizar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnVentasActualizar.insets = new Insets(0, 0, 5, 0);
-		gbc_btnVentasActualizar.gridx = 4;
-		gbc_btnVentasActualizar.gridy = 5;
-		contentPane.add(btnVentasActualizar, gbc_btnVentasActualizar);
+		 btnDetalleActualizar = new JButton("Actualizar");
+		 btnDetalleActualizar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		Producto p=(Producto)cmbProductos.getSelectedItem();
+		 		if (!controlFormato.hayEspaciosVacios(textDetalleCantidad.getText(),textDetalleCodCarrito.getText()) ) {
+		 			int codProducto=p.getCodProducto();
+			 		int cantidad=Integer.parseInt(textDetalleCantidad.getText());
+			 		double valor=Double.valueOf(cantidad)*p.getPrecioVenta();
+			 		
+			 		
+			 		 if(Integer.parseInt(textDetalleCantidad.getText())!=0){
+						ventaDao.agregarDetalleExistente(new Detalle( Integer.parseInt(textDetalleCodCarrito.getText()),cantidad,  codProducto, (valor),  facturaId));
+					}
+			 		
+			 		detalleDao.listarDetalleTable(facturaId, tblDetalles);
+			 		limpiarCamposDetalle();
+			 		habilitarBotonAgregar();
+			 		 
+				} else {
+					msgbox("Campo Vacio");
+				}
+		 		
+		 	}
+		 });
+		 btnDetalleActualizar.setEnabled(false);
+		GridBagConstraints gbc_btnDetalleActualizar = new GridBagConstraints();
+		gbc_btnDetalleActualizar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnDetalleActualizar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnDetalleActualizar.gridx = 4;
+		gbc_btnDetalleActualizar.gridy = 5;
+		contentPane.add(btnDetalleActualizar, gbc_btnDetalleActualizar);
 		
 		 btnDetalleEliminar = new JButton("Eliminar");
+		 btnDetalleEliminar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 		if (textDetalleCodCarrito.getText().length()>0) {
+					detalleDao.deleteProducto(Integer.parseInt(textDetalleCodCarrito.getText()));
+					limpiarCamposDetalle();
+					habilitarBotonAgregar();
+					detalleDao.listarDetalleTable(facturaId, tblDetalles);
+					
+				}
+		 	}
+		 });
+		 btnDetalleEliminar.setEnabled(false);
 		GridBagConstraints gbc_btnDetalleEliminar = new GridBagConstraints();
 		gbc_btnDetalleEliminar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleEliminar.insets = new Insets(0, 0, 5, 0);
 		gbc_btnDetalleEliminar.gridx = 4;
 		gbc_btnDetalleEliminar.gridy = 6;
 		contentPane.add(btnDetalleEliminar, gbc_btnDetalleEliminar);
+		 
+		 btnCancelar = new JButton("Cancelar");
+		 btnCancelar.setVisible(false);
+		 btnCancelar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		limpiarCamposDetalle();
+		 		habilitarBotonAgregar();
+		 	}
+		 });
+		 GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
+		 gbc_btnCancelar.fill = GridBagConstraints.HORIZONTAL;
+		 gbc_btnCancelar.insets = new Insets(0, 0, 5, 0);
+		 gbc_btnCancelar.gridx = 4;
+		 gbc_btnCancelar.gridy = 7;
+		 contentPane.add(btnCancelar, gbc_btnCancelar);
 		
-		 btnDetalleCancelar = new JButton("Cancelar");
+		 btnDetalleCancelar = new JButton("Salir");
 		GridBagConstraints gbc_btnDetalleCancelar = new GridBagConstraints();
 		gbc_btnDetalleCancelar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleCancelar.gridx = 4;
-		gbc_btnDetalleCancelar.gridy = 7;
+		gbc_btnDetalleCancelar.gridy = 8;
 		contentPane.add(btnDetalleCancelar, gbc_btnDetalleCancelar);
 	}
 
@@ -293,6 +398,7 @@ public class DetalleForm extends JFrame {
 		textDetalleCodCarrito.setText("");
 		textDetalleValor.setText("");
 		textDetalleCodFac.setText("");
+		textDetallePrecio.setText("");
 		cmbProductos.setSelectedIndex(0);
 		
 	}
@@ -319,6 +425,27 @@ public class DetalleForm extends JFrame {
 	}
 
 	
+	private void msgbox(String s){
+		   JOptionPane.showMessageDialog(null, s);
+		}
 
+	public JButton getBtnDetalleCancelar() {
+		return btnDetalleCancelar;
+	}
+
+	public void setBtnDetalleCancelar(JButton btnDetalleCancelar) {
+		this.btnDetalleCancelar = btnDetalleCancelar;
+	}
+	
+	private void habilitarBotonAgregar(){
+		 btnDetalleAgregar.setEnabled(true);
+	        btnDetalleActualizar.setEnabled(false);
+	        btnDetalleEliminar.setEnabled(false);
+	       btnCancelar.setVisible(false);
+	       lblValorPagar.setVisible(false);
+	       textDetalleValor.setVisible(false);
+	       cmbProductos.setEnabled(true);
+	       
+	}
 	
 }
