@@ -1,18 +1,22 @@
 package com.farmacia.controlador;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
 import com.farmacia.utils.GenerdorDocumentos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.DecimalFormat;
 
 public class VentaDao {
@@ -93,6 +97,66 @@ public class VentaDao {
 		}
 		
 	}
+	
+	 public void agregarDetalle(Detalle detalle)
+	   {
+		 
+		
+	       int resultado;
+	       try {            
+	            // se crea instancia a procedimiento, los parametros de entrada y salida se simbolizan con el signo ?
+	            CallableStatement proc = con.prepareCall(" CALL proc_agregarNuevoDetalleFactura(?,?,?,?,?) ");
+	            //se cargan los parametros de entrada
+	            proc.setInt("cantidadIn", detalle.getCantidad());//Tipo String
+	            proc.setInt("codProductoIn", detalle.getCodProducto());//Tipo entero
+	            proc.setDouble("v_totalIn", detalle.getV_total());//Tipo entero
+	            proc.setInt("codFacturaIn", detalle.getCodFactura());//Tipo entero
+	            // parametros de salida
+	            proc.registerOutParameter("respuesta", Types.INTEGER);//Tipo String
+	            // Se ejecuta el procedimiento almacenado
+	            proc.execute();            
+	            // devuelve el valor del parametro de salida del procedimiento
+	            resultado = proc.getInt("respuesta");
+	            if (resultado ==0) {
+	            	JOptionPane.showMessageDialog(null, "Revise stock de este producto");
+				}
+	        } 
+	       catch (Exception e) {                  
+	            System.out.println(e);
+	       }
+	       //return resultado;
+	   }
+	
+	 public void agregarDetalleExistente(Detalle detalle)
+	   {
+		 
+		
+	       int resultado;
+	       try {            
+	            // se crea instancia a procedimiento, los parametros de entrada y salida se simbolizan con el signo ?
+	            CallableStatement proc = con.prepareCall(" CALL proc_agregarRepetidoDetalleFactura(?,?,?,?,?,?) ");
+	            //se cargan los parametros de entrada
+	            proc.setInt("cantidadIn", detalle.getCantidad());//Tipo String
+	            proc.setInt("codProductoIn", detalle.getCodProducto());//Tipo entero
+	            proc.setDouble("v_totalIn", detalle.getV_total());//Tipo entero
+	            proc.setInt("codFacturaIn", detalle.getCodFactura());//Tipo entero
+	            proc.setInt("codCarritoIn", detalle.getCodCarrito());//Tipo entero
+	            // parametros de salida
+	            proc.registerOutParameter("respuesta", Types.INTEGER);//Tipo String
+	            // Se ejecuta el procedimiento almacenado
+	            proc.execute();            
+	            // devuelve el valor del parametro de salida del procedimiento
+	            resultado = proc.getInt("respuesta");
+	            if (resultado ==0) {
+	            	JOptionPane.showMessageDialog(null, "Revise stock de este producto");
+				}
+	        } 
+	       catch (Exception e) {                  
+	            System.out.println(e);
+	       }
+	       //return resultado;
+	   }
+	
 	
 	private  String getTwoDecimals(String valor){
 	    DecimalFormat df = new DecimalFormat("0.00");
