@@ -13,5 +13,8 @@
 	<classpathentry kind="lib" path="librerias/itext-pdfa-5.5.13.3.jar"/>
 	<classpathentry kind="lib" path="librerias/pdfbox-app-3.0.0-alpha3.jar"/>
 	<classpathentry kind="lib" path="librerias/pdfbox-app-2.0.28.jar"/>
+	<classpathentry kind="lib" path="librerias/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="librerias/commons-dbcp2-2.9.0.jar"/>
+	<classpathentry kind="lib" path="librerias/commons-pool2-2.11.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
