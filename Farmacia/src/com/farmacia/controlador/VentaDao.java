@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.bd.DBUtil;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
 import com.farmacia.utils.GenerdorDocumentos;
@@ -20,8 +21,8 @@ import java.sql.Types;
 import java.text.DecimalFormat;
 
 public class VentaDao {
-	private static Connection con=ConexionBD.conectar();
-	
+	//private static Connection con=ConexionBD.conectar();
+	private  Connection con=new DBUtil().getConexion();
 	public void registarVenta(Factura factura,JTable productos) {
         PreparedStatement stmtFactura =null;
         PreparedStatement stmtDetalle=null; 

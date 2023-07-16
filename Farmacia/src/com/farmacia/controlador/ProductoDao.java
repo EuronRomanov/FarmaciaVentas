@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.bd.DBUtil;
 import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.form.Main;
@@ -30,8 +31,8 @@ import com.farmacia.form.RenderTabla;
 
 
 public class ProductoDao {
-	private static Connection con=ConexionBD.conectar();
-	
+	//private static Connection con=ConexionBD.conectar();
+	private  Connection con=new DBUtil().getConexion();
 	private DefaultTableModel modelo = new DefaultTableModel();
 	
 	

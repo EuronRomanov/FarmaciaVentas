@@ -15,13 +15,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.bd.DBUtil;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
 import com.farmacia.form.Main;
 import com.farmacia.form.RenderTabla;
 
 public class DetalleDao {
-	private static Connection con=ConexionBD.conectar();
+	//private static Connection con=ConexionBD.conectar();
+	private  Connection con=new DBUtil().getConexion();
 	private DefaultTableModel modelo = new DefaultTableModel();
 	
 	public List listarDetallesId(int key){
