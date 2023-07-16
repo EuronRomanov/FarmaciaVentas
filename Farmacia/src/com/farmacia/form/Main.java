@@ -275,7 +275,7 @@ public class Main extends JFrame {
 			public void windowActivated(WindowEvent e) {
 				//
 				
-				ConexionBD.conectar();
+				//ConexionBD.conectar();
 			mnUsuario.setText(usuarioLogin.getNombre());
 			lblCodUsuario.setText(String.valueOf(usuarioLogin.getCodUsuario()));
 			mnMenuAdministrador.setText(usuarioDao.esAdministradorString(usuarioLogin.getAdministrador()));

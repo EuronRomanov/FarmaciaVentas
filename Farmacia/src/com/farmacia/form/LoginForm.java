@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.bd.DBUtil;
+import com.farmacia.bd.Propiedades;
 import com.farmacia.controlador.UsuarioDao;
 import com.farmacia.entidades.SesionUsuario;
 
@@ -42,7 +44,8 @@ public class LoginForm extends JFrame {
 	private PnlIngresoDB pnlIngresoDB =new PnlIngresoDB();
 	private Usuario usuario=new Usuario();
 	private UsuarioDao usuarioDao=new UsuarioDao();
-	String nombreUsuario;
+	private String nombreUsuario;
+	
 		/**
 	 * Launch the application.
 	 */
@@ -69,11 +72,11 @@ public class LoginForm extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				ConexionBD.conectar();
+				//ConexionBD.conectar();
 			}
 			@Override
 			public void windowOpened(WindowEvent e) {
-				ConexionBD.conectar();
+				//ConexionBD.conectar();
 			}
 		});
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -194,21 +197,22 @@ public class LoginForm extends JFrame {
 		pnlIngresoDB.getBtnDBconectar().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				ConexionBD.obtenerNuevasCredenciales(pnlIngresoDB.getTextDBnombre().getText(), 
-						                        pnlIngresoDB.getTextDBhost().getText(), 
-						                        pnlIngresoDB.getTextDBusuario().getText(), 
-						                        pnlIngresoDB.getTextDBpassword().getText(),
-						                        pnlIngresoDB.getTextDBpuerto().getText());
 				
-				refrescarPagina();
-				ConexionBD.conectar();
+				new Propiedades().escribirArchivoProperties(pnlIngresoDB.getTextDBnombre().getText(), 
+                        pnlIngresoDB.getTextDBhost().getText(), 
+                        pnlIngresoDB.getTextDBusuario().getText(), 
+                        pnlIngresoDB.getTextDBpassword().getText(),
+                        pnlIngresoDB.getTextDBpuerto().getText());
+				new DBUtil();
+				
+				
 			}
 		});
 		
 		pnlIngresoDB.getBtnDBprobarCon().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String mensage="";
-				if (ConexionBD.probarConexion()) {
+				if (new DBUtil().getConexion()!=null) {
 					mensage="Hay conexion con la base de datos";
 					
 				} else {
