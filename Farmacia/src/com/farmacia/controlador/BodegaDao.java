@@ -12,11 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.bd.DBUtil;
 import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Factura;
 
 public class BodegaDao {
-	private static Connection con=ConexionBD.conectar();
+	private static Connection con=new DBUtil().getConexion();
 	
 	
 	public List listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {

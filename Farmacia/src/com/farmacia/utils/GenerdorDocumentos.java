@@ -36,6 +36,7 @@ import org.apache.pdfbox.printing.PDFPageable;
 
 
 import com.farmacia.bd.ConexionBD;
+import com.farmacia.bd.DBUtil;
 import com.farmacia.controlador.BodegaDao;
 import com.farmacia.controlador.DetalleDao;
 import com.farmacia.controlador.FacturaDao;
@@ -65,7 +66,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 public class GenerdorDocumentos {
 
 	
-	private static Connection con=ConexionBD.conectar();
+	private static Connection con=new DBUtil().getConexion();
 	private ControlFormatos formato=new ControlFormatos();
 	
 	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada,String nombrePro)  {
