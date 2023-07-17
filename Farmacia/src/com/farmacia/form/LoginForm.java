@@ -177,6 +177,8 @@ public class LoginForm extends JFrame {
 				if (usuario!=null) {
 					
 					desactivarVenta();
+				}else {
+					JOptionPane.showMessageDialog(null, "Revize sus credenciales o conexión a la base de datos");
 				}
 			
 			}
@@ -204,7 +206,7 @@ public class LoginForm extends JFrame {
                         pnlIngresoDB.getTextDBpassword().getText(),
                         pnlIngresoDB.getTextDBpuerto().getText());
 				new DBUtil();
-				
+				pnlIngresoDB.limpiarCampos();
 				
 			}
 		});
