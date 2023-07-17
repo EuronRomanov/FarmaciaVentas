@@ -286,9 +286,7 @@ public class Main extends JFrame {
 				gridPnlMenuIzquierda.add(btnUsuario);
 				gridPnlMenuIzquierda.add(btnFactura);
 				
-				/*btnProducto.setVisible(false);
-				btnUsuario.setVisible(false);
-				btnFactura.setVisible(false);*/
+				
 			}
 			gridPnlMenuIzquierda.add(btnVentas);
 			gridPnlMenuIzquierda.add(btnCaja);
