@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -18,7 +19,7 @@ import com.farmacia.bd.ConexionBD;
 
 public class PnlIngresoDB extends JPanel {
 	private JTextField textDBusuario;
-	private JTextField textDBpassword;
+	private JPasswordField textDBpassword;
 	private JTextField textDBhost;
 	private JTextField textDBpuerto;
 	private JButton btnDBCancelar,btnDBconectar,btnDBprobarCon ;
@@ -76,7 +77,7 @@ public class PnlIngresoDB extends JPanel {
 		gbc_lblNewLabel_2.gridy = 2;
 		add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
-		textDBpassword = new JTextField();
+		textDBpassword = new JPasswordField();
 		GridBagConstraints gbc_textDBpassword = new GridBagConstraints();
 		gbc_textDBpassword.insets = new Insets(0, 0, 5, 5);
 		gbc_textDBpassword.fill = GridBagConstraints.HORIZONTAL;

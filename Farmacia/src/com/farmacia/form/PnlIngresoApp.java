@@ -132,7 +132,10 @@ public class PnlIngresoApp extends JPanel {
 		return textLoginPassword;
 	}
 	
-	
+	public void limpiarCampos() {
+		textLoginUsuario.setText("");
+		textLoginUsuario.setText("");
+	}
 	
 
 }
