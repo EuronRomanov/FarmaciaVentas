@@ -293,7 +293,9 @@ public class DetalleForm extends JFrame {
 			 		Detalle de=detalleDao.existeDetalle(p.getNombreProducto(),tblDetalles);
 			 		if (de==null && Integer.parseInt(textDetalleCantidad.getText())!=0) {
 			 			ventaDao.agregarDetalle(new Detalle( cantidad,  codProducto, valor,  facturaId));
-					} else if(Integer.parseInt(textDetalleCantidad.getText())!=0){
+					} else if(de!=null && Integer.parseInt(textDetalleCantidad.getText())!=0){
+						//int idc=new ProductoDao().searchCanitdadProductoId(codProducto);
+						
 						ventaDao.agregarDetalleExistente(new Detalle( de.getCodCarrito(),(cantidad+de.getCantidad()),  codProducto, (valor+de.getV_total()),  facturaId));
 					}
 			 		
@@ -327,7 +329,7 @@ public class DetalleForm extends JFrame {
 			 		
 			 		
 			 		 if(Integer.parseInt(textDetalleCantidad.getText())!=0){
-						ventaDao.agregarDetalleExistente(new Detalle( Integer.parseInt(textDetalleCodCarrito.getText()),cantidad,  codProducto, (valor),  facturaId));
+						ventaDao.actualizarDetalle(new Detalle( Integer.parseInt(textDetalleCodCarrito.getText()),cantidad,  codProducto, (valor),  facturaId));
 					}
 			 		
 			 		detalleDao.listarDetalleTable(facturaId, tblDetalles);
