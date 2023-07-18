@@ -360,6 +360,32 @@ public class ProductoDao {
 	}
     
 	
+	
+	public int searchCanitdadProductoId(int key ) {
+		 
+        String sql = "SELECT cantidad FROM Producto WHERE disposicion=1 AND codProducto=?";
+        Producto producto =null;
+        int cantidad=0;
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, key );
+            ResultSet rs = ps.executeQuery();
+           
+            while(rs.next()){
+            	cantidad= rs.getInt("cantidad");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            /*try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }*/
+        }   
+	return cantidad;
+}
+	
 	 public void agregarProductoProCodigo(String key,JTable tblVentas){
 		 String sql = "SELECT * FROM Producto"
 	        		+ " WHERE  disposicion=1 AND cantidad>0 AND codProducto=? ";
@@ -417,9 +443,14 @@ public class ProductoDao {
     	for (int i = 0; i < tblVentas.getRowCount(); i++) {
     	int j=Integer.parseInt(tblVentas.getValueAt(i, 0).toString());
     	if (valor==j) {
+    	int idc=searchCanitdadProductoId(valor);
+    	int cantidad=Integer.parseInt(tblVentas.getValueAt(i, 3).toString())+1;
+    	if (idc>=cantidad) {
+    		tblVentas.setValueAt((cantidad), i, 3);
+		} else {
+			 JOptionPane.showMessageDialog(null, "stock actual es de "+idc);
+		}
     	
-    	int cantidad=Integer.parseInt(tblVentas.getValueAt(i, 3).toString());
-    	tblVentas.setValueAt((cantidad+1), i, 3);
     	flag=true;
     	break;
 		}
