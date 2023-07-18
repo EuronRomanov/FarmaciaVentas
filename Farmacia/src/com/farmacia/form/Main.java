@@ -291,6 +291,10 @@ public class Main extends JFrame {
 			gridPnlMenuIzquierda.add(btnVentas);
 			gridPnlMenuIzquierda.add(btnCaja);
 			gridPnlMenuIzquierda.add(lblCodUsuario);
+			
+			eliminarTab("Caja");
+			
+			eliminarTab("Facturas");
 			}
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -456,7 +460,9 @@ public class Main extends JFrame {
 		 btnCaja = new JButton("Caja");
 		btnCaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cambiarAdministrador();
+				 tabPane_Vistas.removeAll();
+					
+				 tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 			}
 		});
 		btnCaja.setSelectedIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/cashier_icon-32.png")));
@@ -912,7 +918,7 @@ public class Main extends JFrame {
 				switch (opcion) {
 				case 1:
 					
-					if ((textCajaDesde.getDate()==null  || textCajaHasta.getDate()==null && mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) ) {
+					/*if (((textCajaDesde.getDate()==null  || textCajaHasta.getDate()==null) && mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) ) {
 						
 						msgbox("Seleccione un rango de fechas");
 					} else {
@@ -924,6 +930,29 @@ public class Main extends JFrame {
 						generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
 								Integer.parseInt(lblCodUsuario.getText()),
 								fInico,fFin);
+					}*/
+					
+					switch ( mnMenuAdministrador.getText()) {
+					case "Administrador":
+						String fInicoA="",fFinA="";
+						if ((textCajaDesde.getDate()==null  || textCajaHasta.getDate()==null)) {
+							msgbox("Seleccione un rango de fechas");
+						}else {
+							fInicoA=controlFormato.fromDateToLocalDate(textCajaDesde.getDate()).toString();
+							fFinA=controlFormato.fromDateToLocalDate(textCajaHasta.getDate()).toString();
+							generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
+									Integer.parseInt(lblCodUsuario.getText()),
+									fInicoA,fFinA);
+						}
+						break;
+                    case "Vendedor":
+                    	String fInico="",fFin="";
+                    	generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
+								Integer.parseInt(lblCodUsuario.getText()),
+								fInico,fFin);
+						break;
+					default:
+						break;
 					}
 						
 					
@@ -957,14 +986,7 @@ public class Main extends JFrame {
 		/*
 		 * ---------------categorias------------
 		 */
-	/*	
-		if (flagAdministrador==false)  {
-			
-			tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
-			
-			
-			tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
-		}*/
+	
 		pnl_ventas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -1060,6 +1082,7 @@ public class Main extends JFrame {
 		panel_5.add(lblTotalpagar);
 		
 		pnlVentasLadoDerecho = new JPanel();
+		pnlVentasLadoDerecho.setVisible(false);
 		pnlVentasLadoDerecho.setMinimumSize(new Dimension(200, 200));
 		pnlVentasLadoDerecho.setPreferredSize(new Dimension(200, 200));
 		pnl_ventas.add(pnlVentasLadoDerecho, BorderLayout.EAST);
@@ -1264,7 +1287,7 @@ public class Main extends JFrame {
 		tblVentas.getColumnModel().getColumn(3).setPreferredWidth(127);
 		tblVentas.getColumnModel().getColumn(4).setPreferredWidth(95);
 		scrollPane_3.setViewportView(tblVentas);
-		 tabPane_Vistas.add("Usuarios", pnl_usuarios);
+		 //tabPane_Vistas.add("Usuarios", pnl_usuarios);
 		 GridBagLayout gbl_pnl_usuarios = new GridBagLayout();
 		 gbl_pnl_usuarios.columnWidths = new int[]{88, 88, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		 gbl_pnl_usuarios.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1571,7 +1594,7 @@ public class Main extends JFrame {
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
-			tabPane_Vistas.add("Proveedor",pnl_proveedor);
+			//tabPane_Vistas.add("Proveedor",pnl_proveedor);
 			GridBagLayout gbl_pnl_proveedor = new GridBagLayout();
 			gbl_pnl_proveedor.columnWidths = new int[]{615, 334, -172, 0};
 			gbl_pnl_proveedor.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 34, 94, 0, 0, 0, 0, 0, 0};
@@ -2006,9 +2029,9 @@ public class Main extends JFrame {
 			 pnl_proveedor.add(btnProveedorRegresarProducto, gbc_btnProveedorRegresarProducto);
 			
 			
-			tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
+			//tabPane_Vistas.addTab("Consultas", null, pnl_consultas, null);
 		
-			tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
+			//tabPane_Vistas.addTab("Productos", null, pnl_producto, null);
 			GridBagLayout gbl_pnl_producto = new GridBagLayout();
 			gbl_pnl_producto.columnWidths = new int[]{0, 139, 0, 0, 0, 0, 0};
 			gbl_pnl_producto.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -2766,8 +2789,8 @@ public class Main extends JFrame {
 			gbc_btnProductoCancelar.gridy = 8;
 			panel_3.add(btnProductoCancelar, gbc_btnProductoCancelar);
 			
-			tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
-			tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
+			//tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
+			//tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
 			GridBagLayout gbl_pnl_factura = new GridBagLayout();
 			gbl_pnl_factura.columnWidths = new int[]{70, 145, 0, 0, 138, 0, 0, 0, 0};
 			gbl_pnl_factura.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -3016,14 +3039,14 @@ public class Main extends JFrame {
 			btnFacturaAgregar = new JButton("Agregar");
 			btnFacturaAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					eliminarTab("Categoria");
+					/*eliminarTab("Categoria");
 					eliminarTab("Proveedor");
 					eliminarTab("Productos");
 					eliminarTab("Caja");
 					eliminarTab("Usuarios");
-					eliminarTab("Facturas");
+					eliminarTab("Facturas");*/
 					
-					
+					tabPane_Vistas.removeAll();
 					tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 					pnl_ventas.setLayout(new BorderLayout(0, 0));
 					tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Ventas"));
