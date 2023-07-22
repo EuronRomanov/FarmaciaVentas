@@ -27,7 +27,9 @@ public class DBUtil {
 
 		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("jdbc:mysql://"+properties.getProperty("db.localhost")+":"+properties.getProperty("db.port")+"/"+properties.getProperty("db.database")+"?serverTimezone=UTC",
 				properties.getProperty("db.user"),properties.getProperty("db.password"));
-
+		/*ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("jdbc:mysql://"+System.getenv().get("DBhost")+":"+System.getenv().get("DBpuerto")+"/"+System.getenv().get("DBnombre")+"?serverTimezone=UTC",
+				System.getenv().get("DBusuario"),System.getenv().get("DBpassword"));*/
+       
 		PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
 
 		GenericObjectPoolConfig<PoolableConnection> config = new GenericObjectPoolConfig<>();
