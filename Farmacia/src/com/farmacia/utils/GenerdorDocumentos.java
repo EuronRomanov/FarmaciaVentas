@@ -68,7 +68,7 @@ public class GenerdorDocumentos {
 	
 	private static Connection con=new DBUtil().getConexion();
 	private ControlFormatos formato=new ControlFormatos();
-	
+	private  String ruta=System.getProperty("java.class.path").replaceFirst("farmacia.exe", "temp");
 	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada,String nombrePro)  {
 		
 		try {
@@ -126,7 +126,7 @@ public class GenerdorDocumentos {
 
 	
 	public void generarTicket(int idFactura) {
-		
+		crearCarpeta();
 		LocalDateTime hora = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"); 
         ///hora.format(f)
@@ -138,7 +138,7 @@ public class GenerdorDocumentos {
 		Rectangle r=new Rectangle(210,400);
 		
 		Document document=new Document(r,9f,9f,7f,7f);
-		String archivoFactura="temp/ticket"+hora.format(f)+".pdf";
+		String archivoFactura=ruta+"/ticket"+hora.format(f)+".pdf";
 	try {
 		FileOutputStream archivo=new FileOutputStream(archivoFactura);
 		PdfWriter.getInstance(document, archivo);
@@ -616,5 +616,14 @@ private void insertCell(PdfPTable table, String text, int align, int colspan, Fo
 	   
 	 }
 
-
+     private void crearCarpeta() {
+    	 File directorio = new File(ruta);
+         if (!directorio.exists()) {
+             if (directorio.mkdirs()) {
+                 System.out.println("Directorio creado");
+             } else {
+                 System.out.println("Error al crear directorio");
+             }
+         }
+     }
 }
