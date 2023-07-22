@@ -142,6 +142,7 @@ public class LoginForm extends JFrame {
 				   pnlLogin.add(pnlIngresoDB, BorderLayout.CENTER);
 				   pnlIngresoDB.setVisible(true);
 				
+				
 				   
 			}
 		});
@@ -207,13 +208,14 @@ public class LoginForm extends JFrame {
                         pnlIngresoDB.getTextDBpuerto().getText());
 				new DBUtil();
 				pnlIngresoDB.limpiarCampos();
+				   refrescarPagina();
 				
 			}
 		});
 		
 		pnlIngresoDB.getBtnDBprobarCon().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String mensage="";
+				String mensage=" ";
 				if (new DBUtil().getConexion()!=null) {
 					mensage="Hay conexion con la base de datos";
 					
