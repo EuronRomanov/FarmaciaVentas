@@ -11,14 +11,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 import com.farmacia.bd.ConexionBD;
 import com.farmacia.bd.DBUtil;
 import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Factura;
+import com.farmacia.entidades.Producto;
 
 public class BodegaDao {
 	private static Connection con=new DBUtil().getConexion();
-	
+	private DefaultTableModel modelo = new DefaultTableModel();
 	
 	public List listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {
 		 List<Bodega> ListaCl = new ArrayList();
@@ -57,4 +61,54 @@ public class BodegaDao {
 	       }
 	       return ListaCl;
 	}
+	
+	
+	public void searchProducto(int key,JTable tblProducto){
+        
+        String sql = "SELECT codBodega,"
+        		+ "cantidadIngresada,"
+        		+ "fechaIngreso,"
+        		+ "fechaCaducidad,"
+        		+ "fechaCuandoCaduca "
+        		+"FROM bodega"
+        		+ " WHERE codProducto =? ";
+        modelo = (DefaultTableModel) tblProducto.getModel();
+        modelo.setRowCount(0);
+        Object[] ob = new Object[5];
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,  key );
+          
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+            	ob[0]=rs.getLong("codBodega");
+            	ob[1]=rs.getInt("cantidadIngresada"); 
+            	ob[2]=rs.getTimestamp("fechaIngreso").toString().replaceFirst("T", " ");
+            	ob[3]=rs.getDate("fechaCaducidad").toString(); 
+            	ob[4]=rs.getDate("fechaCuandoCaduca").toString();
+            	
+            	 modelo.addRow(ob);
+            }
+            tblProducto.setModel(modelo);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            /*try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }*/
+        }    
+       
+    }
+
+
+	public void agregarBodega(int cantidad, LocalDate fechaCaduca, int codProducto) {
+		// TODO Auto-generated method stub
+		
+	}
+	 
+	
+	
 }
