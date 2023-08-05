@@ -47,39 +47,37 @@ public class ProductoDao {
 		 PreparedStatement stmtDetalle=null;
 		 ResultSet rs = null;
 	        String sql = "INSERT INTO Producto (nombreProducto,"
-	        		+ "codigobarra,"
 	        		+ "precioCompra,"
 	        		+ "precioVenta,"
 	        		+ "cantidad,"
 	        		+ "unidadMedida,"
 	        		+ "presentacion,"
 	        		+ "marca,"
-	        		+ "fechaCaduca,"
 	        		+ "observaciones,"
 	        		+ "formaFarmaceutica,"
 	        		+ "codCategoria,"
-	        		+ "codProveedor) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	        		+ "codProveedor) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	        try {
 	        	con.setAutoCommit(false);
-	            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-	            
+	           // PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+	        	PreparedStatement ps = con.prepareStatement(sql);
 	            ps.setString(1, cl.getNombreProducto());
-	           ps.setString(2, cl.getCodigobarra());
-	           ps.setDouble(3, cl.getPrecioCompra());
-	           ps.setDouble(4, cl.getPrecioVenta());
-	           ps.setInt(5, cl.getCantidad());
-	           ps.setString(6, cl.getUnidadMedida());
-	           ps.setDouble(7, cl.getPresentacion());
-	           ps.setString(8, cl.getMarca());
-	           ps.setString(9, cl.getFechaCaduca().toString());
-	           ps.setString(10, cl.getObservaciones());
-	           ps.setString(11, cl.getFormaFarmaceutica());
-	           ps.setInt(12, cl.getCodCategoria());
-	           ps.setInt(13, cl.getCodProveedor());
+	           
+	           ps.setDouble(2, cl.getPrecioCompra());
+	           ps.setDouble(3, cl.getPrecioVenta());
+	           ps.setInt(4, cl.getCantidad());
+	           ps.setString(5, cl.getUnidadMedida());
+	           ps.setDouble(6, cl.getPresentacion());
+	           ps.setString(7, cl.getMarca());
+	           
+	           ps.setString(8, cl.getObservaciones());
+	           ps.setString(9, cl.getFormaFarmaceutica());
+	           ps.setInt(10, cl.getCodCategoria());
+	           ps.setInt(11, cl.getCodProveedor());
 	            
 	            ps.executeUpdate();
 	            // get candidate id
-	            rs = ps.getGeneratedKeys();
+	           /* rs = ps.getGeneratedKeys();
 	            int productoId = 0;
 	            if(rs.next())
 	            	productoId = rs.getInt(1);
@@ -89,7 +87,7 @@ public class ProductoDao {
 	            stmtDetalle = con.prepareStatement("UPDATE Producto SET codigobarra=? WHERE codProducto=?");
 	            stmtDetalle.setString(1,String.format("%0" + width + "d",productoId));
 	            stmtDetalle.setInt(2,productoId);
-            	stmtDetalle.executeUpdate();
+            	stmtDetalle.executeUpdate();*/
 	            
 	            con.commit();
 	            return true;
@@ -123,9 +121,7 @@ public class ProductoDao {
 	 
 	 public List ListarProducto(){
 	       List<Producto> ListaCl = new ArrayList();
-	       String sql = "SELECT * FROM Producto,Categoria,Proveedor "
-	       		+ "WHERE Producto.codCategoria=Categoria.codCategoria "
-	       		+ "AND Producto.codProveedor=Proveedor.codProveedor AND Producto.disposicion=1";
+	       String sql = "select * from vista_productos";
 	       try {
 	           
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -134,23 +130,21 @@ public class ProductoDao {
 	    	   DateTimeFormatter parser2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	           while (rs.next()) {      
 	        	   
-	               Producto cl = new Producto(rs.getInt("codProducto"),
-	            		                      rs.getString("nombreProducto"), 
-	            		                      rs.getString("codigobarra"), 
-	            		                      rs.getDouble("precioCompra"),
-	            		                      rs.getDouble("precioVenta"),
-	            		                      rs.getInt("cantidad"), 
-	            		                      rs.getString("unidadMedida"),
-	            		                      rs.getDouble("presentacion"), 
-	            		                      rs.getString("marca"), 
-	           			LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString(),parser),
-	        			LocalDate.parse(rs.getDate("fechaCaduca").toString(),parser2), 
-	        			rs.getString("observaciones"),
-	        			rs.getString("formaFarmaceutica"),
-	        			rs.getString("nombreCategoria"), 
-	        			 rs.getString("nombreEmpresa"));
 	               
-	              
+	        	   Producto cl = new Producto(rs.getInt(1),
+		                      rs.getString(2), 
+		                      rs.getDouble(3),
+		                      rs.getDouble(4),
+		                      rs.getInt(5), 
+		                      rs.getString(6),
+		                      rs.getDouble(7), 
+		                      rs.getString(8), 
+		LocalDateTime.parse(rs.getTimestamp(9).toString(),parser),
+		rs.getString(10),
+		rs.getString(11),
+		rs.getString(12), 
+		 rs.getString(13));
+	        	  
 	               
 	               ListaCl.add(cl);
 	           }
@@ -169,12 +163,15 @@ public class ProductoDao {
         ArrayList<Producto> result = new ArrayList<Producto>();
         String sql = "SELECT * FROM Producto,Categoria,Proveedor"
         		+ " WHERE Producto.codCategoria=Categoria.codCategoria "
-        		+ "AND Producto.codProveedor=Proveedor.codProveedor"
+        		+ "AND Producto.codProveedor=Proveedor.codProveedor "
         		+ "AND Producto.disposicion=1"
         		+ " AND Producto.nombreProducto LIKE ? OR Producto.formaFarmaceutica LIKE ?";
         modelo = (DefaultTableModel) tblProducto.getModel();
         modelo.setRowCount(0);
-        Object[] ob = new Object[15];
+        Object[] ob = new Object[14];
+        JButton buttonProducto=new JButton("");
+        buttonProducto.setName("btnProductoDetalle");
+        buttonProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-lupa.png")));
         try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
@@ -184,25 +181,28 @@ public class ProductoDao {
             while(rs.next()){
             	ob[0]=rs.getInt("codProducto");
             	ob[1]= rs.getString("nombreProducto");
-            	ob[2]=rs.getString("codigobarra"); 
-            	ob[3]=rs.getDouble("precioCompra");
-            	ob[4]=rs.getDouble("precioVenta");
-            	ob[5]=rs.getInt("cantidad"); 
-            	ob[6]=rs.getString("unidadMedida");
-            	ob[7]=rs.getDouble("presentacion"); 
-            	ob[8]=rs.getString("marca"); 
-            	ob[9]=rs.getTimestamp("fechaRegistro").toString();
-            	ob[10]=rs.getDate("fechaCaduca").toString().replaceFirst("T", " "); 
-            	ob[11]=rs.getString("observaciones");
-            	ob[12]=rs.getString("formaFarmaceutica");
-            	ob[13]=rs.getInt("codCategoria");
-            	ob[14]=rs.getInt("codProveedor");
-            	
+            	ob[2]=rs.getDouble("precioCompra");
+            	ob[3]=rs.getDouble("precioVenta");
+            	ob[4]=rs.getInt("cantidad"); 
+            	ob[5]=rs.getString("unidadMedida");
+            	ob[6]=rs.getDouble("presentacion"); 
+            	ob[7]=rs.getString("marca"); 
+            	ob[8]=rs.getTimestamp("fechaRegistro").toString().replaceFirst("T", " ");
+            	ob[9]=rs.getString("observaciones");
+            	ob[10]=rs.getString("formaFarmaceutica");
+            	ob[11]=rs.getInt("codCategoria");
+            	ob[12]=rs.getInt("codProveedor");
+            	 ob[13] =buttonProducto;
             	
                
             	 modelo.addRow(ob);
             }
+            
+            
+            tblProducto.setDefaultRenderer(Object.class,new RenderTabla());
+            
             tblProducto.setModel(modelo);
+            tblProducto.setRowHeight(30);
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -227,7 +227,6 @@ public class ProductoDao {
         		+ "unidadMedida=?,"
         		+ "presentacion=?,"
         		+ "marca=?,"
-        		+ "fechaCaduca=?,"
         		+ "observaciones=?,"
         		+ "codCategoria=?,"
         		+ "codProveedor=?,"
@@ -242,17 +241,16 @@ public class ProductoDao {
 	           ps.setString(5, cl.getUnidadMedida());
 	           ps.setDouble(6, cl.getPresentacion());
 	           ps.setString(7, cl.getMarca());
-	           ps.setString(8, cl.getFechaCaduca().toString());
-	           ps.setString(9, cl.getObservaciones());
-	           ps.setInt(10, cl.getCodCategoria());
-	           ps.setInt(11, cl.getCodProveedor());
-	           ps.setString(12, cl.getFormaFarmaceutica());
+	           ps.setString(8, cl.getObservaciones());
+	           ps.setInt(9, cl.getCodCategoria());
+	           ps.setInt(10, cl.getCodProveedor());
+	           ps.setString(11, cl.getFormaFarmaceutica());
             
-            ps.setInt(13, cl.getCodProducto());
+            ps.setInt(12, cl.getCodProducto());
 
             ps.executeUpdate();
         }catch(Exception e){
-        	System.out.println("Comprobrar Mtodo2"+cl.getFechaCaduca().toString());
+        	
            // e.printStackTrace();
         }finally{
             /*try {
@@ -290,27 +288,32 @@ public class ProductoDao {
         List<Producto> ListarCl = this.ListarProducto();
         modelo = (DefaultTableModel) tblProducto.getModel();
         modelo.setRowCount(0);
-        Object[] ob = new Object[15];
+        JButton buttonProducto=new JButton("");
+        buttonProducto.setName("btnProductoDetalle");
+        buttonProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-lupa.png")));
+        Object[] ob = new Object[14];
         for (int i = 0; i < ListarCl.size(); i++) {
             ob[0] = ListarCl.get(i).getCodProducto();
             ob[1] = ListarCl.get(i).getNombreProducto();
-            ob[2] = ListarCl.get(i).getCodigobarra();
-            ob[3] = ListarCl.get(i).getPrecioCompra();
-            ob[4] = ListarCl.get(i).getPrecioVenta();
-            ob[5] = ListarCl.get(i).getCantidad();
-            ob[6] = ListarCl.get(i).getUnidadMedida();
-            ob[7] = ListarCl.get(i).getPresentacion();
-            ob[8] = ListarCl.get(i).getMarca();
-            ob[9] = ListarCl.get(i).getFechaRegistro().toString().replaceFirst("T", " ");
-            ob[10] = ListarCl.get(i).getFechaCaduca().toString();
-            ob[11] = ListarCl.get(i).getObservaciones();
-            ob[12] = ListarCl.get(i).getFormaFarmaceutica();
-            ob[13] = ListarCl.get(i).getCategoria();
-            ob[14] =ListarCl.get(i).getProveedor();
+           
+            ob[2] = ListarCl.get(i).getPrecioCompra();
+            ob[3] = ListarCl.get(i).getPrecioVenta();
+            ob[4] = ListarCl.get(i).getCantidad();
+            ob[5] = ListarCl.get(i).getUnidadMedida();
+            ob[6] = ListarCl.get(i).getPresentacion();
+            ob[7] = ListarCl.get(i).getMarca();
+            ob[8] = ListarCl.get(i).getFechaRegistro().toString().replaceFirst("T", " ");
+            ob[9] = ListarCl.get(i).getObservaciones();
+            ob[10] = ListarCl.get(i).getFormaFarmaceutica();
+            ob[11] = ListarCl.get(i).getCategoria();
+            ob[12] =ListarCl.get(i).getProveedor();
+            ob[13] =buttonProducto;
             modelo.addRow(ob);
         }
-        tblProducto.setModel(modelo);
+        tblProducto.setDefaultRenderer(Object.class,new RenderTabla());
         
+        tblProducto.setModel(modelo);
+        tblProducto.setRowHeight(30);
         
 
     }
@@ -328,8 +331,7 @@ public class ProductoDao {
 	            DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 	            while(rs.next()){
 	            	 producto = new Producto(rs.getInt("codProducto"),
-		                      rs.getString("nombreProducto"), 
-		                      rs.getString("codigobarra"), 
+		                      rs.getString("nombreProducto"),
 		                      rs.getDouble("precioCompra"),
 		                      rs.getDouble("precioVenta"),
 		                      rs.getInt("cantidad"), 
@@ -337,7 +339,6 @@ public class ProductoDao {
 		                      rs.getDouble("presentacion"), 
 		                      rs.getString("marca"), 
 							LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString().replaceFirst("T", " "),parser ),
-						    LocalDate.parse(rs.getTimestamp("fechaCaduca").toString(),parser ), 
 						    rs.getString("observaciones"),
 						    rs.getString("formaFarmaceutica"),
 						    rs.getInt("codCategoria"), 
@@ -363,7 +364,7 @@ public class ProductoDao {
 	
 	public int searchCanitdadProductoId(int key ) {
 		 
-        String sql = "SELECT cantidad FROM Producto WHERE disposicion=1 AND codProducto=?";
+        String sql = "SELECT cantidaIngresada FROM bodega,producto WHERE producto.codProducto=bodega.codProducto AND producto.disposicion=1 AND bodega.codProducto=?";
         Producto producto =null;
         int cantidad=0;
         try{
@@ -372,7 +373,7 @@ public class ProductoDao {
             ResultSet rs = ps.executeQuery();
            
             while(rs.next()){
-            	cantidad= rs.getInt("cantidad");
+            	cantidad= rs.getInt("cantidadIngresada");
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -387,8 +388,8 @@ public class ProductoDao {
 }
 	
 	 public void agregarProductoProCodigo(String key,JTable tblVentas){
-		 String sql = "SELECT * FROM Producto"
-	        		+ " WHERE  disposicion=1 AND cantidad>0 AND codProducto=? ";
+		 String sql = "SELECT * FROM bodega,producto"
+	        		+ " WHERE producto.codProducto=bodega.codProducto AND producto.disposicion=1 AND bodega.cantidadIngresada>0 AND producto.codProducto=? ";
 	        modelo = (DefaultTableModel) tblVentas.getModel();
 	       
 	        Object[] ob = new Object[5];

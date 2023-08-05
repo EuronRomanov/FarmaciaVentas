@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Producto {
     private int codProducto ;
     private String  nombreProducto;
-    private String  codigobarra ;
+   
     private double  precioCompra ;
     private double precioVenta ;
     private int cantidad ;
@@ -14,7 +14,7 @@ public class Producto {
     private double presentacion;
     private String marca ;
     private LocalDateTime fechaRegistro ;
-    private LocalDate fechaCaduca ;
+    
     private String observaciones ;
     private String formaFarmaceutica;
     private int  codCategoria ;
@@ -38,19 +38,19 @@ public class Producto {
 
 
 
-	public Producto(String nombreProducto, String codigobarra, double precioCompra, double precioVenta, int cantidad,
-			String unidadMedida, double presentacion, String marca, LocalDate fechaCaduca, String observaciones,String formaFarmaceutica,
+	public Producto(String nombreProducto,  double precioCompra, double precioVenta, 
+			String unidadMedida, double presentacion, String marca, String observaciones,String formaFarmaceutica,
 			int codCategoria, int codProveedor) {
 		super();
 		this.nombreProducto = nombreProducto;
-		this.codigobarra = codigobarra;
+		
 		this.precioCompra = precioCompra;
 		this.precioVenta = precioVenta;
-		this.cantidad = cantidad;
+		
 		this.unidadMedida = unidadMedida;
 		this.presentacion = presentacion;
 		this.marca = marca;
-		this.fechaCaduca = fechaCaduca;
+		
 		this.observaciones = observaciones;
 		this.codCategoria = codCategoria;
 		this.codProveedor = codProveedor;
@@ -78,13 +78,13 @@ public class Producto {
 
 
 
-	public Producto(int codProducto, String nombreProducto, String codigobarra, double precioCompra, double precioVenta,
+	public Producto(int codProducto, String nombreProducto,  double precioCompra, double precioVenta,
 			int cantidad, String unidadMedida, double presentacion, String marca, LocalDateTime fechaRegistro,
-			LocalDate fechaCaduca, String observaciones,String formaFarmaceutica, String proveedor, String categoria) {
+			 String observaciones,String formaFarmaceutica, String proveedor, String categoria) {
 		super();
 		this.codProducto = codProducto;
 		this.nombreProducto = nombreProducto;
-		this.codigobarra = codigobarra;
+		
 		this.precioCompra = precioCompra;
 		this.precioVenta = precioVenta;
 		this.cantidad = cantidad;
@@ -92,7 +92,7 @@ public class Producto {
 		this.presentacion = presentacion;
 		this.marca = marca;
 		this.fechaRegistro = fechaRegistro;
-		this.fechaCaduca = fechaCaduca;
+		
 		this.observaciones = observaciones;
 		this.proveedor = proveedor;
 		this.categoria = categoria;
@@ -112,13 +112,13 @@ public class Producto {
 
 
 
-	public Producto(int codProducto, String nombreProducto, String codigobarra, double precioCompra, double precioVenta,
+	public Producto(int codProducto, String nombreProducto,  double precioCompra, double precioVenta,
 			int cantidad, String unidadMedida, double presentacion, String marca, LocalDateTime fechaRegistro,
-			LocalDate fechaCaduca, String observaciones,String formaFarmaceutica, int codCategoria, int codProveedor) {
+			 String observaciones,String formaFarmaceutica, int codCategoria, int codProveedor) {
 		super();
 		this.codProducto = codProducto;
 		this.nombreProducto = nombreProducto;
-		this.codigobarra = codigobarra;
+		
 		this.precioCompra = precioCompra;
 		this.precioVenta = precioVenta;
 		this.cantidad = cantidad;
@@ -126,7 +126,7 @@ public class Producto {
 		this.presentacion = presentacion;
 		this.marca = marca;
 		this.fechaRegistro = fechaRegistro;
-		this.fechaCaduca = fechaCaduca;
+	
 		this.observaciones = observaciones;
 		this.codCategoria = codCategoria;
 		this.codProveedor = codProveedor;
@@ -135,24 +135,8 @@ public class Producto {
 	
 
 
-
-
-
-
-
-
-
-
-
-	public Producto(int parseInt, String text, Double valueOf, Double valueOf2, int parseInt2, String text2,
-			Double valueOf3, String text3, LocalDate fromDateToLocalDate, String text4, String text5, int codCategoria2,
-			int codProveedor2) {
-		// TODO Auto-generated constructor stub
-	}
-
-
 	public Producto(int codProducto, String nombreProducto, double precioCompra, double precioVenta, int cantidad,
-			String unidadMedida, double presentacion, String marca,  LocalDate fechaCaduca,
+			String unidadMedida, double presentacion, String marca,  
 			String observaciones, String formaFarmaceutica, int codCategoria, int codProveedor) {
 		super();
 		this.codProducto = codProducto;
@@ -164,7 +148,7 @@ public class Producto {
 		this.presentacion = presentacion;
 		this.marca = marca;
 		
-		this.fechaCaduca = fechaCaduca;
+		
 		this.observaciones = observaciones;
 		this.formaFarmaceutica = formaFarmaceutica;
 		this.codCategoria = codCategoria;
@@ -211,12 +195,7 @@ public class Producto {
 	public void setNombreProducto(String nombreProducto) {
 		this.nombreProducto = nombreProducto;
 	}
-	public String getCodigobarra() {
-		return codigobarra;
-	}
-	public void setCodigobarra(String codigobarra) {
-		this.codigobarra = codigobarra;
-	}
+	
 	public double getPrecioCompra() {
 		return precioCompra;
 	}
@@ -259,12 +238,7 @@ public class Producto {
 	public void setFechaRegistro(LocalDateTime fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
 	}
-	public LocalDate getFechaCaduca() {
-		return fechaCaduca;
-	}
-	public void setFechaCaduca(LocalDate fechaCaduca) {
-		this.fechaCaduca = fechaCaduca;
-	}
+	
 	public String getObservaciones() {
 		return observaciones;
 	}
