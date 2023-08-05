@@ -491,7 +491,7 @@ public class Main extends JFrame {
 				tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 				pnl_ventas.setLayout(new BorderLayout(0, 0));
 				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Ventas"));
-				pnlVentasLadoDerecho.setVisible(false);
+				//pnlVentasLadoDerecho.setVisible(false);
 		 		textVentasCodProd.requestFocus();
 			}
 		});
@@ -1082,7 +1082,7 @@ public class Main extends JFrame {
 		panel_5.add(lblTotalpagar);
 		
 		pnlVentasLadoDerecho = new JPanel();
-		pnlVentasLadoDerecho.setVisible(false);
+		pnlVentasLadoDerecho.setVisible(true);
 		pnlVentasLadoDerecho.setMinimumSize(new Dimension(200, 200));
 		pnlVentasLadoDerecho.setPreferredSize(new Dimension(200, 200));
 		pnl_ventas.add(pnlVentasLadoDerecho, BorderLayout.EAST);
@@ -2516,7 +2516,7 @@ public class Main extends JFrame {
 				        textProductoCodigo.setText(String.valueOf(ca.getCodProducto()  ));
 				        textProductoNombre.setText(ca.getNombreProducto());
 				        textProductoCantidad.setText(String.valueOf(ca.getCantidad()));
-						 textProductoCodBarra.setText(ca.getCodigobarra());
+						 
 						 textProductoFormFarmaceutica.setText(ca.getFormaFarmaceutica());
 						 textProductoFRegistro.setText(ca.getFechaRegistro().toString());
 						 textProductoMarca.setText(ca.getMarca());
@@ -2528,7 +2528,7 @@ public class Main extends JFrame {
 						 cmbProductoCategoria.setSelectedIndex(buscarIdComboCategoria(ca.getCodCategoria()));
 						 textProductoObservacion.setText(ca.getObservaciones());
 						
-						 textProductoFCaducidad.setDate(controlFormato.toDate(ca.getFechaCaduca()));
+						// textProductoFCaducidad.setDate(controlFormato.toDate(ca.getFechaCaduca()));
 						
 						
 						 lblProductoCodBarra.setVisible(true);
@@ -2552,11 +2552,12 @@ public class Main extends JFrame {
 				new Object[][] {
 				},
 				new String[] {
-					"Codigo", "Nombre", "C\u00F3digo Barra", "Precio Compra", "Precio Venta", "Cantidad", "Unidades", "Presentaci\u00F3n", "Marca", "Ingreso", "Caduca", "Observaciones","Forma", "Proveedor", "Categor\u00EDa"
+					"Codigo", "Nombre", "Precio Compra", "Precio Venta", "Cantidad", "Unidades", "Presentaci\u00F3n", "Marca", "Ingreso",  "Observaciones","Forma", "Proveedor", "Categor\u00EDa","Stock"
 				}
 			) {
+				private static final long serialVersionUID = 1L;
 				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false, false, false, false, false, false, false, false, false,false, false
+					false, false, false, false, false, false, false, false, false, false, false, false, false,false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
@@ -2623,7 +2624,6 @@ public class Main extends JFrame {
 								textProductoFormFarmaceutica.getText(),
 								textProductoPventa.getText(),
 								textProductoPcompra.getText(),
-								textProductoCantidad.getText(),
 								textProductoUmedida.getText(),
 								textProductoPresentacion.getText()) ) {
 
@@ -2631,18 +2631,16 @@ public class Main extends JFrame {
 										&& controlFormato.validarSiNumeroDecimal(textProductoPventa.getText())
 										&& controlFormato.validarSiNumeroDecimal(textProductoPresentacion.getText())) {
 									Producto producto=new Producto(textProductoNombre.getText(), 
-											textProductoCodBarra.getText(),
 											Double.valueOf( textProductoPcompra.getText()),
-											Double.valueOf( textProductoPventa.getText()), 
-											Integer.parseInt(textProductoCantidad.getText()),
+											Double.valueOf( textProductoPventa.getText()),
 											textProductoUmedida.getText(),
 											Double.valueOf(textProductoPresentacion.getText()), 
-											textProductoMarca.getText(),
-											controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()), 
+											textProductoMarca.getText(), 
 											textProductoObservacion.getText(),
 											textProductoFormFarmaceutica.getText(),
 											c.getCodCategoria(), 
 											p.getCodProveedor());
+									
 									
 									
 									
@@ -2706,7 +2704,7 @@ public class Main extends JFrame {
 									producto.setUnidadMedida(textProductoUmedida.getText());
 									producto.setPresentacion(Double.valueOf(textProductoPresentacion.getText()));
 									producto.setMarca(textProductoMarca.getText());
-									producto.setFechaCaduca(controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()));
+									//producto.setFechaCaduca(controlFormato.fromDateToLocalDate(textProductoFCaducidad.getDate()));
 									producto.setObservaciones(textProductoObservacion.getText());
 									producto.setFormaFarmaceutica(textProductoFormFarmaceutica.getText());
 								    producto.setCodCategoria(c.getCodCategoria());
