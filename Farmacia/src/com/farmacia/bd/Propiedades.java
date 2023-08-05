@@ -14,7 +14,8 @@ import java.io.File;
 public class Propiedades {
 	
 	
-	private  String ruta=System.getProperty("java.class.path").replaceFirst("farmacia.exe", ".env");
+	///private  String ruta=System.getProperty("java.class.path").replaceFirst("farmacia.exe", ".env");
+	private  String ruta="/Users/janpierarmijos/Desktop/.env";
   public Properties cargarArchivoProperties() {
 	  createArchivo();
 	  Properties propiedades=new Properties();
