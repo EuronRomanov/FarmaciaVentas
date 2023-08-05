@@ -325,3 +325,40 @@ nombreEmpresa
  FROM Producto,Categoria,Proveedor
 WHERE Producto.codCategoria=Categoria.codCategoria 
 AND Producto.codProveedor=Proveedor.codProveedor AND Producto.disposicion=1;
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarBodega`(IN cantidadIngresadaIn int,IN fechaCaducidadIn date, IN codProductoIn int,OUT respuesta char)
+BEGIN
+
+INSERT INTO bodega (`cantidadIngresada`,
+`fechaCaducidad`,
+`fechaCuandoCaduca`,
+`codProducto`)
+SELECT * FROM (SELECT cantidadIngresadaIn,
+fechaCaducidadIn,
+date_sub( fechaCaducidadIn, INTERVAL 90 DAY),
+codProductoIn) AS tmp
+WHERE NOT EXISTS (
+    SELECT fechaCaducidad,codProducto FROM  bodega WHERE fechaCaducidad = fechaCaducidadIn AND codProducto=codProductoIn
+) LIMIT 1;
+
+
+
+/*
+INSERT INTO `bodega`
+(`cantidadIngresada`,
+`fechaCaducidad`,
+`fechaCuandoCaduca`,
+`codProducto`)
+SELECT 
+cantidadIngresadaIn,
+fechaCaducidadIn,
+date_sub( fechaCaducidadIn, INTERVAL 90 DAY),
+codProductoIn
+WHERE NOT EXISTS(SELECT * FROM bodega WHERE bodega.codProducto=codProductoIn AND bodega.fechaCaducidad=fechaCaducidadIn)LIMIT 1;*/
+
+UPDATE bodega SET bodega.codigoBarra = LPAD(CONVERT(@@identity,CHAR),13,'0') 
+         WHERE bodega.codBodega = @@identity;
+SET respuesta='1';
+END
