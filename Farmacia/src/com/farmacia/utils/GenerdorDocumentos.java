@@ -69,7 +69,9 @@ public class GenerdorDocumentos {
 	private static Connection con=new DBUtil().getConexion();
 	private ControlFormatos formato=new ControlFormatos();
 	//private  String ruta=System.getProperty("java.class.path").replaceFirst("farmacia.exe", "temp");
-	private String ruta="/Users/janpierarmijos/Desktop/temp";
+	//private String ruta="/Users/janpierarmijos/Desktop/temp";
+	private  String ruta="C:/Farmacia/temp";
+
 	public void generarPDFs(String codigo, int cantidad,String carpetaSeleccionada,String nombrePro)  {
 		
 		try {
