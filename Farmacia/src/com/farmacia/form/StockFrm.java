@@ -35,8 +35,7 @@ import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.utils.ControlFormatos;
 import com.farmacia.utils.GenerdorDocumentos;
-
-import javax.swing.SwingConstants;
+import java.awt.Toolkit;
 
 public class StockFrm extends JDialog {
 
@@ -73,6 +72,8 @@ public class StockFrm extends JDialog {
 	 * Create the dialog.
 	 */
 	public StockFrm() {
+		setUndecorated(true);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(StockFrm.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -303,11 +304,12 @@ public class StockFrm extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					
 					 if (textProductoFechaE.getDate()!=null) {
-						 if (!controlFormato.hayEspaciosVacios(textProductoCantidad.getText(),textProductoCod.getText()) ) {
-							 bodegaDao.agregarBodega(Integer.parseInt(textProductoCantidad.getText()),
+						 if (!controlFormato.hayEspaciosVacios(textProductoCantidad.getText()) ) {
+							 bodegaDao.agregarBodega(new Bodega(Integer.parseInt(textProductoCantidad.getText()),
 										controlFormato.fromDateToLocalDate(textProductoFechaE.getDate()),
-										Integer.parseInt(textProductoCod.getText()));
-								
+										codProducto));
+							 limpiarCampos();
+							 bodegaDao.searchProducto(codProducto, tblProductos);
 							}else {
 								JOptionPane.showMessageDialog(null, "Hay un campo vacio");
 							}
@@ -320,6 +322,7 @@ public class StockFrm extends JDialog {
 				}
 			});
 			GridBagConstraints gbc_btnBodegaAgregar = new GridBagConstraints();
+			gbc_btnBodegaAgregar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnBodegaAgregar.insets = new Insets(0, 0, 5, 0);
 			gbc_btnBodegaAgregar.gridx = 5;
 			gbc_btnBodegaAgregar.gridy = 4;
@@ -327,8 +330,26 @@ public class StockFrm extends JDialog {
 		}
 		{
 			 btnBodegaActualizar = new JButton("Actualizar");
+			 btnBodegaActualizar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (textProductoFechaE.getDate()!=null) {
+			 			if (!controlFormato.hayEspaciosVacios(textProductoCantidad.getText(),textBodegaCod.getText()) ) {
+							 bodegaDao.actualizarBodega(new Bodega(Integer.parseInt(textBodegaCod.getText()),
+									 Integer.parseInt(textProductoCantidad.getText()),
+										controlFormato.fromDateToLocalDate(textProductoFechaE.getDate())));
+							 limpiarCampos();
+							 bodegaDao.searchProducto(codProducto, tblProductos);
+							}else {
+								JOptionPane.showMessageDialog(null, "Hay un campo vacio");
+							}
+					}else {
+						msgbox("Fecha no correcta");
+					}
+			 	}
+			 });
 			 btnBodegaActualizar.setEnabled(false);
 			GridBagConstraints gbc_btnBodegaActualizar = new GridBagConstraints();
+			gbc_btnBodegaActualizar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnBodegaActualizar.insets = new Insets(0, 0, 5, 0);
 			gbc_btnBodegaActualizar.gridx = 5;
 			gbc_btnBodegaActualizar.gridy = 5;
@@ -336,8 +357,22 @@ public class StockFrm extends JDialog {
 		}
 		{
 			 btnBodegaEliminar = new JButton("Eliminar");
+			 btnBodegaEliminar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		if (!controlFormato.hayEspaciosVacios(textBodegaCod.getText()) ) {
+						 bodegaDao.eliminarBodega(Integer.parseInt(textBodegaCod.getText()));
+						 limpiarCampos();
+						 
+						 bodegaDao.searchProducto(codProducto, tblProductos);
+						}else {
+							JOptionPane.showMessageDialog(null, "Hay un campo vacio");
+						}
+			 		
+			 	}
+			 });
 			 btnBodegaEliminar.setEnabled(false);
 			GridBagConstraints gbc_btnBodegaEliminar = new GridBagConstraints();
+			gbc_btnBodegaEliminar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnBodegaEliminar.insets = new Insets(0, 0, 5, 0);
 			gbc_btnBodegaEliminar.gridx = 5;
 			gbc_btnBodegaEliminar.gridy = 6;
@@ -353,6 +388,7 @@ public class StockFrm extends JDialog {
 			 btnBodegaLimpiar.setVisible(false);
 			 btnBodegaLimpiar.setEnabled(false);
 			GridBagConstraints gbc_btnBodegaLimpiar = new GridBagConstraints();
+			gbc_btnBodegaLimpiar.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnBodegaLimpiar.gridx = 5;
 			gbc_btnBodegaLimpiar.gridy = 7;
 			contentPanel.add(btnBodegaLimpiar, gbc_btnBodegaLimpiar);
@@ -411,5 +447,13 @@ public class StockFrm extends JDialog {
 	private void msgbox(String s){
 		   JOptionPane.showMessageDialog(null, s);
 		}
+
+	public JButton getCancelButton() {
+		return cancelButton;
+	}
+
+	
+	
+	
 	
 }
