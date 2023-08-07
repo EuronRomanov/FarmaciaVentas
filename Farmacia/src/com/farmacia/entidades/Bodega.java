@@ -11,6 +11,7 @@ private LocalDate fechaCaducidad;
 private LocalDate fechaCuandoCaducidad;
 private String caduca;
 private String codigoBarra;
+private int codProducto;
 public Bodega() {
 	super();
 }
@@ -33,12 +34,26 @@ public Bodega(int codBodega, int cantidadIngresada, LocalDateTime fechaIngreso,L
 
 
 
+public Bodega(int codBodega, int cantidadIngresada, LocalDate fechaCaducidad) {
+	super();
+	this.codBodega = codBodega;
+	this.cantidadIngresada = cantidadIngresada;
+	this.fechaCaducidad = fechaCaducidad;
+}
 public Bodega(int codBodega, int cantidadIngresada, LocalDate fechaCaducidad, String codigoBarra) {
 	super();
 	this.codBodega = codBodega;
 	this.cantidadIngresada = cantidadIngresada;
 	this.fechaCaducidad = fechaCaducidad;
 	this.codigoBarra = codigoBarra;
+}
+
+
+public Bodega(int cantidadIngresada, LocalDate fechaCaducidad, int codProducto) {
+	super();
+	this.cantidadIngresada = cantidadIngresada;
+	this.fechaCaducidad = fechaCaducidad;
+	this.codProducto = codProducto;
 }
 public int getCantidadIngresada() {
 	return cantidadIngresada;
@@ -60,6 +75,9 @@ public LocalDate getFechaCuandoCaducidad() {
 }
 public String getCodigoBarra() {
 	return codigoBarra;
+}
+public int getCodProducto() {
+	return codProducto;
 }
 
 

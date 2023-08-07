@@ -1,9 +1,12 @@
 package com.farmacia.controlador;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,10 +24,12 @@ import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
 import com.farmacia.entidades.Producto;
+import com.farmacia.utils.ControlFormatos;
 
 public class BodegaDao {
 	private static Connection con=new DBUtil().getConexion();
 	private DefaultTableModel modelo = new DefaultTableModel();
+	 private ControlFormatos controlFormato=new ControlFormatos();
 	
 	public List listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {
 		 List<Bodega> ListaCl = new ArrayList();
@@ -139,8 +145,93 @@ public class BodegaDao {
 	}
 
 
-
+	 public void agregarBodega(Bodega bodega)
+	   {
+		 
+		
+	       int resultado;
+	       try {            
+	            // se crea instancia a procedimiento, los parametros de entrada y salida se simbolizan con el signo ?
+	            CallableStatement proc = con.prepareCall(" CALL proc_agregarBodega(?,?,?,?) ");
+	            //se cargan los parametros de entrada
+	            proc.setInt("cantidadIngresadaIn", bodega.getCantidadIngresada());//Tipo String
+	           
+	            proc.setDate("fechaCaducidadIn",java.sql.Date.valueOf(bodega.getFechaCaducidad()) );//Tipo entero
+	            proc.setInt("codProductoIn",bodega.getCodProducto());//Tipo entero
+	            
+	            // parametros de salida
+	            proc.registerOutParameter("respuesta", Types.CHAR);//Tipo String
+	            // Se ejecuta el procedimiento almacenado
+	            proc.execute();            
+	            // devuelve el valor del parametro de salida del procedimiento
+	            resultado = proc.getInt("respuesta");
+	            if (resultado =='0') {
+	            	JOptionPane.showMessageDialog(null, "Revise si  este producto existe");
+				}
+	        } 
+	       catch (Exception e) {                  
+	            System.out.println(e);
+	       }
+	       //return resultado;
+	   }
 	 
-	
+	 public void eliminarBodega(int codBodega)
+	   {
+		 
+		
+	       int resultado;
+	       try {            
+	            // se crea instancia a procedimiento, los parametros de entrada y salida se simbolizan con el signo ?
+	            CallableStatement proc = con.prepareCall(" CALL proc_eliminarBodega(?,?) ");
+	            //se cargan los parametros de entrada
+	            proc.setInt("codBodegaIn", codBodega);//Tipo String
+	           
+	            
+	            // parametros de salida
+	            proc.registerOutParameter("respuesta", Types.CHAR);//Tipo String
+	            // Se ejecuta el procedimiento almacenado
+	            proc.execute();            
+	            // devuelve el valor del parametro de salida del procedimiento
+	            resultado = proc.getInt("respuesta");
+	            if (resultado =='0') {
+	            	JOptionPane.showMessageDialog(null, "Revise si  este producto existe");
+				}
+	        } 
+	       catch (Exception e) {                  
+	            System.out.println(e);
+	       }
+	       //return resultado;
+	   }
+	 
+	 public void actualizarBodega(Bodega bodega)
+	   {
+		 
+		
+	       int resultado;
+	       try {            
+	            // se crea instancia a procedimiento, los parametros de entrada y salida se simbolizan con el signo ?
+	            CallableStatement proc = con.prepareCall(" CALL proc_actualizarBodega(?,?,?,?) ");
+	            //se cargan los parametros de entrada
+	            proc.setInt("codBodegaIn",bodega.getCodBodega());//Tipo entero
+	            proc.setInt("cantidadIngresadaIn", bodega.getCantidadIngresada());//Tipo String
+	           
+	            proc.setDate("fechaCaducidadIn",java.sql.Date.valueOf(bodega.getFechaCaducidad()) );//Tipo entero
+	            
+	            
+	            // parametros de salida
+	            proc.registerOutParameter("respuesta", Types.CHAR);//Tipo String
+	            // Se ejecuta el procedimiento almacenado
+	            proc.execute();            
+	            // devuelve el valor del parametro de salida del procedimiento
+	            resultado = proc.getInt("respuesta");
+	            if (resultado =='0') {
+	            	JOptionPane.showMessageDialog(null, "Revise si  este producto existe");
+				}
+	        } 
+	       catch (Exception e) {                  
+	            System.out.println(e);
+	       }
+	       //return resultado;
+	   }
 	
 }
