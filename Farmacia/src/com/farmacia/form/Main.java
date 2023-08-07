@@ -3041,7 +3041,11 @@ public class Main extends JFrame {
 			 });
 			
 			
-			
+			stockForm.getCancelButton().addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		 productoDao.ListarProductoTable(tblProductos);
+			 	}
+			 });
 
 	}
 	protected void cargarDatosProductoSeleccionado(int key) {
