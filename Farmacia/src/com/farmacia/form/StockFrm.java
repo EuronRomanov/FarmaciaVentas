@@ -1,11 +1,13 @@
 package com.farmacia.form;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -21,11 +23,20 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+
 import com.farmacia.controlador.BodegaDao;
+import com.farmacia.entidades.Bodega;
+import com.farmacia.entidades.Detalle;
 import com.farmacia.utils.ControlFormatos;
+import com.farmacia.utils.GenerdorDocumentos;
+
+import javax.swing.SwingConstants;
 
 public class StockFrm extends JDialog {
 
@@ -42,7 +53,9 @@ public class StockFrm extends JDialog {
 	private JDateChooser textProductoFechaE;
 	private BodegaDao bodegaDao=new BodegaDao();
 	 private ControlFormatos controlFormato=new ControlFormatos();
-
+	 private JTextField textProductoCodbarras;
+	 private JLabel lblProductoCodbarras;
+	 private GenerdorDocumentos generarDocumento= new GenerdorDocumentos();
 	/**
 	 * Launch the application.
 	 */
@@ -60,10 +73,15 @@ public class StockFrm extends JDialog {
 	 * Create the dialog.
 	 */
 	public StockFrm() {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
+				limpiarCampos();
 				bodegaDao.searchProducto(codProducto, tblProductos);
+			}
+			@Override
+			public void windowClosed(WindowEvent e) {
 			}
 		});
 		setBounds(100, 100, 697, 384);
@@ -138,6 +156,29 @@ public class StockFrm extends JDialog {
 		{
 			lblBodegaBarras = new JLabel("# código barras");
 			lblBodegaBarras.setVisible(false);
+			{
+				textProductoCodbarras = new JTextField();
+				textProductoCodbarras.setVisible(false);
+				{
+					lblProductoCodbarras = new JLabel("Cod. Barras");
+					lblProductoCodbarras.setVisible(false);
+					lblProductoCodbarras.setLabelFor(textProductoCodbarras);
+					GridBagConstraints gbc_lblProductoCodbarras = new GridBagConstraints();
+					gbc_lblProductoCodbarras.insets = new Insets(0, 0, 5, 5);
+					gbc_lblProductoCodbarras.anchor = GridBagConstraints.EAST;
+					gbc_lblProductoCodbarras.gridx = 0;
+					gbc_lblProductoCodbarras.gridy = 2;
+					contentPanel.add(lblProductoCodbarras, gbc_lblProductoCodbarras);
+				}
+				textProductoCodbarras.setEnabled(false);
+				GridBagConstraints gbc_textProductoCodbarras = new GridBagConstraints();
+				gbc_textProductoCodbarras.insets = new Insets(0, 0, 5, 5);
+				gbc_textProductoCodbarras.fill = GridBagConstraints.HORIZONTAL;
+				gbc_textProductoCodbarras.gridx = 1;
+				gbc_textProductoCodbarras.gridy = 2;
+				contentPanel.add(textProductoCodbarras, gbc_textProductoCodbarras);
+				textProductoCodbarras.setColumns(10);
+			}
 			GridBagConstraints gbc_lblBodegaBarras = new GridBagConstraints();
 			gbc_lblBodegaBarras.insets = new Insets(0, 0, 5, 5);
 			gbc_lblBodegaBarras.anchor = GridBagConstraints.EAST;
@@ -158,6 +199,31 @@ public class StockFrm extends JDialog {
 		}
 		{
 			btnBodegaPDF = new JButton("");
+			btnBodegaPDF.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser selectCarpeta=new JFileChooser();
+					selectCarpeta.setCurrentDirectory(new File("."));
+					selectCarpeta.setDialogTitle("Seleccionar la carpeta para guardar los archivos");
+					selectCarpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					selectCarpeta.setAcceptAllFileFilterUsed(false);
+					if (selectCarpeta.showOpenDialog(contentPanel)==JFileChooser.APPROVE_OPTION) {
+						
+						
+						GenerdorDocumentos generador=new GenerdorDocumentos();
+						if (!controlFormato.hayEspaciosVacios(textBodegaCantBarras.getText(),
+								textProductoCantidad.getText())) {
+							//String nomPro=textProductoNombre.getText()+" "+textProductoFormFarmaceutica.getText()+" "+textProductoPresentacion.getText()+" "+textProductoUmedida.getText();
+							String nomPro="";
+							generador.generarPDFs(textProductoCodbarras.getText(),Integer.parseInt(textBodegaCantBarras.getText()) ,selectCarpeta.getSelectedFile().toPath().toString(),nomPro);
+						}else {
+							msgbox("No hay cantidad de codigos de barras");
+						}
+						
+					}
+					
+				}
+			});
+			btnBodegaPDF.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnBodegaPDF.setVisible(false);
 			btnBodegaPDF.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/download-icon.png")));
 			GridBagConstraints gbc_btnBodegaPDF = new GridBagConstraints();
@@ -180,6 +246,38 @@ public class StockFrm extends JDialog {
 			contentPanel.add(scrollPane, gbc_scrollPane);
 			{
 				tblProductos = new JTable();
+				tblProductos.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						int fila = tblProductos.rowAtPoint(e.getPoint());
+				           
+				         if(fila>=0)  {
+				        	 limpiarCampos();
+				        	 String key= tblProductos.getValueAt(fila, 0).toString();
+						        Bodega ca=bodegaDao.searchBodegaId(Integer.parseInt(key));
+						      if (ca!=null) {
+						    	  textBodegaCantBarras.setVisible(true);
+						    	  textProductoCantidad.setText(String.valueOf(ca.getCantidadIngresada()) );
+									textProductoFechaE.setDate(controlFormato.toDate(ca.getFechaCaducidad()));
+									textBodegaCod.setText(String.valueOf(ca.getCodBodega()));
+									textProductoCodbarras.setText(ca.getCodigoBarra());
+									
+							        btnBodegaAgregar.setEnabled(false);
+							        btnBodegaActualizar.setEnabled(true);
+							        btnBodegaEliminar.setEnabled(true);
+							        btnBodegaLimpiar.setVisible(true);
+							        btnBodegaLimpiar.setEnabled(true);
+							       lblBodegaBarras.setVisible(true);
+							       btnBodegaPDF.setEnabled(true);
+							       btnBodegaPDF.setVisible(true);
+							       lblProductoCodbarras.setVisible(true);
+							       textProductoCodbarras.setVisible(true);
+							} 
+						       
+				         }
+					}
+				});
+				
 				tblProductos.setModel(new DefaultTableModel(
 						new Object[][] {
 						},
@@ -247,6 +345,11 @@ public class StockFrm extends JDialog {
 		}
 		{
 			 btnBodegaLimpiar = new JButton("Cancelar");
+			 btnBodegaLimpiar.addActionListener(new ActionListener() {
+			 	public void actionPerformed(ActionEvent e) {
+			 		limpiarCampos();
+			 	}
+			 });
 			 btnBodegaLimpiar.setVisible(false);
 			 btnBodegaLimpiar.setEnabled(false);
 			GridBagConstraints gbc_btnBodegaLimpiar = new GridBagConstraints();
@@ -260,6 +363,11 @@ public class StockFrm extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				 cancelButton = new JButton("Salir");
+				 cancelButton.addActionListener(new ActionListener() {
+				 	public void actionPerformed(ActionEvent e) {
+				 		 cerrarVentana();
+				 	}
+				 });
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -267,6 +375,12 @@ public class StockFrm extends JDialog {
 	}
 
 	
+
+	protected void cerrarVentana() {
+		// TODO Auto-generated method stub
+		limpiarCampos();
+		this.dispose();
+	}
 
 	public void setCodProducto(int codProducto) {
 		this.codProducto = codProducto;
@@ -277,8 +391,25 @@ public class StockFrm extends JDialog {
 		textBodegaCod.setText("");
 		textProductoCantidad.setText("");
 		textProductoCod.setText("");
+		textProductoFechaE.setDate(null);
+		textProductoCodbarras.setText("");
+		
+		
+		 btnBodegaAgregar.setEnabled(true);
+	        btnBodegaActualizar.setEnabled(false);
+	        btnBodegaEliminar.setEnabled(false);
+	        btnBodegaLimpiar.setVisible(false);
+	        btnBodegaLimpiar.setEnabled(false);
+	       lblBodegaBarras.setVisible(false);
+	       btnBodegaPDF.setVisible(false);
+	       lblProductoCodbarras.setVisible(false);
+	       textProductoCodbarras.setVisible(false);
+	       textBodegaCantBarras.setVisible(false);
+		
 		}
 			
-	
+	private void msgbox(String s){
+		   JOptionPane.showMessageDialog(null, s);
+		}
 	
 }
