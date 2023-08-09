@@ -97,7 +97,7 @@ public class Main extends JFrame {
 	private JTextField textBuscarCategoria;
 	private JTable tblCategoria;
 	private JTabbedPane tabPane_Vistas;
-    private ArrayList<JButton> listEdit, listDelete;
+    
 	JPanel pnl_factura = new JPanel();
 	JPanel pnl_consultas = new JPanel();
     
@@ -2299,6 +2299,7 @@ public class Main extends JFrame {
 			pnl_producto.add(lblNewLabel_17, gbc_lblNewLabel_17);
 			
 			textProductoCantidad = new JTextField();
+			textProductoCantidad.setEnabled(false);
 			textProductoCantidad.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent e) {
