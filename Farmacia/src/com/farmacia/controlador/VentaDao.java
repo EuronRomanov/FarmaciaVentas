@@ -32,7 +32,7 @@ public class VentaDao {
 			            //se deshabilita el modo de confirmación automática
 			            con.setAutoCommit(false);  
 			            stmtFactura = con.prepareStatement("INSERT INTO Factura (ruc,cedula,n_cliente,observacion,total,codUsuario) VALUES( ?, ?,?,?,?,? );",Statement.RETURN_GENERATED_KEYS);            
-			            stmtDetalle = con.prepareStatement("INSERT INTO Detalle (cantidad,codProducto,v_total,codFactura)VALUES( ?, ?, ?,? );");
+			            stmtDetalle = con.prepareStatement("INSERT INTO Detalle (cantidad,codBodega,v_total,codFactura)VALUES( ?, ?, ?,? );");
 			           
 			            
 			            //insert factura

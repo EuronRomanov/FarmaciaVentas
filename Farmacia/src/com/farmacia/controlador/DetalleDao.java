@@ -28,9 +28,7 @@ public class DetalleDao {
 	
 	public List listarDetallesId(int key){
 	       List<Detalle> ListaCl = new ArrayList();
-	       String sql = "SELECT codCarrito,Detalle.cantidad as cantidadD,nombreProducto,v_total,precioVenta FROM Detalle,Producto"
-	       		+ " WHERE Detalle.codProducto=Producto.codProducto"
-	       		+ " AND codFactura=?";
+	       String sql = "SELECT codCarrito,cantidadD,nombreProducto,v_total,precioVenta FROM view_listarDetallesId WHERE codFactura=?";
 	       try {
 	    	  
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -39,10 +37,10 @@ public class DetalleDao {
 	           while (rs.next()) {               
 	              
 	               
-	        	   Detalle cl=new Detalle(rs.getInt("codCarrito"), 
-	        			   rs.getInt("cantidadD"),
-	        			   rs.getString("nombreProducto"),
-	        			   rs.getDouble("v_total"),rs.getDouble("precioVenta"));
+	        	   Detalle cl=new Detalle(rs.getInt(1), 
+	        			   rs.getInt(2),
+	        			   rs.getString(3),
+	        			   rs.getDouble(4),rs.getDouble(5));
 	               
 	               
 	               ListaCl.add(cl);
@@ -78,7 +76,7 @@ public class DetalleDao {
 	    
 	  public Detalle searchDetalleId(int key){
 		  Detalle cl=null;
-	       String sql = "SELECT * FROM Detalle,Producto WHERE Detalle.codProducto=Producto.codProducto AND Producto.disposicion=1 AND Detalle.codCarrito=? ";
+	       String sql = "SELECT * FROM view_searchDetalleId WHERE codCarrito=? ";
 	       try {
 	    	  
 	    	   PreparedStatement ps = con.prepareStatement(sql);
@@ -87,10 +85,10 @@ public class DetalleDao {
 	           while (rs.next()) {               
 	              
 	               
-	        	    cl=new Detalle(rs.getInt("codCarrito"), 
-	        			   rs.getInt("cantidad"),
-	        			   rs.getInt("codProducto"),
-	        			   rs.getDouble("v_total"),rs.getInt("codFactura"));
+	        	    cl=new Detalle(rs.getInt(1), 
+	        			   rs.getInt(2),
+	        			   rs.getInt(3),
+	        			   rs.getDouble(4),rs.getInt(5));
 	               
 	        	    
 	               

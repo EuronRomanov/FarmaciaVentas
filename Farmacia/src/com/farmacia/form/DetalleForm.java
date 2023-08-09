@@ -266,6 +266,10 @@ public class DetalleForm extends JFrame {
 				"Codigo",  "Producto", "Cantidad",  "Precio","Valor Total"
 			}
 		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] {
 				false, false, false, false, false
 			};
@@ -403,12 +407,20 @@ public class DetalleForm extends JFrame {
 		textDetallePrecio.setText("");
 		cmbProductos.setSelectedIndex(0);
 		
+		btnDetalleAgregar.setEnabled(true);
+        btnDetalleActualizar.setEnabled(false);
+        btnDetalleEliminar.setEnabled(false);
+        btnCancelar.setVisible(false);
+       lblValorPagar.setVisible(false);
+       cmbProductos.setEnabled(true);
+       textDetalleValor.setVisible(false);
+		
 	}
 
 	public int getFacturaId() {
 		return facturaId;
 	}
-
+ 
 	public void setFacturaId(int facturaId) {
 		this.facturaId = facturaId;
 	}

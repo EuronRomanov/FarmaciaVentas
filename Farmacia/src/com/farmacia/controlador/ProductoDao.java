@@ -322,7 +322,7 @@ public class ProductoDao {
 
 	public Producto searchProductoId(int key ) {
 		 
-	        String sql = "SELECT * FROM Producto WHERE disposicion=1 AND codProducto=?";
+	        String sql = "SELECT * FROM view_searchProductoId WHERE  codProducto=?";
 	        Producto producto =null;
 	        try{
 	            PreparedStatement ps = con.prepareStatement(sql);
@@ -330,19 +330,19 @@ public class ProductoDao {
 	            ResultSet rs = ps.executeQuery();
 	            DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 	            while(rs.next()){
-	            	 producto = new Producto(rs.getInt("codProducto"),
-		                      rs.getString("nombreProducto"),
-		                      rs.getDouble("precioCompra"),
-		                      rs.getDouble("precioVenta"),
-		                      rs.getInt("cantidad"), 
-		                      rs.getString("unidadMedida"),
-		                      rs.getDouble("presentacion"), 
-		                      rs.getString("marca"), 
-							LocalDateTime.parse(rs.getTimestamp("fechaRegistro").toString().replaceFirst("T", " "),parser ),
-						    rs.getString("observaciones"),
-						    rs.getString("formaFarmaceutica"),
-						    rs.getInt("codCategoria"), 
-						    rs.getInt("codProveedor"));
+	            	 producto = new Producto(rs.getInt(1),
+		                      rs.getString(2),
+		                      rs.getDouble(3),
+		                      rs.getDouble(4),
+		                      rs.getInt(5), 
+		                      rs.getString(6),
+		                      rs.getDouble(7), 
+		                      rs.getString(8), 
+							LocalDateTime.parse(rs.getTimestamp(9).toString().replaceFirst("T", " "),parser ),
+						    rs.getString(10),
+						    rs.getString(11),
+						    rs.getInt(12), 
+						    rs.getInt(13));
 	            	
 	            	
 	               
@@ -364,8 +364,8 @@ public class ProductoDao {
 	
 	public int searchCanitdadProductoId(int key ) {
 		 
-        String sql = "SELECT cantidaIngresada FROM bodega,producto WHERE producto.codProducto=bodega.codProducto AND producto.disposicion=1 AND bodega.codProducto=?";
-        Producto producto =null;
+        String sql = "SELECT  cantidadIngresada FROM view_cantidadproductoid WHERE codBodega=?";
+       
         int cantidad=0;
         try{
             PreparedStatement ps = con.prepareStatement(sql);
@@ -373,7 +373,7 @@ public class ProductoDao {
             ResultSet rs = ps.executeQuery();
            
             while(rs.next()){
-            	cantidad= rs.getInt("cantidadIngresada");
+            	cantidad= rs.getInt(1);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -388,8 +388,7 @@ public class ProductoDao {
 }
 	
 	 public void agregarProductoProCodigo(String key,JTable tblVentas){
-		 String sql = "SELECT * FROM bodega,producto"
-	        		+ " WHERE producto.codProducto=bodega.codProducto AND producto.disposicion=1 AND bodega.cantidadIngresada>0 AND producto.codProducto=? ";
+		 String sql = "select * from view_productoPorCodigo WHERE  codBodega=?";
 	        modelo = (DefaultTableModel) tblVentas.getModel();
 	       
 	        Object[] ob = new Object[5];
@@ -405,11 +404,11 @@ public class ProductoDao {
 		            button.setName("btnEliminarVenta");
 		            button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
 		            while(rs.next()){
-		            	ob[0]=rs.getInt("codProducto");
-		            	ob[1]= rs.getString("nombreProducto");
+		            	ob[0]=rs.getInt(1);
+		            	ob[1]= rs.getString(2);
 		            	 
 		            	
-		            	ob[2]=rs.getDouble("precioVenta");
+		            	ob[2]=rs.getDouble(3);
 		            	 
 		            	ob[3]=1;
 		            	
