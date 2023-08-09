@@ -243,7 +243,7 @@ public class DetalleForm extends JFrame {
 							textDetalleCodCarrito.setText(String.valueOf(ca.getCodCarrito()));
 							textDetalleValor.setText(String.valueOf(ca.getV_total()));
 							textDetalleCodFac.setText(String.valueOf(ca.getCodFactura()));
-							cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodProducto()));
+							cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodCodProductoBodega()));
 					       textDetallePrecio.setText(tblDetalles.getValueAt(fila, 3).toString());
 							
 					        btnDetalleAgregar.setEnabled(false);
