@@ -89,6 +89,7 @@ public class DetalleDao {
 	        			   rs.getInt(2),
 	        			   rs.getInt(3),
 	        			   rs.getDouble(4),rs.getInt(5));
+	        	    cl.setCodCodProductoBodega(rs.getInt(6));
 	               
 	        	    
 	               

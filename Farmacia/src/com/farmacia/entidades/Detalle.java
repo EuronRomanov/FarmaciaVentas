@@ -8,6 +8,7 @@ public class Detalle {
     private  int  codFactura;
     private String producto;
     private double precioVenta;
+    private int codCodProductoBodega;
 	public Detalle() {
 		super();
 	}
@@ -38,6 +39,21 @@ public class Detalle {
 		this.producto = producto;
 		this.v_total = v_total;
 		this.precioVenta = precioVenta;
+	}
+	public Detalle(int codCarrito, int cantidad, String producto, double v_total, double precioVenta,int codCodProductoBodega) {
+		super();
+		this.codCarrito = codCarrito;
+		this.cantidad = cantidad;
+		this.producto = producto;
+		this.v_total = v_total;
+		this.precioVenta = precioVenta;
+		this.codCodProductoBodega=codCodProductoBodega;
+	}
+	
+	
+	
+	public void setCodCodProductoBodega(int codCodProductoBodega) {
+		this.codCodProductoBodega = codCodProductoBodega;
 	}
 	public int getCodCarrito() {
 		return codCarrito;
@@ -81,6 +97,12 @@ public class Detalle {
 	public void setPrecioVenta(double precioVenta) {
 		this.precioVenta = precioVenta;
 	}
+	public int getCodCodProductoBodega() {
+		return codCodProductoBodega;
+	}
+	
     
+	
+	
     
 }
