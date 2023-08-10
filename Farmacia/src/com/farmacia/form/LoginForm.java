@@ -15,6 +15,8 @@ import com.farmacia.entidades.SesionUsuario;
 
 import com.farmacia.entidades.Usuario;
 
+
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -112,6 +114,7 @@ public class LoginForm extends JFrame {
 				    
 				    pnlLogin.add(pnlIngresoApp, BorderLayout.CENTER);
 				    pnlIngresoApp.setVisible(true);
+				    
 				   
 					
 			}
@@ -261,6 +264,7 @@ public class LoginForm extends JFrame {
 		Main frame = new Main();
 		frame.setUsuarioLogin(usuario);
 		frame.setVisible(true);
+	   
 		
 	}
 	
