@@ -420,6 +420,7 @@ public class DetalleForm extends JFrame {
 		textDetalleValor.setText("");
 		textDetalleCodFac.setText("");
 		textDetallePrecio.setText("");
+		textDetallecodBodega.setText("");
 		cmbProductos.setSelectedIndex(0);
 		
 		btnDetalleAgregar.setEnabled(true);
