@@ -1057,7 +1057,6 @@ public class Main extends JFrame {
 		panel_5.add(lblTotalpagar);
 		
 		pnlVentasLadoDerecho = new JPanel();
-		pnlVentasLadoDerecho.setVisible(true);
 		pnlVentasLadoDerecho.setMinimumSize(new Dimension(200, 200));
 		pnlVentasLadoDerecho.setPreferredSize(new Dimension(200, 200));
 		pnl_ventas.add(pnlVentasLadoDerecho, BorderLayout.EAST);
