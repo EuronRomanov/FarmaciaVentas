@@ -150,7 +150,13 @@ public class ProductoDao {
 	           }
 	       } catch (SQLException e) {
 	           System.out.println(e.toString());
-	       }
+	       }finally{
+	            /*try {
+               con.close();
+           } catch (SQLException e) {
+               System.out.println(e.toString());
+           }*/
+       } 
 	       return ListaCl;
 	   }
 	 
@@ -206,7 +212,7 @@ public class ProductoDao {
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            /*try {
+           /* try {
                 con.close();
             } catch (SQLException e) {
                 System.out.println(e.toString());
