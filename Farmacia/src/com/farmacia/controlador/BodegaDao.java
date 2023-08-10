@@ -234,4 +234,35 @@ public class BodegaDao {
 	       //return resultado;
 	   }
 	
+	 
+	 public String consultaProductosCaducados() {
+         String bodega=null;
+       String sql = "SELECT * FROM view_alertaProductoCaduca";
+       
+       Object[] ob = new Object[6];
+       try{
+           PreparedStatement ps = con.prepareStatement(sql);
+           
+         
+           ResultSet rs = ps.executeQuery();
+         
+           while(rs.next()){
+           	
+           	bodega+=rs.getString(1)+"\n";
+           }
+          
+       }catch(Exception e){
+           e.printStackTrace();
+       }finally{
+           /*try {
+               con.close();
+           } catch (SQLException e) {
+               System.out.println(e.toString());
+           }*/
+       }    
+		
+		
+		
+		return  bodega;
+	}
 }
