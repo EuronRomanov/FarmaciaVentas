@@ -218,6 +218,7 @@ public class Main extends JFrame {
 	
 	private JLabel lblProductoFIngreso;
 	private StockFrm stockForm=new StockFrm();
+	private BodegaDao bodegaDao=new BodegaDao();
 	//LoginForm lo=new LoginForm();
 	//String nombreUsuario=lo.getNombreUsuario();
     /**
@@ -354,7 +355,8 @@ public class Main extends JFrame {
 				productoDao.ListarProductoTable(tblProductos);
 				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
 				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
-				mostrarNotificacionProductos();
+				
+				mostrarNotificacionProductos(bodegaDao.consultaProductosCaducados() );
 				
 				
 				
@@ -3225,7 +3227,9 @@ public class Main extends JFrame {
 		 this.setEnabled(true);
 		}
 	
-	public void mostrarNotificacionProductos() {
+	public void mostrarNotificacionProductos(String cadena) {
+		String mesange="";
+		
 		 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, "dddfdf");
 		  noti.showNotification();
 	}
