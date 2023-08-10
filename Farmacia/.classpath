@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="librerias/commons-collections4-4.4.jar"/>
 	<classpathentry kind="lib" path="librerias/commons-dbcp2-2.9.0.jar"/>
 	<classpathentry kind="lib" path="librerias/commons-pool2-2.11.1.jar"/>
+	<classpathentry kind="lib" path="librerias/TimingFramework-0.55.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
