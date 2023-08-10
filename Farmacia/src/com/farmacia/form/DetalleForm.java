@@ -22,7 +22,6 @@ import com.farmacia.controlador.ProductoDao;
 import com.farmacia.controlador.VentaDao;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Producto;
-import com.farmacia.entidades.Usuario;
 import com.farmacia.utils.ControlFormatos;
 import com.farmacia.controlador.DetalleDao;
 import java.awt.event.MouseAdapter;
@@ -33,16 +32,19 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Window.Type;
 
 public class DetalleForm extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textDetalleCantidad;
 	private JTextField textDetalleValor;
 	private JTextField textDetalleCodCarrito;
 	private JTable tblDetalles;
-	private JComboBox cmbProductos;
+	private JComboBox<Producto> cmbProductos;
     private ProductoDao productoDao=new ProductoDao();
     private DetalleDao detalleDao=new DetalleDao();
     private int facturaId;
@@ -53,6 +55,7 @@ public class DetalleForm extends JFrame {
     private JButton btnCancelar;
     private JLabel lblValorPagar;
     private VentaDao ventaDao=new VentaDao();
+    private JTextField textDetallecodBodega;
    
 	/**
 	 * Launch the application.
@@ -98,7 +101,7 @@ public class DetalleForm extends JFrame {
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
 		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
@@ -159,7 +162,7 @@ public class DetalleForm extends JFrame {
 		gbc_lblNewLabel_1.gridy = 0;
 		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
-		 cmbProductos = new JComboBox();
+		 cmbProductos = new JComboBox<Producto>();
 		GridBagConstraints gbc_cmbProductos = new GridBagConstraints();
 		gbc_cmbProductos.insets = new Insets(0, 0, 5, 5);
 		gbc_cmbProductos.fill = GridBagConstraints.HORIZONTAL;
@@ -169,6 +172,16 @@ public class DetalleForm extends JFrame {
 		
 		 lblValorPagar = new JLabel("Valor Pagar");
 		lblValorPagar.setVisible(false);
+		
+		textDetallecodBodega = new JTextField();
+		textDetallecodBodega.setVisible(false);
+		GridBagConstraints gbc_textDetallecodBodega = new GridBagConstraints();
+		gbc_textDetallecodBodega.insets = new Insets(0, 0, 5, 0);
+		gbc_textDetallecodBodega.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetallecodBodega.gridx = 4;
+		gbc_textDetallecodBodega.gridy = 0;
+		contentPane.add(textDetallecodBodega, gbc_textDetallecodBodega);
+		textDetallecodBodega.setColumns(10);
 		GridBagConstraints gbc_lblValorPagar = new GridBagConstraints();
 		gbc_lblValorPagar.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValorPagar.anchor = GridBagConstraints.EAST;
@@ -245,6 +258,7 @@ public class DetalleForm extends JFrame {
 							textDetalleCodFac.setText(String.valueOf(ca.getCodFactura()));
 							cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodCodProductoBodega()));
 					       textDetallePrecio.setText(tblDetalles.getValueAt(fila, 3).toString());
+					       textDetallecodBodega.setText(String.valueOf(ca.getCodProducto()));
 							
 					        btnDetalleAgregar.setEnabled(false);
 					        btnDetalleActualizar.setEnabled(true);
@@ -290,7 +304,8 @@ public class DetalleForm extends JFrame {
 		 	public void actionPerformed(ActionEvent e) {
 		 		Producto p=(Producto)cmbProductos.getSelectedItem();
 		 		if (!controlFormato.hayEspaciosVacios(textDetalleCantidad.getText()) ) {
-		 			int codProducto=p.getCodProducto();
+		 		//	int codProducto=p.getCodProducto();
+		 			int codProducto=Integer.parseInt(textDetallecodBodega.getText());
 			 		int cantidad=Integer.parseInt(textDetalleCantidad.getText());
 			 		double valor=Double.valueOf(cantidad)*p.getPrecioVenta();
 			 		
