@@ -3227,10 +3227,15 @@ public class Main extends JFrame {
 		 this.setEnabled(true);
 		}
 	
-	public void mostrarNotificacionProductos(String cadena) {
-		String mesange="";
+	public void mostrarNotificacionProductos(String consulta) {
 		
-		 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, "dddfdf");
-		  noti.showNotification();
+		if (consulta.length()>0) {
+			 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, consulta);
+			  noti.showNotification();
+		} else {
+			 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, "No hay productos por caducar");
+			  noti.showNotification();
+		}
+		
 	}
 }
