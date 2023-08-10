@@ -17,31 +17,19 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.Dimension;
 
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
-import java.awt.Dimension;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import java.awt.Cursor;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import com.farmacia.entidades.Categoria;
 import com.farmacia.entidades.Producto;
 import com.farmacia.entidades.Proveedor;
-import com.farmacia.entidades.SesionUsuario;
-
 import com.farmacia.entidades.Usuario;
 import com.farmacia.entidades.Factura;
 import com.farmacia.utils.ControlFormatos;
@@ -51,9 +39,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -65,7 +50,6 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import com.farmacia.bd.ConexionBD;
 import com.farmacia.controlador.*;
 
 import java.awt.event.KeyAdapter;
@@ -83,6 +67,9 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.components.JLocaleChooser;
+
+import com.farmacia.javaswingdev.*;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -90,6 +77,7 @@ import javax.swing.Box;
 import java.awt.Toolkit;
 import com.toedter.calendar.JCalendar;
 
+import com.farmacia.javaswingdev.*;
 
 public class Main extends JFrame {
 
@@ -163,7 +151,7 @@ public class Main extends JFrame {
     private JLabel lblNewLabel_19;
     private JTextField textVentasRuc;
     private JTextField textVentasCedula;
-    JTextArea textVentasObservaciones;
+    private JTextArea textVentasObservaciones;
     private JLabel lblNewLabel_22;
     private JLabel lblNewLabel_23;
     private JTextField textVendedorUsuario;
@@ -366,7 +354,7 @@ public class Main extends JFrame {
 				productoDao.ListarProductoTable(tblProductos);
 				proveedorDao.cargarListaProveedor(cmbProductoProveedor);
 				categoriaDao.cargarListaCategorias(cmbProductoCategoria);
-				
+				mostrarNotificacionProductos();
 				
 				
 				
@@ -917,19 +905,7 @@ public class Main extends JFrame {
 				switch (opcion) {
 				case 1:
 					
-					/*if (((textCajaDesde.getDate()==null  || textCajaHasta.getDate()==null) && mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) ) {
-						
-						msgbox("Seleccione un rango de fechas");
-					} else {
-						String fInico="",fFin="";
-						if (mnMenuAdministrador.getText().equalsIgnoreCase("Administrador")) {
-							fInico=controlFormato.fromDateToLocalDate(textCajaDesde.getDate()).toString();
-							fFin=controlFormato.fromDateToLocalDate(textCajaHasta.getDate()).toString();
-						} 
-						generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
-								Integer.parseInt(lblCodUsuario.getText()),
-								fInico,fFin);
-					}*/
+					
 					
 					switch ( mnMenuAdministrador.getText()) {
 					case "Administrador":
@@ -1273,6 +1249,7 @@ public class Main extends JFrame {
 				"Codigo", "Producto", "Precio por Unidad", "Cantidad", "Acci\u00F3n"
 			}
 		) {
+			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] {
 				false, false, false, false,  false
 			};
@@ -2057,7 +2034,7 @@ public class Main extends JFrame {
 						int key=e.getKeyChar();
 					
 					
-					if (controlFormato.validarSoloLetras(key)) {
+					if (controlFormato.validarSoloLetras(key) && controlFormato.validarNumerosDecimal(key)) {
 						e.consume();
 					}
 				}
@@ -2939,12 +2916,7 @@ public class Main extends JFrame {
 			btnFacturaAgregar = new JButton("Agregar");
 			btnFacturaAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					/*eliminarTab("Categoria");
-					eliminarTab("Proveedor");
-					eliminarTab("Productos");
-					eliminarTab("Caja");
-					eliminarTab("Usuarios");
-					eliminarTab("Facturas");*/
+					
 					
 					tabPane_Vistas.removeAll();
 					tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
@@ -3253,4 +3225,9 @@ public class Main extends JFrame {
 	private void habilitarVentana() {
 		 this.setEnabled(true);
 		}
+	
+	public void mostrarNotificacionProductos() {
+		 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, "dddfdf");
+		  noti.showNotification();
+	}
 }
