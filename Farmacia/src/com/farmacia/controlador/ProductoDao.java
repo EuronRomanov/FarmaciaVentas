@@ -166,7 +166,7 @@ public class ProductoDao {
      * @return list of client whose name contains the @key
      */
     public void searchProducto(String key,JTable tblProducto){
-        ArrayList<Producto> result = new ArrayList<Producto>();
+       // ArrayList<Producto> result = new ArrayList<Producto>();
         String sql = "SELECT * FROM Producto,Categoria,Proveedor"
         		+ " WHERE Producto.codCategoria=Categoria.codCategoria "
         		+ "AND Producto.codProveedor=Proveedor.codProveedor "
@@ -180,7 +180,7 @@ public class ProductoDao {
         buttonProducto.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-lupa.png")));
         try{
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, "%" + key + "%");
+            ps.setString(1,  "%" + key + "%");
             ps.setString(2, "%" + key + "%");
             ps.setString(3, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
