@@ -119,7 +119,7 @@ public class ProductoDao {
 	  * listar
 	  */
 	 
-	 public List ListarProducto(){
+	 public List<Producto> ListarProducto(){
 	       List<Producto> ListaCl = new ArrayList();
 	       String sql = "select * from vista_productos";
 	       try {
@@ -171,7 +171,7 @@ public class ProductoDao {
         		+ " WHERE Producto.codCategoria=Categoria.codCategoria "
         		+ "AND Producto.codProveedor=Proveedor.codProveedor "
         		+ "AND Producto.disposicion=1"
-        		+ " AND Producto.nombreProducto LIKE ? OR Producto.formaFarmaceutica LIKE ?";
+        		+ " AND Producto.codProducto LIKE ? OR Producto.nombreProducto LIKE ? OR Producto.formaFarmaceutica LIKE ?";
         modelo = (DefaultTableModel) tblProducto.getModel();
         modelo.setRowCount(0);
         Object[] ob = new Object[14];
@@ -182,6 +182,7 @@ public class ProductoDao {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + key + "%");
             ps.setString(2, "%" + key + "%");
+            ps.setString(3, "%" + key + "%");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
@@ -464,7 +465,7 @@ public class ProductoDao {
     	return flag;
     }
     
-    public void cargarListaProductos(JComboBox cmbDetalleProductos) {
+    public void cargarListaProductos(JComboBox<Producto> cmbDetalleProductos) {
       	 List<Producto> ListarCl = this.ListarProducto();
       	cmbDetalleProductos.removeAllItems();
       	 for (Producto proveedor : ListarCl) {
