@@ -31,8 +31,8 @@ public class BodegaDao {
 	private DefaultTableModel modelo = new DefaultTableModel();
 	 private ControlFormatos controlFormato=new ControlFormatos();
 	
-	public List listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {
-		 List<Bodega> ListaCl = new ArrayList();
+	public List<Bodega> listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {
+		 List<Bodega> ListaCl = new ArrayList<Bodega>();
 	       String sql = "SELECT cantidadIngresada,fechaIngreso,fechaCaducidad, "
 	       		+ "IF(fechaCuandoCaduca<=DATE(NOW()), 'YES', 'NO') AS Caduca FROM bodega WHERE codProducto=?";
 	      
@@ -236,7 +236,7 @@ public class BodegaDao {
 	
 	 
 	 public String consultaProductosCaducados() {
-         String bodega=null;
+         String bodega="";
        String sql = "SELECT * FROM view_alertaProductoCaduca";
        
        Object[] ob = new Object[6];
