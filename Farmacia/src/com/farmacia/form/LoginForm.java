@@ -7,12 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.farmacia.bd.ConexionBD;
 import com.farmacia.bd.DBUtil;
 import com.farmacia.bd.Propiedades;
 import com.farmacia.controlador.UsuarioDao;
-import com.farmacia.entidades.SesionUsuario;
-
 import com.farmacia.entidades.Usuario;
 
 
@@ -20,10 +17,6 @@ import com.farmacia.entidades.Usuario;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.GridLayout;
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
@@ -32,13 +25,12 @@ import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Window.Type;
 
 public class LoginForm extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private PnlLogin pnlLogin=new PnlLogin();
 	private PnlIngresoApp pnlIngresoApp=new PnlIngresoApp();
@@ -91,12 +83,7 @@ public class LoginForm extends JFrame {
 		pnlLogin.setLayout(new BorderLayout(0, 0));
 		pnlMenu.setOpaque(false);
 		pnlLogin.add(pnlMenu, BorderLayout.CENTER);
-		/*pnlIngresoApp.setOpaque(false);
-		pnlLogin.add(pnlIngresoApp, BorderLayout.NORTH);
-		pnlIngresoDB.setOpaque(false);
-		pnlLogin.add(pnlIngresoDB, BorderLayout.SOUTH);
-		 pnlIngresoApp.setVisible(false);
-		 pnlIngresoDB.setVisible(false);*/
+		
 		 pnlMenu.setVisible(true);
 		 
 		GridBagLayout gbl_pnlMenu = new GridBagLayout();
