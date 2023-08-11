@@ -1193,7 +1193,7 @@ public class Main extends JFrame {
 						Integer.parseInt(lblCodUsuario.getText())) ;
 				ventaDao.registarVenta(factura, tblVentas);
 				limpiarCamposVentas();
-				pnlVentasLadoDerecho.setVisible(false);
+				//pnlVentasLadoDerecho.setVisible(false);
 				textVentasCodProd.setEditable(true);
 			}
 		});
@@ -1213,7 +1213,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				limpiarCamposVentas();
 				 textVentasCodProd.setEditable(true);
-				 pnlVentasLadoDerecho.setVisible(false);
+				// pnlVentasLadoDerecho.setVisible(false);
 			}
 		});
 		GridBagConstraints gbc_btnVentasCancelar = new GridBagConstraints();
@@ -1245,7 +1245,7 @@ public class Main extends JFrame {
 	                    	 //ventaDao.totalizar(tblVentas, textVentasTotal);
 	                    	 ventaDao.totalizar(tblVentas, lblTotalpagar);
 	                    	 if (tblVentas.getRowCount()==0) {
-								pnlVentasLadoDerecho.setVisible(false);
+								//pnlVentasLadoDerecho.setVisible(false);
 								textVentasCodProd.setEditable(true);
 								textVentasCodProd.requestFocus();
 							}
@@ -3273,7 +3273,7 @@ public class Main extends JFrame {
 	
 	public void mostrarNotificacionProductos(String consulta) {
 		
-		if (consulta.length()>0) {
+		if (consulta!=null) {
 			 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, consulta);
 			  noti.showNotification();
 		} else {
