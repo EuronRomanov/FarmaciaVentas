@@ -108,7 +108,6 @@ public class Main extends JFrame {
     private JTextField textNombreCategoria;
     private JTextField textCodCategoria;
     private DefaultTableModel modelo = new DefaultTableModel();
-    private DefaultTableModel tmp = new DefaultTableModel();
     private JButton btnAgregarCategoria,btnCancelar,btnActualizarCategoria, btnEliminarCategoria;
     private JButton btnAgregarProveedor,btnModificarProveedor,btnEliminarProveedor,btnCancelarProveedor,btnBuscarProveedor;
     private boolean flagAdministrador=false;
@@ -147,8 +146,8 @@ public class Main extends JFrame {
     private JLabel lblTotalpagar;
     private JPanel panel_6;
     private JTextField textVentasCliente;
-    private JLabel lblNewLabel_16;
-    private JLabel lblNewLabel_19;
+    private JLabel lblVentasCliente;
+    private JLabel lblVentasRuc;
     private JTextField textVentasRuc;
     private JTextField textVentasCedula;
     private JTextArea textVentasObservaciones;
@@ -202,7 +201,7 @@ public class Main extends JFrame {
 	private JMenu mnUsuario;
 	private Usuario usuarioLogin=new Usuario();
 	private JLabel lblCodUsuario;
-	private JButton btnProducto,btnUsuario, btnFactura,btnCaja, btnVentas;
+	private JButton btnProducto,btnUsuario, btnFactura,btnCaja, btnVentas,btnVentasFinalizar , btnVentasCancelar;
 	private JPanel gridPnlMenuIzquierda=new JPanel();
 	private JMenu mnMenuAdministrador;
 	private Component horizontalGlue;
@@ -1037,7 +1036,8 @@ public class Main extends JFrame {
 			
 			
 			if (!lblTotalpagar.getText().equalsIgnoreCase("0,00")) {
-				pnlVentasLadoDerecho.setVisible(true);
+				//pnlVentasLadoDerecho.setVisible(true);
+				mostrarComponentesLadoDerecho();
 				textVentasCodProd.setEditable(false);				
 			}else {
 				textVentasCodProd.requestFocus();
@@ -1074,15 +1074,17 @@ public class Main extends JFrame {
 		gbl_panel_6.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_6.setLayout(gbl_panel_6);
 		
-		lblNewLabel_16 = new JLabel("Cliente");
-		GridBagConstraints gbc_lblNewLabel_16 = new GridBagConstraints();
-		gbc_lblNewLabel_16.gridwidth = 3;
-		gbc_lblNewLabel_16.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_16.gridx = 0;
-		gbc_lblNewLabel_16.gridy = 0;
-		panel_6.add(lblNewLabel_16, gbc_lblNewLabel_16);
+		lblVentasCliente = new JLabel("Cliente");
+		lblVentasCliente.setVisible(false);
+		GridBagConstraints gbc_lblVentasCliente = new GridBagConstraints();
+		gbc_lblVentasCliente.gridwidth = 3;
+		gbc_lblVentasCliente.insets = new Insets(0, 0, 5, 0);
+		gbc_lblVentasCliente.gridx = 0;
+		gbc_lblVentasCliente.gridy = 0;
+		panel_6.add(lblVentasCliente, gbc_lblVentasCliente);
 		
 		textVentasCliente = new JTextField();
+		textVentasCliente.setVisible(false);
 		textVentasCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -1099,15 +1101,17 @@ public class Main extends JFrame {
 		panel_6.add(textVentasCliente, gbc_textVentasCliente);
 		textVentasCliente.setColumns(10);
 		
-		lblNewLabel_19 = new JLabel("RUC");
-		GridBagConstraints gbc_lblNewLabel_19 = new GridBagConstraints();
-		gbc_lblNewLabel_19.gridwidth = 3;
-		gbc_lblNewLabel_19.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_19.gridx = 0;
-		gbc_lblNewLabel_19.gridy = 2;
-		panel_6.add(lblNewLabel_19, gbc_lblNewLabel_19);
+		lblVentasRuc = new JLabel("RUC");
+		lblVentasRuc.setVisible(false);
+		GridBagConstraints gbc_lblVentasRuc = new GridBagConstraints();
+		gbc_lblVentasRuc.gridwidth = 3;
+		gbc_lblVentasRuc.insets = new Insets(0, 0, 5, 0);
+		gbc_lblVentasRuc.gridx = 0;
+		gbc_lblVentasRuc.gridy = 2;
+		panel_6.add(lblVentasRuc, gbc_lblVentasRuc);
 		
 		textVentasRuc = new JTextField();
+		textVentasRuc.setVisible(false);
 		textVentasRuc.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -1123,15 +1127,17 @@ public class Main extends JFrame {
 		panel_6.add(textVentasRuc, gbc_textVentasRuc);
 		textVentasRuc.setColumns(10);
 		
-		JLabel lblNewLabel_20 = new JLabel("Cedula");
-		GridBagConstraints gbc_lblNewLabel_20 = new GridBagConstraints();
-		gbc_lblNewLabel_20.gridwidth = 3;
-		gbc_lblNewLabel_20.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_20.gridx = 0;
-		gbc_lblNewLabel_20.gridy = 4;
-		panel_6.add(lblNewLabel_20, gbc_lblNewLabel_20);
+		JLabel lblVentasCedula = new JLabel("Cedula");
+		lblVentasCedula.setVisible(false);
+		GridBagConstraints gbc_lblVentasCedula = new GridBagConstraints();
+		gbc_lblVentasCedula.gridwidth = 3;
+		gbc_lblVentasCedula.insets = new Insets(0, 0, 5, 0);
+		gbc_lblVentasCedula.gridx = 0;
+		gbc_lblVentasCedula.gridy = 4;
+		panel_6.add(lblVentasCedula, gbc_lblVentasCedula);
 		
 		textVentasCedula = new JTextField();
+		textVentasCedula.setVisible(false);
 		textVentasCedula.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -1147,15 +1153,18 @@ public class Main extends JFrame {
 		panel_6.add(textVentasCedula, gbc_textVentasCedula);
 		textVentasCedula.setColumns(10);
 		
-		JLabel lblNewLabel_21 = new JLabel("Observaciones");
-		GridBagConstraints gbc_lblNewLabel_21 = new GridBagConstraints();
-		gbc_lblNewLabel_21.gridwidth = 3;
-		gbc_lblNewLabel_21.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_21.gridx = 0;
-		gbc_lblNewLabel_21.gridy = 6;
-		panel_6.add(lblNewLabel_21, gbc_lblNewLabel_21);
+		JLabel lblVentasObservacion = new JLabel("Observaciones");
+		lblVentasObservacion.setVisible(false);
+		GridBagConstraints gbc_lblVentasObservacion = new GridBagConstraints();
+		gbc_lblVentasObservacion.gridwidth = 3;
+		gbc_lblVentasObservacion.insets = new Insets(0, 0, 5, 0);
+		gbc_lblVentasObservacion.gridx = 0;
+		gbc_lblVentasObservacion.gridy = 6;
+		panel_6.add(lblVentasObservacion, gbc_lblVentasObservacion);
 		
 		textVentasObservaciones = new JTextArea();
+		textVentasObservaciones.setVisible(false);
+		textVentasObservaciones.setAutoscrolls(false);
 		textVentasObservaciones.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -1171,7 +1180,8 @@ public class Main extends JFrame {
 		gbc_textVentasObservaciones.gridy = 7;
 		panel_6.add(textVentasObservaciones, gbc_textVentasObservaciones);
 		
-		JButton btnVentasFinalizar = new JButton("Finalizar");
+		btnVentasFinalizar  = new JButton("Finalizar");
+		btnVentasFinalizar.setVisible(false);
 		btnVentasFinalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Factura factura=new Factura(textVentasRuc.getText(),
@@ -1196,7 +1206,9 @@ public class Main extends JFrame {
 		gbc_btnVentasFinalizar.gridy = 12;
 		panel_6.add(btnVentasFinalizar, gbc_btnVentasFinalizar);
 		
-		JButton btnVentasCancelar = new JButton("Cancelar");
+		
+		 btnVentasCancelar = new JButton("Cancelar");
+		 btnVentasCancelar.setVisible(false);
 		btnVentasCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarCamposVentas();
@@ -3022,6 +3034,37 @@ public class Main extends JFrame {
 			 });
 
 	}
+	protected void mostrarComponentesLadoDerecho() {
+		// TODO Auto-generated method stub
+		lblVentasCliente.setVisible(true);
+		 
+		 lblVentasRuc.setVisible(true);
+		 lblVentasTotal.setVisible(true);
+		textVentasCliente.setVisible(true);
+		 textVentasRuc.setVisible(true);
+		 textVentasCedula.setVisible(true);
+		 textVentasObservaciones.setVisible(true);
+		 btnVentasFinalizar.setVisible(true);
+		 btnVentasCancelar.setVisible(true);
+		 
+		
+	}
+	protected void ocultaComponentesLadoDerecho() {
+		// TODO Auto-generated method stub
+		lblVentasCliente.setVisible(false);
+		 
+		 lblVentasRuc.setVisible(false);
+		 lblVentasTotal.setVisible(false);
+		textVentasCliente.setVisible(false);
+		 textVentasRuc.setVisible(false);
+		 textVentasCedula.setVisible(false);
+		 textVentasObservaciones.setVisible(false);
+		
+		 btnVentasFinalizar.setVisible(false);
+		 btnVentasCancelar.setVisible(false);
+		
+	}
+
 	protected void cargarDatosProductoSeleccionado(int key) {
 		// Producto ca=productoDao.searchProductoId(Integer.parseInt(key));
 		Producto ca=productoDao.searchProductoId(key);
@@ -3200,9 +3243,10 @@ public class Main extends JFrame {
 		 textVentasObservaciones.setText("");
 		 DefaultTableModel modeloVentas = (DefaultTableModel) tblVentas.getModel();
 		 modeloVentas.setRowCount(0);
+		 tblVentas.setModel(modeloVentas);
 		 lblTotalpagar.setText("0,00");
-		 pnlVentasLadoDerecho.setVisible(true);
-		
+		 //pnlVentasLadoDerecho.setVisible(true);
+		ocultaComponentesLadoDerecho();
 		 textVentasCodProd.setText("");
 		 textVentasCodProd.requestFocus();
 	 }
