@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
 
 public class Notification extends javax.swing.JComponent {
 
@@ -39,7 +41,7 @@ public class Notification extends javax.swing.JComponent {
         dialog.setUndecorated(true);
         dialog.setFocusableWindowState(false);
         dialog.setBackground(new Color(0, 0, 0, 0));
-        dialog.add(this);
+        dialog.getContentPane().add(this);
         dialog.setSize(getPreferredSize());
         if (type == Type.SUCCESS) {
             lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/farmacia/javaswingdev/sucess.png")));
@@ -239,25 +241,25 @@ public class Notification extends javax.swing.JComponent {
         lbMessageText.setText("Message Text");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
-        panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
-            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbMessage)
-                    .addComponent(lbMessageText))
-                .addContainerGap(217, Short.MAX_VALUE))
+        	panelLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelLayout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelLayout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(lbMessageText, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(lbMessage, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE))
+        			.addContainerGap(22, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
-            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbMessage)
-                .addGap(3, 3, 3)
-                .addComponent(lbMessageText)
-                .addContainerGap())
+        	panelLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelLayout.createSequentialGroup()
+        			.addContainerGap()
+        			.addComponent(lbMessage)
+        			.addGap(3)
+        			.addComponent(lbMessageText)
+        			.addContainerGap())
         );
+        panel.setLayout(panelLayout);
 
         cmdClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/farmacia/javaswingdev/close.png"))); // NOI18N
         cmdClose.setBorder(null);
