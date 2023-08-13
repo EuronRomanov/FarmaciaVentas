@@ -127,8 +127,7 @@ public class ProductoDao {
 	    	   PreparedStatement ps = con.prepareStatement(sql);
 	    	   ResultSet rs = ps.executeQuery();
 	    	   DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-	    	   DateTimeFormatter parser2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	           while (rs.next()) {      
+	    	   while (rs.next()) {      
 	        	   
 	               
 	        	   Producto cl = new Producto(rs.getInt(1),

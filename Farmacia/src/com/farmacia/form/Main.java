@@ -3274,8 +3274,8 @@ public class Main extends JFrame {
 	
 	public void mostrarNotificacionProductos(String consulta) {
 		
-		if (consulta!=null) {
-			 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, consulta);
+		if (consulta.length()>0) {
+			 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, "<html><body>"+consulta+"</body></html>");
 			  noti.showNotification();
 		} else {
 			 Notification noti=new Notification(this, Notification.Type.INFO, Notification.Location.TOP_RIGHT, "No hay productos por caducar");

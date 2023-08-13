@@ -342,7 +342,8 @@ public class DetalleForm extends JFrame {
 		 	public void actionPerformed(ActionEvent e) {
 		 		Producto p=(Producto)cmbProductos.getSelectedItem();
 		 		if (!controlFormato.hayEspaciosVacios(textDetalleCantidad.getText(),textDetalleCodCarrito.getText()) ) {
-		 			int codProducto=p.getCodProducto();
+		 			//int codProducto=p.getCodProducto();
+		 			int codProducto=Integer.parseInt(textDetallecodBodega.getText());
 			 		int cantidad=Integer.parseInt(textDetalleCantidad.getText());
 			 		double valor=Double.valueOf(cantidad)*p.getPrecioVenta();
 			 		
@@ -475,7 +476,7 @@ public class DetalleForm extends JFrame {
 	       lblValorPagar.setVisible(false);
 	       textDetalleValor.setVisible(false);
 	       cmbProductos.setEnabled(true);
-	       
+	        
 	}
 	
 }

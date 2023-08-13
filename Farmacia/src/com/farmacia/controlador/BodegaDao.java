@@ -239,7 +239,7 @@ public class BodegaDao {
          String bodega="";
        String sql = "SELECT * FROM view_alertaProductoCaduca";
        
-       Object[] ob = new Object[6];
+      
        try{
            PreparedStatement ps = con.prepareStatement(sql);
            
@@ -248,7 +248,7 @@ public class BodegaDao {
          
            while(rs.next()){
            	
-           	bodega+=rs.getString(1)+"\n";
+           	bodega+=rs.getString(1)+"<br>";
            }
           
        }catch(Exception e){
