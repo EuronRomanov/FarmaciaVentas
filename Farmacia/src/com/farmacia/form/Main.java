@@ -81,13 +81,17 @@ import com.farmacia.javaswingdev.*;
 
 public class Main extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textBuscarCategoria;
 	private JTable tblCategoria;
 	private JTabbedPane tabPane_Vistas;
     
-	JPanel pnl_factura = new JPanel();
-	JPanel pnl_consultas = new JPanel();
+	private JPanel pnl_factura = new JPanel();
+	private JPanel pnl_consultas = new JPanel();
     
     private JPanel pnl_usuarios = new JPanel();
     private JPanel pnl_producto = new JPanel();
@@ -282,6 +286,11 @@ public class Main extends JFrame {
 			@Override
 			public void windowOpened(WindowEvent e) {
 
+			}
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				
+				
 			}
 		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
