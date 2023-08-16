@@ -27,6 +27,7 @@ import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
 import com.farmacia.entidades.Producto;
 import com.farmacia.form.Main;
+import com.farmacia.form.RenderTabla;
 import com.farmacia.utils.ControlFormatos;
 
 public class BodegaDao {
@@ -251,7 +252,7 @@ public class BodegaDao {
          
            while(rs.next()){
            	
-           	bodega+=rs.getInt(1)+"<br>";
+           	bodega+=rs.getInt(1);
            }
           
        }catch(Exception e){
@@ -296,7 +297,11 @@ public class BodegaDao {
 	            	ob[8]=button;
 	            	 modelo.addRow(ob);
 	            }
+	            tblProductoCaducados.setDefaultRenderer(Object.class,new RenderTabla());
+	            
 	            tblProductoCaducados.setModel(modelo);
+	            tblProductoCaducados.setRowHeight(30);
+	            
 	        }catch(Exception e){
 	            e.printStackTrace();
 	        }finally{
@@ -312,6 +317,28 @@ public class BodegaDao {
 
 	public void retirarProductoBodega(int key) {
 		// TODO Auto-generated method stub
-		
+		   int resultado;
+	       try {            
+	            // se crea instancia a procedimiento, los parametros de entrada y salida se simbolizan con el signo ?
+	            CallableStatement proc = con.prepareCall(" CALL proc_eliminarProductoBodega(?,?) ");
+	            //se cargan los parametros de entrada
+	            proc.setInt("codBodegaIn",key);//Tipo entero
+	           
+	            
+	            
+	            // parametros de salida
+	            proc.registerOutParameter("respuesta", Types.CHAR);//Tipo String
+	            // Se ejecuta el procedimiento almacenado
+	            proc.execute();            
+	            // devuelve el valor del parametro de salida del procedimiento
+	            resultado = proc.getInt("respuesta");
+	            if (resultado =='0') {
+	            	JOptionPane.showMessageDialog(null, "Revise si  este producto existe");
+				}
+	        } 
+	       catch (Exception e) {                  
+	            System.out.println(e);
+	       }
+	       //return resultado;
 	}
 }
