@@ -222,6 +222,10 @@ public class Main extends JFrame {
 	private JLabel lblProductoFIngreso;
 	private StockFrm stockForm=new StockFrm();
 	private BodegaDao bodegaDao=new BodegaDao();
+	private JPanel pnl_pCaducados;
+	private JScrollPane scrollPane_6;
+	private JTable tblProductosCaducados;
+	private JMenuItem mntmNewMenuItem_1;
 	//LoginForm lo=new LoginForm();
 	//String nombreUsuario=lo.getNombreUsuario();
     /**
@@ -312,6 +316,19 @@ public class Main extends JFrame {
 				lo.setVisible(true);
 			}
 		});
+		
+		mntmNewMenuItem_1 = new JMenuItem("Productos Caducados");
+		mntmNewMenuItem_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tabPane_Vistas.removeAll();
+				tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
+				tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Productos Caducados"));
+				bodegaDao.getProductosCaducados(tblProductosCaducados);
+			}
+		});
+		mntmNewMenuItem_1.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-pastilla.png")));
+		mnUsuario.add(mntmNewMenuItem_1);
 		mntmNewMenuItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mntmNewMenuItem.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/logout_icon_32.png")));
 		mnUsuario.add(mntmNewMenuItem);
@@ -1592,6 +1609,66 @@ public class Main extends JFrame {
 		 pnl_usuarios.add(btnVendedorCancelar, gbc_btnVendedorCancelar);
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
+			
+			pnl_pCaducados = new JPanel();
+			tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
+			GridBagLayout gbl_pnl_pCaducados = new GridBagLayout();
+			gbl_pnl_pCaducados.columnWidths = new int[]{0, 0};
+			gbl_pnl_pCaducados.rowHeights = new int[]{0, 0};
+			gbl_pnl_pCaducados.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+			gbl_pnl_pCaducados.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+			pnl_pCaducados.setLayout(gbl_pnl_pCaducados);
+			
+			scrollPane_6 = new JScrollPane();
+			GridBagConstraints gbc_scrollPane_6 = new GridBagConstraints();
+			gbc_scrollPane_6.fill = GridBagConstraints.BOTH;
+			gbc_scrollPane_6.gridx = 0;
+			gbc_scrollPane_6.gridy = 0;
+			pnl_pCaducados.add(scrollPane_6, gbc_scrollPane_6);
+			
+			tblProductosCaducados = new JTable();
+			tblProductosCaducados.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int column = tblProductosCaducados.getColumnModel().getColumnIndexAtX(e.getX());
+					 int row    = e.getY()/tblVentas.getRowHeight();
+					 if (row < tblProductosCaducados.getRowCount() && row >= 0  && column < tblProductosCaducados.getColumnCount() && column >= 0)  {
+		                 Object value = tblProductosCaducados.getValueAt(row, column);
+		                 if (value instanceof JButton) {
+		                     //perform a click event
+		                     ((JButton)value).doClick();
+		                     JButton botones=(JButton)value;
+		                     if (botones.getName().equals("btnEliminarPBodega")) {
+		                    	 String key= tblProductosCaducados.getValueAt(row, 0).toString();
+		                    	 bodegaDao.retirarProductoBodega(Integer.parseInt(key));                    	
+		                    	 bodegaDao.getProductosCaducados(tblProductosCaducados);
+		                    	
+		                    	 
+							}
+		                 }
+		             }
+					
+				}
+			});
+			tblProductosCaducados.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Cod", "Fecha Caducidad", "Fecha Caducidad (-90 dias)", "Cantidad", "Producto", "FormaFarmaceutica", "Presentaci\u00F3n", "Unidad Medida", "Eliminar"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false, false, false, false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			});
+			scrollPane_6.setViewportView(tblProductosCaducados);
 			
 			//tabPane_Vistas.add("Proveedor",pnl_proveedor);
 			GridBagLayout gbl_pnl_proveedor = new GridBagLayout();
