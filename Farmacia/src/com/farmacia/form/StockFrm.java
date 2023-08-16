@@ -39,6 +39,10 @@ import java.awt.Toolkit;
 
 public class StockFrm extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textProductoCantidad;
 	private JTextField textProductoCod;
