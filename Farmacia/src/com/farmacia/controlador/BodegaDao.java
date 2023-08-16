@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -24,6 +26,7 @@ import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Factura;
 import com.farmacia.entidades.Producto;
+import com.farmacia.form.Main;
 import com.farmacia.utils.ControlFormatos;
 
 public class BodegaDao {
@@ -248,7 +251,7 @@ public class BodegaDao {
          
            while(rs.next()){
            	
-           	bodega+=rs.getString(1)+"<br>";
+           	bodega+=rs.getInt(1)+"<br>";
            }
           
        }catch(Exception e){
@@ -264,5 +267,51 @@ public class BodegaDao {
 		
 		
 		return  bodega;
+	}
+	 
+	 
+	 public void getProductosCaducados(JTable tblProductoCaducados){
+	        
+	        String sql = "SELECT * FROM view_alertaProductosCaducos";
+	        modelo = (DefaultTableModel) tblProductoCaducados.getModel();
+	        modelo.setRowCount(0);
+	        Object[] ob = new Object[9];
+	        try{
+	            PreparedStatement ps = con.prepareStatement(sql);
+	           
+	          
+	            ResultSet rs = ps.executeQuery();
+	            JButton button=new JButton("ELiminar");
+	            button.setName("btnEliminarPBodega");
+	            button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
+	            while(rs.next()){
+	            	ob[0]=rs.getInt(1);
+	            	ob[1]=rs.getDate(2); 
+	            	ob[2]=rs.getDate(3); 
+	            	ob[3]=rs.getInt(4);
+	            	ob[4]=rs.getString(5); 
+	            	ob[5]=rs.getString(6);
+	            	ob[6]=rs.getDouble(7); 
+	            	ob[7]=rs.getString(8);
+	            	ob[8]=button;
+	            	 modelo.addRow(ob);
+	            }
+	            tblProductoCaducados.setModel(modelo);
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }finally{
+	            /*try {
+	                con.close();
+	            } catch (SQLException e) {
+	                System.out.println(e.toString());
+	            }*/
+	        }    
+	       
+	    }
+
+
+	public void retirarProductoBodega(int key) {
+		// TODO Auto-generated method stub
+		
 	}
 }
