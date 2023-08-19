@@ -38,7 +38,7 @@ public class BodegaDao {
 	public List<Bodega> listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {
 		 List<Bodega> ListaCl = new ArrayList<Bodega>();
 	       String sql = "SELECT cantidadIngresada,fechaIngreso,fechaCaducidad, "
-	       		+ "IF(fechaCuandoCaduca<=DATE(NOW()), 'YES', 'NO') AS Caduca FROM bodega WHERE codProducto=?";
+	       		+ "IF(fechaCuandoCaduca<=DATE(NOW()), 'YES', 'NO') AS Caduca FROM bodega WHERE codProducto=? AND bodega.habilitado=1";
 	      
 	       try {
 	    	   DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
