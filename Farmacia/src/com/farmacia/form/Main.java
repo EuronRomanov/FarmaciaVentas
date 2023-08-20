@@ -65,6 +65,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Frame;
+
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.components.JLocaleChooser;
 
@@ -78,6 +80,11 @@ import java.awt.Toolkit;
 import com.toedter.calendar.JCalendar;
 
 import com.farmacia.javaswingdev.*;
+
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 public class Main extends JFrame {
 
@@ -226,6 +233,10 @@ public class Main extends JFrame {
 	private JScrollPane scrollPane_6;
 	private JTable tblProductosCaducados;
 	private JMenuItem mntmNewMenuItem_1;
+	
+	
+	
+	
 	//LoginForm lo=new LoginForm();
 	//String nombreUsuario=lo.getNombreUsuario();
     /**
@@ -300,12 +311,40 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1304, 607);
 		
+		
+		
+		
+		
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
 		 mnUsuario = new JMenu("Usuario");
 		menuBar.add(mnUsuario);
 		
+		
+		WindowStateListener listener = new WindowAdapter() {
+		      public void windowStateChanged(WindowEvent evt) {
+		        int oldState = evt.getOldState();
+		        int newState = evt.getNewState();
+
+		        if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
+		          System.out.println("Frame was iconized");
+		        } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
+		          System.out.println("Frame was deiconized");
+		        }
+
+		        if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
+		          System.out.println("Frame was maximized");
+		        } else if ((oldState & Frame.MAXIMIZED_BOTH) != 0 && (newState & Frame.MAXIMIZED_BOTH) == 0) {
+		          System.out.println("Frame was minimized");
+		        }
+		      }
+		    };
+		
+		
+		    stockForm.addWindowStateListener(listener);
+		    
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
