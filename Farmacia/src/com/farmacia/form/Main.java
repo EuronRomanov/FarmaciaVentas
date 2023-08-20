@@ -39,6 +39,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -3119,6 +3120,9 @@ public class Main extends JFrame {
 			 		 productoDao.ListarProductoTable(tblProductos);
 			 	}
 			 });
+			
+			
+			System.out.println( Arrays.toString(stockForm.getWindowStateListeners()));
 
 	}
 	protected void mostrarComponentesLadoDerecho() {
