@@ -76,7 +76,6 @@ public class StockFrm extends JDialog {
 	 * Create the dialog.
 	 */
 	public StockFrm() {
-		setUndecorated(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(StockFrm.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
