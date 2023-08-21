@@ -324,27 +324,143 @@ public class Main extends JFrame {
 		menuBar.add(mnUsuario);
 		
 		
-		WindowStateListener listener = new WindowAdapter() {
-		      public void windowStateChanged(WindowEvent evt) {
-		        int oldState = evt.getOldState();
-		        int newState = evt.getNewState();
+		detalleForm.addWindowListener(new WindowAdapter() {
 
-		        if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
-		          System.out.println("Frame was iconized");
-		        } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
-		          System.out.println("Frame was deiconized");
-		        }
+			
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				actualizarTablaFacturas();
+				super.windowClosed(e);
+			}
 
-		        if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
-		          System.out.println("Frame was maximized");
-		        } else if ((oldState & Frame.MAXIMIZED_BOTH) != 0 && (newState & Frame.MAXIMIZED_BOTH) == 0) {
-		          System.out.println("Frame was minimized");
-		        }
-		      }
-		    };
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowOpened(e);
+				System.out.println("se  open");
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				//actualizarTablaFacturas();
+				System.out.println("se closing"+e.toString());
+				super.windowClosing(e);
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowIconified(e);
+				System.out.println("se iconifica"+e.toString());
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowDeiconified(e);
+				System.out.println("se deicofinifica"+e.toString());
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowActivated(e);
+				System.out.println("se windwoactivated"+e.toString());
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowDeactivated(e);
+				
+			}
+
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowGainedFocus(e);
+				System.out.println("se gained focus"+e.toString());
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowLostFocus(e);
+				System.out.println("se lost focus"+e.toString());
+			}
+		      
+			
+			
+	   });
 		
 		
-		    stockForm.addWindowStateListener(listener);
+		   stockForm.addWindowListener(new WindowAdapter() {
+
+				@Override
+				public void windowOpened(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowOpened(e);
+					System.out.println("se  open");
+				}
+
+				@Override
+				public void windowClosing(WindowEvent e) {
+					// TODO Auto-generated method stub
+					
+
+					System.out.println("se close"+e.toString());
+					super.windowClosing(e);
+					
+				}
+
+				@Override
+				public void windowIconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowIconified(e);
+					System.out.println("se iconifica"+e.toString());
+				}
+
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowDeiconified(e);
+					System.out.println("se deicofinifica"+e.toString());
+				}
+
+				@Override
+				public void windowActivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowActivated(e);
+					System.out.println("se windwoactivated"+e.toString());
+				}
+
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowDeactivated(e);
+					actualizarTablaProductos();
+				}
+
+				@Override
+				public void windowGainedFocus(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowGainedFocus(e);
+					System.out.println("se gained focus"+e.toString());
+				}
+
+				@Override
+				public void windowLostFocus(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowLostFocus(e);
+					System.out.println("se lost focus"+e.toString());
+				}
+			      
+		   });
+		    //detalleForm.addWindowsListener(listener);
 		    
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
@@ -2982,7 +3098,7 @@ public class Main extends JFrame {
 									
 								}
 		                    	detalleForm.setFacturaId(facturaId);
-		                    	setEnabled(false);
+		                    	//setEnabled(false);
 									
 								
 							}
@@ -3149,7 +3265,7 @@ public class Main extends JFrame {
 			 		
 			 		detalleForm.dispose();
 			 		facturaDao.ListarFacturaTable(tblFacturas);
-			 		habilitarVentana() ;
+			 		//habilitarVentana() ;
 			 	}
 			 });
 			
@@ -3161,9 +3277,21 @@ public class Main extends JFrame {
 			 });
 			
 			
-			System.out.println( Arrays.toString(stockForm.getWindowStateListeners()));
+			
 
 	}
+	protected void actualizarTablaFacturas() {
+
+		detalleForm.cerrarVentana();;
+ 		facturaDao.ListarFacturaTable(tblFacturas);
+ 		//habilitarVentana() ;
+	}
+
+	protected void actualizarTablaProductos() {
+		 productoDao.ListarProductoTable(tblProductos);
+		
+	}
+
 	protected void mostrarComponentesLadoDerecho() {
 		// TODO Auto-generated method stub
 		lblVentasCliente.setVisible(true);

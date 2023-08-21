@@ -32,6 +32,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
+import java.awt.Window.Type;
 
 public class DetalleForm extends JFrame {
 
@@ -77,8 +79,7 @@ public class DetalleForm extends JFrame {
 	 * Create the frame.
 	 */
 	public DetalleForm() {
-		setUndecorated(true);
-		setType(Type.UTILITY);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(DetalleForm.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
@@ -92,7 +93,7 @@ public class DetalleForm extends JFrame {
 				habilitarBotonAgregar();
 			}
 		});
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 702, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -477,6 +478,12 @@ public class DetalleForm extends JFrame {
 	       textDetalleValor.setVisible(false);
 	       cmbProductos.setEnabled(true);
 	        
+	}
+	
+	public void cerrarVentana() {
+		// TODO Auto-generated method stub
+		limpiarCamposDetalle();
+		this.dispose();
 	}
 	
 }
