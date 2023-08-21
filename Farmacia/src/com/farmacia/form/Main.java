@@ -331,7 +331,8 @@ public class Main extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
-				actualizarTablaFacturas();
+				
+				System.out.println("se  close");
 				super.windowClosed(e);
 			}
 
@@ -345,7 +346,7 @@ public class Main extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
-				//actualizarTablaFacturas();
+				actualizarTablaFacturas();
 				System.out.println("se closing"+e.toString());
 				super.windowClosing(e);
 				
