@@ -230,7 +230,7 @@ public class Main extends JFrame {
 	private JLabel lblProductoFIngreso;
 	private StockFrm stockForm=new StockFrm();
 	private BodegaDao bodegaDao=new BodegaDao();
-	private JPanel pnl_pCaducados;
+	private JPanel pnl_pCaducados = new JPanel();;
 	private JScrollPane scrollPane_6;
 	private JTable tblProductosCaducados;
 	private JMenuItem mntmNewMenuItem_1;
@@ -266,8 +266,8 @@ public class Main extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent e) {
-				setEnabled(true);
-				detalleForm.dispose();
+				//setEnabled(true);
+				//detalleForm.dispose();
 			}
 			public void windowLostFocus(WindowEvent e) {
 				
@@ -366,12 +366,7 @@ public class Main extends JFrame {
 				System.out.println("se deicofinifica"+e.toString());
 			}
 
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				super.windowActivated(e);
-				System.out.println("se windwoactivated"+e.toString());
-			}
+			
 
 			@Override
 			public void windowDeactivated(WindowEvent e) {
@@ -380,20 +375,7 @@ public class Main extends JFrame {
 				
 			}
 
-			@Override
-			public void windowGainedFocus(WindowEvent e) {
-				// TODO Auto-generated method stub
-				super.windowGainedFocus(e);
-				System.out.println("se gained focus"+e.toString());
-			}
-
-			@Override
-			public void windowLostFocus(WindowEvent e) {
-				// TODO Auto-generated method stub
-				super.windowLostFocus(e);
-				System.out.println("se lost focus"+e.toString());
-			}
-		      
+			
 			
 			
 	   });
@@ -401,12 +383,7 @@ public class Main extends JFrame {
 		
 		   stockForm.addWindowListener(new WindowAdapter() {
 
-				@Override
-				public void windowOpened(WindowEvent e) {
-					// TODO Auto-generated method stub
-					super.windowOpened(e);
-					System.out.println("se  open");
-				}
+				
 
 				@Override
 				public void windowClosing(WindowEvent e) {
@@ -432,12 +409,7 @@ public class Main extends JFrame {
 					System.out.println("se deicofinifica"+e.toString());
 				}
 
-				@Override
-				public void windowActivated(WindowEvent e) {
-					// TODO Auto-generated method stub
-					super.windowActivated(e);
-					System.out.println("se windwoactivated"+e.toString());
-				}
+				
 
 				@Override
 				public void windowDeactivated(WindowEvent e) {
@@ -446,19 +418,7 @@ public class Main extends JFrame {
 					actualizarTablaProductos();
 				}
 
-				@Override
-				public void windowGainedFocus(WindowEvent e) {
-					// TODO Auto-generated method stub
-					super.windowGainedFocus(e);
-					System.out.println("se gained focus"+e.toString());
-				}
-
-				@Override
-				public void windowLostFocus(WindowEvent e) {
-					// TODO Auto-generated method stub
-					super.windowLostFocus(e);
-					System.out.println("se lost focus"+e.toString());
-				}
+				
 			      
 		   });
 		    //detalleForm.addWindowsListener(listener);
@@ -1767,8 +1727,8 @@ public class Main extends JFrame {
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
-			pnl_pCaducados = new JPanel();
-			tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
+			//pnl_pCaducados = new JPanel();
+			//tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
 			GridBagLayout gbl_pnl_pCaducados = new GridBagLayout();
 			gbl_pnl_pCaducados.columnWidths = new int[]{0, 0};
 			gbl_pnl_pCaducados.rowHeights = new int[]{0, 0};
@@ -3261,10 +3221,10 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaCancelar, gbc_btnFacturaCancelar);
 		
 		
-			detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
+		/*	detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
 			 	public void actionPerformed(ActionEvent e) {
 			 		
-			 		detalleForm.dispose();
+			 		//detalleForm.dispose();
 			 		facturaDao.ListarFacturaTable(tblFacturas);
 			 		//habilitarVentana() ;
 			 	}
@@ -3275,7 +3235,7 @@ public class Main extends JFrame {
 			 	public void actionPerformed(ActionEvent e) {
 			 		 productoDao.ListarProductoTable(tblProductos);
 			 	}
-			 });
+			 });*/
 			
 			
 			
@@ -3283,9 +3243,12 @@ public class Main extends JFrame {
 	}
 	protected void actualizarTablaFacturas() {
 
-		detalleForm.cerrarVentana();;
+		//detalleForm.cerrarVentana();
  		facturaDao.ListarFacturaTable(tblFacturas);
  		//habilitarVentana() ;
+ 		tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
+		pnl_ventas.setLayout(new BorderLayout(0, 0));
+		tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Facturas"));
 	}
 
 	protected void actualizarTablaProductos() {
@@ -3526,9 +3489,7 @@ public class Main extends JFrame {
 		   JOptionPane.showMessageDialog(null, s);
 		}
 	
-	private void habilitarVentana() {
-		 this.setEnabled(true);
-		}
+
 	
 	public void mostrarNotificacionProductos(String consulta) {
 		
