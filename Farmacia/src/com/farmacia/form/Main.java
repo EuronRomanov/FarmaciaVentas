@@ -230,7 +230,7 @@ public class Main extends JFrame {
 	private JLabel lblProductoFIngreso;
 	private StockFrm stockForm=new StockFrm();
 	private BodegaDao bodegaDao=new BodegaDao();
-	private JPanel pnl_pCaducados;
+	private JPanel pnl_pCaducados = new JPanel();;
 	private JScrollPane scrollPane_6;
 	private JTable tblProductosCaducados;
 	private JMenuItem mntmNewMenuItem_1;
@@ -266,8 +266,8 @@ public class Main extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent e) {
-				setEnabled(true);
-				detalleForm.dispose();
+				//setEnabled(true);
+				//detalleForm.dispose();
 			}
 			public void windowLostFocus(WindowEvent e) {
 				
@@ -324,27 +324,104 @@ public class Main extends JFrame {
 		menuBar.add(mnUsuario);
 		
 		
-		WindowStateListener listener = new WindowAdapter() {
-		      public void windowStateChanged(WindowEvent evt) {
-		        int oldState = evt.getOldState();
-		        int newState = evt.getNewState();
+		detalleForm.addWindowListener(new WindowAdapter() {
 
-		        if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
-		          System.out.println("Frame was iconized");
-		        } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
-		          System.out.println("Frame was deiconized");
-		        }
+			
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+				System.out.println("se  close");
+				super.windowClosed(e);
+			}
 
-		        if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
-		          System.out.println("Frame was maximized");
-		        } else if ((oldState & Frame.MAXIMIZED_BOTH) != 0 && (newState & Frame.MAXIMIZED_BOTH) == 0) {
-		          System.out.println("Frame was minimized");
-		        }
-		      }
-		    };
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowOpened(e);
+				System.out.println("se  open");
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				actualizarTablaFacturas();
+				System.out.println("se closing"+e.toString());
+				super.windowClosing(e);
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowIconified(e);
+				System.out.println("se iconifica"+e.toString());
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowDeiconified(e);
+				System.out.println("se deicofinifica"+e.toString());
+			}
+
+			
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowDeactivated(e);
+				
+			}
+
+			
+			
+			
+	   });
 		
 		
-		    stockForm.addWindowStateListener(listener);
+		   stockForm.addWindowListener(new WindowAdapter() {
+
+				
+
+				@Override
+				public void windowClosing(WindowEvent e) {
+					// TODO Auto-generated method stub
+					
+
+					System.out.println("se close"+e.toString());
+					super.windowClosing(e);
+					
+				}
+
+				@Override
+				public void windowIconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowIconified(e);
+					System.out.println("se iconifica"+e.toString());
+				}
+
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowDeiconified(e);
+					System.out.println("se deicofinifica"+e.toString());
+				}
+
+				
+
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+					super.windowDeactivated(e);
+					actualizarTablaProductos();
+				}
+
+				
+			      
+		   });
+		    //detalleForm.addWindowsListener(listener);
 		    
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
@@ -1650,8 +1727,8 @@ public class Main extends JFrame {
 
 			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
-			pnl_pCaducados = new JPanel();
-			tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
+			//pnl_pCaducados = new JPanel();
+			//tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
 			GridBagLayout gbl_pnl_pCaducados = new GridBagLayout();
 			gbl_pnl_pCaducados.columnWidths = new int[]{0, 0};
 			gbl_pnl_pCaducados.rowHeights = new int[]{0, 0};
@@ -2982,7 +3059,7 @@ public class Main extends JFrame {
 									
 								}
 		                    	detalleForm.setFacturaId(facturaId);
-		                    	setEnabled(false);
+		                    	//setEnabled(false);
 									
 								
 							}
@@ -3144,12 +3221,12 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaCancelar, gbc_btnFacturaCancelar);
 		
 		
-			detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
+		/*	detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
 			 	public void actionPerformed(ActionEvent e) {
 			 		
-			 		detalleForm.dispose();
+			 		//detalleForm.dispose();
 			 		facturaDao.ListarFacturaTable(tblFacturas);
-			 		habilitarVentana() ;
+			 		//habilitarVentana() ;
 			 	}
 			 });
 			
@@ -3158,12 +3235,27 @@ public class Main extends JFrame {
 			 	public void actionPerformed(ActionEvent e) {
 			 		 productoDao.ListarProductoTable(tblProductos);
 			 	}
-			 });
+			 });*/
 			
 			
-			System.out.println( Arrays.toString(stockForm.getWindowStateListeners()));
+			
 
 	}
+	protected void actualizarTablaFacturas() {
+
+		//detalleForm.cerrarVentana();
+ 		facturaDao.ListarFacturaTable(tblFacturas);
+ 		//habilitarVentana() ;
+ 		tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
+		pnl_ventas.setLayout(new BorderLayout(0, 0));
+		tabPane_Vistas.setSelectedIndex(tabPane_Vistas.indexOfTab("Facturas"));
+	}
+
+	protected void actualizarTablaProductos() {
+		 productoDao.ListarProductoTable(tblProductos);
+		
+	}
+
 	protected void mostrarComponentesLadoDerecho() {
 		// TODO Auto-generated method stub
 		lblVentasCliente.setVisible(true);
@@ -3397,9 +3489,7 @@ public class Main extends JFrame {
 		   JOptionPane.showMessageDialog(null, s);
 		}
 	
-	private void habilitarVentana() {
-		 this.setEnabled(true);
-		}
+
 	
 	public void mostrarNotificacionProductos(String consulta) {
 		

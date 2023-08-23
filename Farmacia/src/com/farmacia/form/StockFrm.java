@@ -36,6 +36,7 @@ import com.farmacia.entidades.Detalle;
 import com.farmacia.utils.ControlFormatos;
 import com.farmacia.utils.GenerdorDocumentos;
 import java.awt.Toolkit;
+import java.awt.Window.Type;
 
 public class StockFrm extends JDialog {
 
