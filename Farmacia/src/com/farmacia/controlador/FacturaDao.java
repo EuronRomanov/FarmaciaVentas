@@ -82,8 +82,8 @@ public class FacturaDao {
 	  * listar
 	  */
 	 
-	 public List listarFacturas(){
-	       List<Factura> ListaCl = new ArrayList();
+	 public List<Factura> listarFacturas(){
+	       List<Factura> ListaCl = new ArrayList<Factura>();
 	       String sql = "SELECT * FROM Factura,Usuario"
 	       		+ " WHERE Factura.codUsuario=Usuario.codUsuario";
 	       try {
