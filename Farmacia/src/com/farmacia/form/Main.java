@@ -169,7 +169,7 @@ public class Main extends JFrame {
     private JTextField textVendedorPassword;
     private JLabel lblNewLabel_25;
     private JTextField textVendedorCedula;
-    private JComboBox cmbVendedorEstado;
+    private JComboBox<?> cmbVendedorEstado;
     private JComboBox cmbVendedorAdmin;
     private JLabel lblNewLabel_26;
     private JLabel lblNewLabel_27;
@@ -295,9 +295,9 @@ public class Main extends JFrame {
 			gridPnlMenuIzquierda.add(btnCaja);
 			gridPnlMenuIzquierda.add(lblCodUsuario);
 			
-			eliminarTab("Caja");
+			//eliminarTab("Caja");
 			
-			eliminarTab("Facturas");
+			//eliminarTab("Facturas");
 			}
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -348,21 +348,21 @@ public class Main extends JFrame {
 				// TODO Auto-generated method stub
 				actualizarTablaFacturas();
 				System.out.println("se closing"+e.toString());
-				super.windowClosing(e);
+				//super.windowClosing(e);
 				
 			}
 
 			@Override
 			public void windowIconified(WindowEvent e) {
 				// TODO Auto-generated method stub
-				super.windowIconified(e);
+				//super.windowIconified(e);
 				System.out.println("se iconifica"+e.toString());
 			}
 
 			@Override
 			public void windowDeiconified(WindowEvent e) {
 				// TODO Auto-generated method stub
-				super.windowDeiconified(e);
+				//super.windowDeiconified(e);
 				System.out.println("se deicofinifica"+e.toString());
 			}
 
@@ -398,14 +398,14 @@ public class Main extends JFrame {
 				@Override
 				public void windowIconified(WindowEvent e) {
 					// TODO Auto-generated method stub
-					super.windowIconified(e);
+					//super.windowIconified(e);
 					System.out.println("se iconifica"+e.toString());
 				}
 
 				@Override
 				public void windowDeiconified(WindowEvent e) {
 					// TODO Auto-generated method stub
-					super.windowDeiconified(e);
+					//super.windowDeiconified(e);
 					System.out.println("se deicofinifica"+e.toString());
 				}
 
@@ -414,7 +414,7 @@ public class Main extends JFrame {
 				@Override
 				public void windowDeactivated(WindowEvent e) {
 					// TODO Auto-generated method stub
-					super.windowDeactivated(e);
+					//super.windowDeactivated(e);
 					actualizarTablaProductos();
 				}
 
@@ -967,7 +967,7 @@ public class Main extends JFrame {
 		panel_2.add(btnVolverCategoriaProducto, gbc_btnVolverCategoriaProducto);
 		
 		
-		tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
+		//tabPane_Vistas.addTab("Caja", null, pnl_caja, null);
 		GridBagLayout gbl_pnl_caja = new GridBagLayout();
 		gbl_pnl_caja.columnWidths = new int[]{0, 0, 0, 0};
 		gbl_pnl_caja.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
@@ -1062,6 +1062,8 @@ public class Main extends JFrame {
 							generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
 									Integer.parseInt(lblCodUsuario.getText()),
 									fInicoA,fFinA);
+							
+							limpiarCamposConsultaReportes();
 						}
 						break;
                     case "Vendedor":
@@ -1069,6 +1071,7 @@ public class Main extends JFrame {
                     	generador.generarReporteVentas(arhivoPath,mnMenuAdministrador.getText(),
 								Integer.parseInt(lblCodUsuario.getText()),
 								fInico,fFin);
+                    	limpiarCamposConsultaReportes();
 						break;
 					default:
 						break;
@@ -1725,7 +1728,7 @@ public class Main extends JFrame {
 		 gbc_btnVendedorCancelar.gridy = 14;
 		 pnl_usuarios.add(btnVendedorCancelar, gbc_btnVendedorCancelar);
 
-			tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
+			//tabPane_Vistas.setBackgroundAt(0, new Color(214, 214, 214));
 			
 			//pnl_pCaducados = new JPanel();
 			//tabPane_Vistas.addTab("Productos Caducados", null, pnl_pCaducados, null);
@@ -3050,14 +3053,17 @@ public class Main extends JFrame {
         		        	 int facturaId=Integer.parseInt(tblFacturas.getValueAt(fila, 0).toString()) ;
 		                     if (botones.getName().equals("btnFacturaDetalle")) {
 		                    	 
-		                    	if (detalleForm!=null) {
+		                    /*	if (detalleForm!=null) {
+									
+
 		                    		detalleForm.setVisible(true);
 								} else {
 									detalleForm=new DetalleForm();
 									detalleForm.setVisible(true);
 									
 									
-								}
+								}*/
+		                    	detalleForm.setVisible(true);
 		                    	detalleForm.setFacturaId(facturaId);
 		                    	//setEnabled(false);
 									
@@ -3221,16 +3227,16 @@ public class Main extends JFrame {
 			pnl_factura.add(btnFacturaCancelar, gbc_btnFacturaCancelar);
 		
 		
-		/*	detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
+			detalleForm.getBtnDetalleCancelar().addActionListener(new ActionListener() {
 			 	public void actionPerformed(ActionEvent e) {
 			 		
-			 		//detalleForm.dispose();
-			 		facturaDao.ListarFacturaTable(tblFacturas);
+			 		detalleForm.dispose();
+			 		//facturaDao.ListarFacturaTable(tblFacturas);
 			 		//habilitarVentana() ;
 			 	}
 			 });
 			
-			
+			/*
 			stockForm.getCancelButton().addActionListener(new ActionListener() {
 			 	public void actionPerformed(ActionEvent e) {
 			 		 productoDao.ListarProductoTable(tblProductos);
@@ -3241,6 +3247,12 @@ public class Main extends JFrame {
 			
 
 	}
+	protected void limpiarCamposConsultaReportes() {
+		textCajaDesde.setDate(null);
+		textCajaHasta.setDate(null);
+		
+	}
+
 	protected void actualizarTablaFacturas() {
 
 		//detalleForm.cerrarVentana();
