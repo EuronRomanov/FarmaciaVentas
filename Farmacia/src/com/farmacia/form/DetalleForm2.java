@@ -43,7 +43,7 @@ import com.farmacia.entidades.Producto;
 import com.farmacia.utils.ControlFormatos;
 
 
-public class DetalleForm extends JDialog {
+public class DetalleForm2 extends JDialog {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -78,7 +78,7 @@ public class DetalleForm extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DetalleForm dialog = new DetalleForm();
+			DetalleForm2 dialog = new DetalleForm2();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -89,10 +89,10 @@ public class DetalleForm extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DetalleForm() {
+	public DetalleForm2() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(DetalleForm.class.getResource("/com/farmacia/icon/icon-producto.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(DetalleForm2.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {

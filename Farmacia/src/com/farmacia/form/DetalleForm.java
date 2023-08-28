@@ -20,9 +20,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.farmacia.controlador.ProductoDao;
 import com.farmacia.controlador.VentaDao;
+import com.farmacia.entidades.Bodega;
 import com.farmacia.entidades.Detalle;
 import com.farmacia.entidades.Producto;
 import com.farmacia.utils.ControlFormatos;
+import com.farmacia.controlador.BodegaDao;
 import com.farmacia.controlador.DetalleDao;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,8 +36,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import java.awt.Window.Type;
+import javax.swing.DefaultComboBoxModel;
 
-public class DetalleForm1 extends JFrame {
+public class DetalleForm extends JFrame {
 
 	/**
 	 * 
@@ -49,6 +52,7 @@ public class DetalleForm1 extends JFrame {
 	private JComboBox<Producto> cmbProductos;
     private ProductoDao productoDao=new ProductoDao();
     private DetalleDao detalleDao=new DetalleDao();
+    private BodegaDao bodegaDao=new BodegaDao();
     private int facturaId;
     private JTextField textDetalleCodFac;
     private JButton btnDetalleCancelar, btnDetalleAgregar, btnDetalleActualizar,btnDetalleEliminar;
@@ -58,6 +62,8 @@ public class DetalleForm1 extends JFrame {
     private JLabel lblValorPagar;
     private VentaDao ventaDao=new VentaDao();
     private JTextField textDetallecodBodega;
+    private JLabel lblDetalleCodBodega;
+    private JComboBox<Bodega> cmbBodega;
    
 	/**
 	 * Launch the application.
@@ -78,13 +84,14 @@ public class DetalleForm1 extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DetalleForm1() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(DetalleForm.class.getResource("/com/farmacia/icon/icon-producto.png")));
+	public DetalleForm() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(DetalleForm2.class.getResource("/com/farmacia/icon/icon-producto.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				productoDao.cargarListaProductos(cmbProductos);
+				//productoDao.cargarListaProductos(cmbProductos);
 				detalleDao.listarDetalleTable(facturaId, tblDetalles);
+				System.out.println("activated");
 				
 			}
 			@Override
@@ -92,9 +99,14 @@ public class DetalleForm1 extends JFrame {
 				limpiarCamposDetalle();
 				habilitarBotonAgregar();
 			}
+			@Override
+			public void windowOpened(WindowEvent e) {
+				productoDao.cargarListaProductos(cmbProductos);
+				System.out.println("open");
+			}
 		});
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 702, 300);
+		setBounds(100, 100, 726, 380);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -164,6 +176,18 @@ public class DetalleForm1 extends JFrame {
 		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		 cmbProductos = new JComboBox<Producto>();
+		 cmbProductos.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		Producto producto=(Producto)cmbProductos.getSelectedItem();
+		 	bodegaDao.cargarProductosBodegasById(cmbBodega,producto.getCodProducto());
+		 	}
+		 });
+		 cmbProductos.addMouseListener(new MouseAdapter() {
+		 	@Override
+		 	public void mouseClicked(MouseEvent e) {
+		 		
+		 	}
+		 });
 		GridBagConstraints gbc_cmbProductos = new GridBagConstraints();
 		gbc_cmbProductos.insets = new Insets(0, 0, 5, 5);
 		gbc_cmbProductos.fill = GridBagConstraints.HORIZONTAL;
@@ -172,17 +196,17 @@ public class DetalleForm1 extends JFrame {
 		contentPane.add(cmbProductos, gbc_cmbProductos);
 		
 		 lblValorPagar = new JLabel("Valor Pagar");
-		lblValorPagar.setVisible(false);
+		 lblValorPagar.setVisible(false);
 		
-		textDetallecodBodega = new JTextField();
-		textDetallecodBodega.setVisible(false);
-		GridBagConstraints gbc_textDetallecodBodega = new GridBagConstraints();
-		gbc_textDetallecodBodega.insets = new Insets(0, 0, 5, 0);
-		gbc_textDetallecodBodega.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textDetallecodBodega.gridx = 4;
-		gbc_textDetallecodBodega.gridy = 0;
-		contentPane.add(textDetallecodBodega, gbc_textDetallecodBodega);
-		textDetallecodBodega.setColumns(10);
+		textDetalleCodFac = new JTextField();
+		textDetalleCodFac.setVisible(false);
+		GridBagConstraints gbc_textDetalleCodFac = new GridBagConstraints();
+		gbc_textDetalleCodFac.insets = new Insets(0, 0, 5, 0);
+		gbc_textDetalleCodFac.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetalleCodFac.gridx = 4;
+		gbc_textDetalleCodFac.gridy = 0;
+		contentPane.add(textDetalleCodFac, gbc_textDetalleCodFac);
+		textDetalleCodFac.setColumns(10);
 		GridBagConstraints gbc_lblValorPagar = new GridBagConstraints();
 		gbc_lblValorPagar.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValorPagar.anchor = GridBagConstraints.EAST;
@@ -201,21 +225,35 @@ public class DetalleForm1 extends JFrame {
 		contentPane.add(textDetalleValor, gbc_textDetalleValor);
 		textDetalleValor.setColumns(10);
 		
-		textDetalleCodCarrito = new JTextField();
-		textDetalleCodCarrito.setVisible(false);
-		GridBagConstraints gbc_textDetalleCodCarrito = new GridBagConstraints();
-		gbc_textDetalleCodCarrito.insets = new Insets(0, 0, 5, 5);
-		gbc_textDetalleCodCarrito.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textDetalleCodCarrito.gridx = 3;
-		gbc_textDetalleCodCarrito.gridy = 1;
-		contentPane.add(textDetalleCodCarrito, gbc_textDetalleCodCarrito);
-		textDetalleCodCarrito.setColumns(10);
-		
-		textDetalleCodFac = new JTextField();
-		textDetalleCodFac.setVisible(false);
-		
 		textDetallePrecio = new JTextField();
 		textDetallePrecio.setVisible(false);
+		
+		textDetallecodBodega = new JTextField();
+		textDetallecodBodega.setVisible(false);
+		
+		lblDetalleCodBodega = new JLabel("Inf. Bodega");
+		GridBagConstraints gbc_lblDetalleCodBodega = new GridBagConstraints();
+		gbc_lblDetalleCodBodega.anchor = GridBagConstraints.EAST;
+		gbc_lblDetalleCodBodega.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDetalleCodBodega.gridx = 2;
+		gbc_lblDetalleCodBodega.gridy = 1;
+		contentPane.add(lblDetalleCodBodega, gbc_lblDetalleCodBodega);
+		
+		cmbBodega = new JComboBox<Bodega>();
+		cmbBodega.setModel(new DefaultComboBoxModel(new String[] {"Producto en bodega"}));
+		GridBagConstraints gbc_cmbBodega = new GridBagConstraints();
+		gbc_cmbBodega.insets = new Insets(0, 0, 5, 5);
+		gbc_cmbBodega.fill = GridBagConstraints.HORIZONTAL;
+		gbc_cmbBodega.gridx = 3;
+		gbc_cmbBodega.gridy = 1;
+		contentPane.add(cmbBodega, gbc_cmbBodega);
+		GridBagConstraints gbc_textDetallecodBodega = new GridBagConstraints();
+		gbc_textDetallecodBodega.insets = new Insets(0, 0, 5, 0);
+		gbc_textDetallecodBodega.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetallecodBodega.gridx = 4;
+		gbc_textDetallecodBodega.gridy = 1;
+		contentPane.add(textDetallecodBodega, gbc_textDetallecodBodega);
+		textDetallecodBodega.setColumns(10);
 		GridBagConstraints gbc_textDetallePrecio = new GridBagConstraints();
 		gbc_textDetallePrecio.insets = new Insets(0, 0, 5, 5);
 		gbc_textDetallePrecio.fill = GridBagConstraints.HORIZONTAL;
@@ -223,13 +261,16 @@ public class DetalleForm1 extends JFrame {
 		gbc_textDetallePrecio.gridy = 2;
 		contentPane.add(textDetallePrecio, gbc_textDetallePrecio);
 		textDetallePrecio.setColumns(10);
-		GridBagConstraints gbc_textDetalleCodFac = new GridBagConstraints();
-		gbc_textDetalleCodFac.insets = new Insets(0, 0, 5, 5);
-		gbc_textDetalleCodFac.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textDetalleCodFac.gridx = 3;
-		gbc_textDetalleCodFac.gridy = 2;
-		contentPane.add(textDetalleCodFac, gbc_textDetalleCodFac);
-		textDetalleCodFac.setColumns(10);
+		
+		textDetalleCodCarrito = new JTextField();
+		textDetalleCodCarrito.setVisible(false);
+		GridBagConstraints gbc_textDetalleCodCarrito = new GridBagConstraints();
+		gbc_textDetalleCodCarrito.insets = new Insets(0, 0, 5, 0);
+		gbc_textDetalleCodCarrito.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDetalleCodCarrito.gridx = 4;
+		gbc_textDetalleCodCarrito.gridy = 2;
+		contentPane.add(textDetalleCodCarrito, gbc_textDetalleCodCarrito);
+		textDetalleCodCarrito.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -408,6 +449,11 @@ public class DetalleForm1 extends JFrame {
 		 contentPane.add(btnCancelar, gbc_btnCancelar);
 		
 		 btnDetalleCancelar = new JButton("Salir");
+		 btnDetalleCancelar.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent e) {
+		 		
+		 	}
+		 });
 		GridBagConstraints gbc_btnDetalleCancelar = new GridBagConstraints();
 		gbc_btnDetalleCancelar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnDetalleCancelar.gridx = 4;
