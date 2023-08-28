@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -38,7 +39,7 @@ public class BodegaDao {
 	public List<Bodega> listarDatosBodega(int codProducto,String fechaInicio,String fechaFin) {
 		 List<Bodega> ListaCl = new ArrayList<Bodega>();
 	       String sql = "SELECT cantidadIngresada,fechaIngreso,fechaCaducidad, "
-	       		+ "IF(fechaCuandoCaduca<=DATE(NOW()), 'YES', 'NO') AS Caduca FROM bodega WHERE codProducto=? AND bodega.habilitado=1";
+	       		+ "IF(fechaCuandoCaduca<=DATE(NOW()), 'YES', 'NO') AS Caduca FROM bodega WHERE codProducto=? ";
 	      
 	       try {
 	    	   DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
@@ -340,5 +341,31 @@ public class BodegaDao {
 	            System.out.println(e);
 	       }
 	       //return resultado;
+	}
+
+
+	public void cargarProductosBodegasById(JComboBox<Bodega> cmbBodega, int codProducto) {
+		 
+		cmbBodega.removeAllItems();
+	      	 
+	      	 
+	      	String sql = "SELECT * FROM view_cantidadBodega WHERE codProducto =? ";
+	      	 try{
+	      		DateTimeFormatter parser2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	             PreparedStatement ps = con.prepareStatement(sql);
+	             ps.setInt(1,  codProducto );
+	           
+	             ResultSet rs = ps.executeQuery();
+
+	             while(rs.next()){
+	             	
+	             	Bodega bodega=new Bodega(rs.getInt(1), rs.getInt(3),  LocalDate.parse(rs.getDate(5).toString(),parser2));
+	             	cmbBodega.addItem(bodega);
+	             }
+	             
+	         }catch(Exception e){
+	             e.printStackTrace();
+	         }
+		
 	}
 }

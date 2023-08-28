@@ -79,6 +79,11 @@ public String getCodigoBarra() {
 public int getCodProducto() {
 	return codProducto;
 }
+@Override
+public String toString() {
+	return "" + codBodega + "- cantidad=" + cantidadIngresada + " fechaCaducidad="
+			+ fechaCaducidad.toString().replaceFirst("T", " ") ;
+}
 
 
 
