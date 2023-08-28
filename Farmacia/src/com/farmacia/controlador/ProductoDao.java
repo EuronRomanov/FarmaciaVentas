@@ -120,7 +120,7 @@ public class ProductoDao {
 	  */
 	 
 	 public List<Producto> ListarProducto(){
-	       List<Producto> ListaCl = new ArrayList();
+	       List<Producto> ListaCl = new ArrayList<Producto>();
 	       String sql = "select * from vista_productos";
 	       try {
 	           
@@ -467,7 +467,9 @@ public class ProductoDao {
     public void cargarListaProductos(JComboBox<Producto> cmbDetalleProductos) {
       	 List<Producto> ListarCl = this.ListarProducto();
       	cmbDetalleProductos.removeAllItems();
+      	
       	 for (Producto proveedor : ListarCl) {
+      		
       		cmbDetalleProductos.addItem(proveedor);
    			
    		}
