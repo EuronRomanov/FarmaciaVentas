@@ -501,6 +501,20 @@ public class DetalleForm extends JFrame {
 		}
 		return y;
 	}
+	
+	
+	protected int buscarIdComboBodega(int j) {
+
+        int y=-1;
+         for (int i = 0; i < cmbBodega.getItemCount(); i++) {
+			 Bodega p=(Bodega)cmbBodega.getItemAt(i);
+			 if (p.getCodBodega()==j) {
+				 y=i;
+				break;
+			}
+		}
+		return y;
+	}
 
 	
 	private void msgbox(String s){
