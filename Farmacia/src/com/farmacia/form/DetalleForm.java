@@ -301,7 +301,9 @@ public class DetalleForm extends JFrame {
 							cmbProductos.setSelectedIndex(buscarIdComboProducto(ca.getCodCodProductoBodega()));
 					       textDetallePrecio.setText(tblDetalles.getValueAt(fila, 3).toString());
 					       textDetallecodBodega.setText(String.valueOf(ca.getCodProducto()));
-							
+					       cmbBodega.setSelectedIndex(buscarIdComboBodega(ca.getCodProducto()));
+					       
+					       
 					        btnDetalleAgregar.setEnabled(false);
 					        btnDetalleActualizar.setEnabled(true);
 					        btnDetalleEliminar.setEnabled(true);
@@ -470,6 +472,7 @@ public class DetalleForm extends JFrame {
 		textDetallePrecio.setText("");
 		textDetallecodBodega.setText("");
 		cmbProductos.setSelectedIndex(0);
+		cmbBodega.setSelectedIndex(0);
 		
 		btnDetalleAgregar.setEnabled(true);
         btnDetalleActualizar.setEnabled(false);
