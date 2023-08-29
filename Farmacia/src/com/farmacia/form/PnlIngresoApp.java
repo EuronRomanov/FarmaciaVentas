@@ -34,6 +34,7 @@ public class PnlIngresoApp extends JPanel {
 	 */
 	
 	public PnlIngresoApp() {
+		setOpaque(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 276, 276, 276, 276, 0};
 		gridBagLayout.rowHeights = new int[]{42, 45, 53, 49, 41, 44, 0};

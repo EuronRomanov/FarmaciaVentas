@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import com.farmacia.bd.ConexionBD;
 
 public class PnlIngresoDB extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JTextField textDBusuario;
 	private JPasswordField textDBpassword;
 	private JTextField textDBhost;
@@ -28,6 +29,7 @@ public class PnlIngresoDB extends JPanel {
 	 * Create the panel.
 	 */
 	public PnlIngresoDB() {
+		setOpaque(false);
 		GridBagLayout gbl_pnlDB = new GridBagLayout();
 		gbl_pnlDB.columnWidths = new int[]{99, 0, 0, 0, 0};
 		gbl_pnlDB.rowHeights = new int[]{32, 52, 52, 52, 52, 53, 0};
