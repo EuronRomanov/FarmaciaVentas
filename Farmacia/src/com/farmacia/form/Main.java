@@ -1392,6 +1392,7 @@ public class Main extends JFrame {
 	                    	 ventaDao.totalizar(tblVentas, lblTotalpagar);
 	                    	 if (tblVentas.getRowCount()==0) {
 								//pnlVentasLadoDerecho.setVisible(false);
+	                    		 ocultaComponentesLadoDerecho();
 								textVentasCodProd.setEditable(true);
 								textVentasCodProd.requestFocus();
 							}
