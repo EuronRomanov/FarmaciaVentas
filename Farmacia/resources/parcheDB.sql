@@ -1,333 +1,331 @@
-use farmacia;
-ALTER TABLE bodega RENAME COLUMN codigo TO codBodega;
-ALTER TABLE `farmacia`.`bodega` 
-CHANGE COLUMN `codBodega` `codBodega` INT NOT NULL AUTO_INCREMENT ;
-ALTER TABLE bodega  add codigoBarra varchar(250) DEFAULT NULL after fechaCuandoCaduca;
-ALTER TABLE bodega ADD UNIQUE INDEX `codigobarra_UNIQUE` (`codigobarra` ASC) VISIBLE;
-TRUNCATE TABLE bodega;
+-- MySQL Workbench Forward Engineering
 
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema farmacia
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema farmacia
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `farmacia` DEFAULT CHARACTER SET utf8mb3 ;
+USE `farmacia` ;
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`categoria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`categoria` (
+  `codCategoria` INT NOT NULL AUTO_INCREMENT,
+  `nombreCategoria` VARCHAR(200) NOT NULL,
+  `disposicion` CHAR(2) NULL DEFAULT '1',
+  PRIMARY KEY (`codCategoria`),
+  UNIQUE INDEX `nombreCategoria` (`nombreCategoria` ASC) VISIBLE,
+  UNIQUE INDEX `codCategoria_UNIQUE` (`codCategoria` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 28
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`proveedor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`proveedor` (
+  `codProveedor` INT NOT NULL AUTO_INCREMENT,
+  `nombreEmpresa` VARCHAR(250) NOT NULL,
+  `representante` VARCHAR(250) NULL DEFAULT 'sin representante',
+  `direccion` VARCHAR(250) NULL DEFAULT 'sin direcciÃƒÂ³n',
+  `celular` VARCHAR(20) NULL DEFAULT '0000000000',
+  `telefono` VARCHAR(20) NULL DEFAULT '0000000',
+  `ruc` VARCHAR(45) NULL DEFAULT '00000000000',
+  `disposicion` CHAR(2) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`codProveedor`),
+  UNIQUE INDEX `nombreEmpresa_UNIQUE` (`nombreEmpresa` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 13
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`producto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`producto` (
+  `codProducto` INT NOT NULL AUTO_INCREMENT,
+  `nombreProducto` VARCHAR(250) NOT NULL,
+  `precioCompra` DECIMAL(9,2) NOT NULL,
+  `precioVenta` DECIMAL(9,2) NOT NULL,
+  `cantidad` INT NOT NULL,
+  `unidadMedida` VARCHAR(100) NOT NULL,
+  `presentacion` DECIMAL(9,2) NOT NULL,
+  `marca` VARCHAR(45) NOT NULL,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `observaciones` VARCHAR(250) NULL DEFAULT NULL,
+  `formaFarmaceutica` VARCHAR(100) NOT NULL,
+  `codCategoria` INT NOT NULL,
+  `codProveedor` INT NOT NULL,
+  `disposicion` CHAR(2) NULL DEFAULT '1',
+  PRIMARY KEY (`codProducto`),
+  INDEX `fk_Producto_Categoria1_idx` (`codCategoria` ASC) VISIBLE,
+  INDEX `fk_Producto_Proveedor1_idx` (`codProveedor` ASC) VISIBLE,
+  CONSTRAINT `fk_Producto_Categoria1`
+    FOREIGN KEY (`codCategoria`)
+    REFERENCES `farmacia`.`categoria` (`codCategoria`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_Producto_Proveedor1`
+    FOREIGN KEY (`codProveedor`)
+    REFERENCES `farmacia`.`proveedor` (`codProveedor`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 38
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`bodega`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`bodega` (
+  `codBodega` INT NOT NULL AUTO_INCREMENT,
+  `cantidadIngresada` INT NOT NULL,
+  `fechaIngreso` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fechaCaducidad` DATE NOT NULL,
+  `fechaCuandoCaduca` DATE NOT NULL,
+  `codigoBarra` VARCHAR(250) NULL DEFAULT NULL,
+  `codProducto` INT NOT NULL,
+  `habilitado` INT NOT NULL DEFAULT '1',
+  PRIMARY KEY (`codBodega`),
+  UNIQUE INDEX `codigobarra_UNIQUE` (`codigoBarra` ASC) VISIBLE,
+  INDEX `pwd_producto_bodega` (`codProducto` ASC) VISIBLE,
+  CONSTRAINT `pwd_producto_bodega`
+    FOREIGN KEY (`codProducto`)
+    REFERENCES `farmacia`.`producto` (`codProducto`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 38
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`cita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`cita` (
+  `cod` BIGINT NOT NULL,
+  `start` DATETIME NOT NULL,
+  `end` DATETIME NOT NULL,
+  `title` VARCHAR(45) CHARACTER SET 'utf8mb3' NOT NULL,
+  `description` VARCHAR(255) CHARACTER SET 'utf8mb3' NULL DEFAULT NULL,
+  `colour` VARCHAR(45) CHARACTER SET 'utf8mb3' NULL DEFAULT NULL,
+  PRIMARY KEY (`cod`),
+  UNIQUE INDEX `cod_UNIQUE` (`cod` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`usuario` (
+  `codUsuario` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(250) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `estado` INT NULL DEFAULT '0',
+  `administrador` INT NULL DEFAULT '1',
+  `cedula` VARCHAR(45) NOT NULL,
+  `disposicion` CHAR(2) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`codUsuario`),
+  UNIQUE INDEX `codUsuario_UNIQUE` (`codUsuario` ASC) VISIBLE,
+  UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC) VISIBLE,
+  UNIQUE INDEX `cedulaa_UNIQUE` (`cedula` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`factura`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`factura` (
+  `codFactura` INT NOT NULL AUTO_INCREMENT,
+  `fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ruc` VARCHAR(20) NULL DEFAULT 'xxxxxxxxxx',
+  `cedula` VARCHAR(12) NULL DEFAULT 'xxxxxxxxxx',
+  `n_cliente` VARCHAR(250) NULL DEFAULT 'xxxxxxxxx',
+  `observacion` VARCHAR(250) NULL DEFAULT 'SIn observacions',
+  `subtotal` DECIMAL(9,2) NULL DEFAULT '0.00',
+  `total` DECIMAL(9,2) NULL DEFAULT '0.00',
+  `codUsuario` INT NOT NULL,
+  PRIMARY KEY (`codFactura`),
+  UNIQUE INDEX `codFactura_UNIQUE` (`codFactura` ASC) VISIBLE,
+  INDEX `fk_Usuario_Factura_idx` (`codUsuario` ASC) VISIBLE,
+  CONSTRAINT `fk_Usuario_Factura`
+    FOREIGN KEY (`codUsuario`)
+    REFERENCES `farmacia`.`usuario` (`codUsuario`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 26
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `farmacia`.`detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`detalle` (
+  `codCarrito` INT NOT NULL AUTO_INCREMENT,
+  `cantidad` INT NOT NULL,
+  `codBodega` INT NOT NULL,
+  `v_total` DECIMAL(6,2) NOT NULL DEFAULT '0.00',
+  `codFactura` INT NOT NULL,
+  PRIMARY KEY (`codCarrito`),
+  UNIQUE INDEX `codCarrito_UNIQUE` (`codCarrito` ASC) VISIBLE,
+  INDEX `fk_Carrito_Factura1_idx` (`codFactura` ASC) VISIBLE,
+  INDEX `fk_Detalle_Bodega_idx` (`codBodega` ASC) VISIBLE,
+  CONSTRAINT `fk_Detalle_Bodega`
+    FOREIGN KEY (`codBodega`)
+    REFERENCES `farmacia`.`bodega` (`codBodega`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_Detalle_Factura1`
+    FOREIGN KEY (`codFactura`)
+    REFERENCES `farmacia`.`factura` (`codFactura`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 63
+DEFAULT CHARACTER SET = utf8mb3;
+
+USE `farmacia` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_alertaproductocaduca`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_alertaproductocaduca` (`info` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_alertaproductoscaducos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_alertaproductoscaducos` (`codBodega` INT, `fechaCaducidad` INT, `fechaCuandoCaduca` INT, `cantidadIngresada` INT, `nombreProducto` INT, `formaFarmaceutica` INT, `presentacion` INT, `unidadMedida` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_bodegafecha`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_bodegafecha` (`fechaCaducidad` INT, `codProducto` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_bodegasearchid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_bodegasearchid` (`codBodega` INT, `cantidadIngresada` INT, `fechaCaducidad` INT, `codigoBarra` INT, `codProducto` INT, `habilitado` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_cantidadbodega`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_cantidadbodega` (`codBodega` INT, `codigoBarra` INT, `cantidadIngresada` INT, `fechaIngreso` INT, `fechaCaducidad` INT, `fechaCuandoCaduca` INT, `codProducto` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_cantidadproductoid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_cantidadproductoid` (`cantidadIngresada` INT, `codBodega` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_listardetallesid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_listardetallesid` (`codCarrito` INT, `cantidadD` INT, `nombreProducto` INT, `v_total` INT, `precioVenta` INT, `codFactura` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_productoporcodigo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_productoporcodigo` (`codBodega` INT, `nombreProducto` INT, `precioVenta` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_searchdetalleid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_searchdetalleid` (`codCarrito` INT, `cantidad` INT, `codBodega` INT, `v_total` INT, `codFactura` INT, `codProducto` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`view_searchproductoid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`view_searchproductoid` (`codProducto` INT, `nombreProducto` INT, `precioCompra` INT, `precioVenta` INT, `cantidad` INT, `unidadMedida` INT, `presentacion` INT, `marca` INT, `fechaRegistro` INT, `observaciones` INT, `formaFarmaceutica` INT, `codCategoria` INT, `codProveedor` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `farmacia`.`vista_productos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `farmacia`.`vista_productos` (`codProducto` INT, `nombreProducto` INT, `precioCompra` INT, `precioVenta` INT, `cantidad` INT, `unidadMedida` INT, `presentacion` INT, `marca` INT, `fechaRegistro` INT, `observaciones` INT, `formaFarmaceutica` INT, `nombreCategoria` INT, `nombreEmpresa` INT);
+
+-- -----------------------------------------------------
+-- procedure proc_actualizarBodega
+-- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE proc_actulizarBodega()
+USE `farmacia`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_actualizarBodega`(IN codBodegaIn int,IN cantidadIngresadaIn int,IN fechaCaducidadIn date,OUT respuesta char)
 BEGIN
- DECLARE cursor_producto_isdone  BOOLEAN DEFAULT FALSE;
-  
-
-DECLARE cur_cantidadIngresada int;
-DECLARE cur_codProducto int;
-DECLARE cur_fechaCaducidad date;
-DECLARE cur_fechaCuandoCaduca date;
-
- DECLARE cursor_producto CURSOR FOR SELECT  producto.codProducto,  producto.cantidad,
-  producto.fechaCaduca,date_sub( producto.fechaCaduca, INTERVAL 90 DAY) FROM producto;
- 
 
 
- DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_producto_isdone = TRUE; 
- 
- 
-  OPEN cursor_producto;
-    loop_List: LOOP
-    FETCH cursor_producto INTO cur_codProducto,cur_cantidadIngresada, cur_fechaCaducidad, cur_fechaCuandoCaduca;
-      IF cursor_producto_isdone THEN
-         LEAVE loop_List;
-      END IF;
-      /*
-      aqui va codigo
-      */
-      INSERT INTO bodega(codProducto,cantidadIngresada,fechaCaducidad, fechaCuandoCaduca)
-VALUES(cur_codProducto, cur_cantidadIngresada,cur_fechaCaducidad,cur_fechaCuandoCaduca);
-      
-       /*
-      */
-    END LOOP loop_List;
-  CLOSE cursor_producto;
-  
-
-  
-END
-$$
-
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE proc_actulizarBodegaCodBarras()
-BEGIN
- DECLARE cur_codBodega int; 
-DECLARE cursor_bodega_isdone  BOOLEAN DEFAULT FALSE;
-DECLARE cursor_bodega CURSOR FOR SELECT bodega.codBodega FROM bodega;
- DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_bodega_isdone = TRUE;
- 
-    OPEN cursor_bodega;
-    loop_List: LOOP
-    FETCH cursor_bodega INTO cur_codBodega;
-      IF cursor_bodega_isdone THEN
-         LEAVE loop_List;
-      END IF;
-      /*
-      aqui va codigo
-      */
-      
-      UPDATE bodega SET bodega.codigoBarra = LPAD(CONVERT(cur_codBodega,CHAR),13,'0') 
-         WHERE bodega.codBodega = cur_codBodega;
-       /*
-      */
-    END LOOP loop_List;
-  CLOSE cursor_bodega;
-  
-  
- 
-END
-$$
-
-CALL proc_actulizarBodega();
-CALL proc_actulizarBodegaCodBarras();
-DROP PROCEDURE IF EXISTS proc_actulizarBodega;
-DROP PROCEDURE IF EXISTS proc_actulizarBodegaCodBarras;
-DROP TRIGGER IF EXISTS `farmacia`.`trigger_restarProducto`;
-DROP TRIGGER IF EXISTS `farmacia`.`bodega_insertBodegaAProducto`;
-
-DELIMITER $$
-USE `farmacia`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `farmacia`.`bodega_insertBodegaAProducto` AFTER INSERT ON `bodega` FOR EACH ROW
-BEGIN
-UPDATE bodega SET bodega.codigoBarra = LPAD(CONVERT(NEW.codBodega,CHAR),13,'0') 
-         WHERE bodega.codBodega = NEW.codBodega;
-UPDATE producto SET producto.cantidad=producto.cantidad+NEW.cantidadIngresada WHERE  producto.codProducto=NEW.codProducto;
-END$$
-DELIMITER ;
-
-ALTER TABLE producto DROP COLUMN fechaCaduca ;
-ALTER TABLE producto DROP COLUMN codigoBarra ;
-DROP TRIGGER IF EXISTS `farmacia`.`trigger_restarProducto`;
-
-DELIMITER $$
-USE `farmacia`$$
-CREATE DEFINER=`root`@`localhost` TRIGGER `trigger_restarProducto` AFTER INSERT ON `detalle` FOR EACH ROW BEGIN
-UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada-NEW.cantidad WHERE  bodega.codProducto=NEW.codProducto;
-
-
-END$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS `farmacia`.`tgr_updateDetalleProducto`;
-
-DELIMITER $$
-USE `farmacia`$$
-CREATE DEFINER=`root`@`localhost` TRIGGER `tgr_updateDetalleProducto` AFTER UPDATE ON `detalle` FOR EACH ROW BEGIN
-/* cuando agregamos cantidad al detalle
-*/
- IF NEW.cantidad>OLD.cantidad AND OLD.cantidad>0  THEN
-set @cantidad =NEW.cantidad-OLD.cantidad;
-set @valor=NEW.v_total-OLD.v_total;
-UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada-@cantidad WHERE bodega.codProducto=NEW.codProducto;
-
- UPDATE factura SET 
-factura.total=factura.total+@valor WHERE
-factura.codFactura=NEW.codFactura;
-/* cuando quitamos cantidad al detalle
-*/
- ELSEIF NEW.cantidad<OLD.cantidad AND NEW.cantidad>0 THEN
- set @cantidad =OLD.cantidad-NEW.cantidad;
- set @valor=OLD.v_total-NEW.v_total;
- UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada+@cantidad WHERE bodega.codProducto=NEW.codProducto;
-
-UPDATE factura SET 
-factura.total=factura.total-@valor WHERE
-factura.codFactura=NEW.codFactura;
- END IF;
-END$$
-DELIMITER ;
-
-DROP TRIGGER IF EXISTS `farmacia`.`tgr_eliminarDetalle`;
-
-DELIMITER $$
-USE `farmacia`$$
-CREATE DEFINER=`root`@`localhost` TRIGGER `tgr_eliminarDetalle` AFTER DELETE ON `detalle` FOR EACH ROW BEGIN
-
-UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada+OLD.cantidad WHERE  bodega.codProducto=OLD.codProducto;
-
-UPDATE factura SET 
-factura.total=factura.total-OLD.v_total WHERE
-factura.codFactura=OLD.codFactura;
-
-SET @cantidad= (SELECT factura.total FROM factura WHERE factura.codFactura=OLD.codFactura);
-IF @cantidad=0 THEN 
-DELETE FROM factura WHERE factura.codFactura=OLD.codFactura;
-END IF;
-END$$
-DELIMITER ;
-USE `farmacia`;
-DROP procedure IF EXISTS `proc_agregarRepetidoDetalleFactura`;
-
-USE `farmacia`;
-DROP procedure IF EXISTS `farmacia`.`proc_agregarRepetidoDetalleFactura`;
-;
-
-DELIMITER $$
-USE `farmacia`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarRepetidoDetalleFactura`(IN `cantidadIn` INT, IN `codProductoIn` INT, IN `v_totalIn` DECIMAL(6,2), IN `codFacturaIn` INT, IN `codCarritoIn` INT, OUT `respuesta` INT)
-BEGIN 
-SET @cantidadP=(SELECT cantidadIn FROM bodega WHERE codBodega=codProductoIn);
-SET @cantidadD=(SELECT cantidad FROM detalle WHERE codCarrito=codCarritoIn);
-
-SET @residuo=0;
-IF cantidadIn>@cantidadD THEN
-SET @residuo=cantidadIn-@cantidadD;
-END IF ;
-
-IF (cantidadIn>0 AND @residuo<=@cantidadP AND @cantidadP>0 AND cantidadIn>@cantidadD) THEN
-
-UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE codCarrito=codCarritoIn;
-SET respuesta=1;
-ELSE 
-SET respuesta=0;
-END IF ;
-
+UPDATE `farmacia`.`bodega`
+SET
+bodega.cantidadIngresada = cantidadIngresadaIn,
+bodega.fechaCaducidad = fechaCaducidadIn,
+bodega.fechaCuandoCaduca =date_sub( fechaCaducidadIn, INTERVAL 90 DAY)
+WHERE bodega.codBodega = codBodegaIn;
+SET respuesta='1';
 
 END$$
 
 DELIMITER ;
-;
 
-
-USE `farmacia`;
-DROP procedure IF EXISTS `proc_agregarNuevoDetalleFactura`;
-
-USE `farmacia`;
-DROP procedure IF EXISTS `farmacia`.`proc_agregarNuevoDetalleFactura`;
-;
-
-DELIMITER $$
-USE `farmacia`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarNuevoDetalleFactura`(IN `cantidadIn` INT, IN `codProductoIn` INT, IN `v_totalIn` DECIMAL(6,2), IN `codFacturaIn` INT, OUT `respuesta` INT)
-BEGIN 
-SET @cantidadP=(SELECT cantidadIngresada FROM bodega WHERE codProducto=codProductoIn);
-SET @valor=(SELECT  total FROM factura WHERE codFactura=codFacturaIn);
-
-IF (cantidadIn>0 AND cantidadIn<=@cantidadP) THEN
-INSERT INTO detalle( cantidad, codProducto, v_total, codFactura) VALUES (cantidadIn,codProductoIn,v_totalIn,codFacturaIn);
-UPDATE factura SET total=(@valor+v_totalIn) WHERE codFactura=codFacturaIn;
-SET respuesta=1;
-ELSE 
-SET respuesta=0;
-END IF ;
-
-
-END$$
-
-DELIMITER ;
-;
-
-USE `farmacia`;
-DROP procedure IF EXISTS `proc_actualizarDetalle`;
-
-USE `farmacia`;
-DROP procedure IF EXISTS `farmacia`.`proc_actualizarDetalle`;
-;
+-- -----------------------------------------------------
+-- procedure proc_actualizarDetalle
+-- -----------------------------------------------------
 
 DELIMITER $$
 USE `farmacia`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_actualizarDetalle`(IN `cantidadIn` INT, IN `codProductoIn` INT, IN `v_totalIn` DECIMAL(6,2), IN `codFacturaIn` INT, IN `codCarritoIn` INT, OUT `respuesta` INT)
 BEGIN 
-SET @cantidadP=(SELECT cantidadIngresada FROM bodega WHERE codProducto=codProductoIn);
-SET @cantidadD=(SELECT cantidad FROM detalle WHERE codCarrito=codCarritoIn);
+SET @cantidadP=(SELECT bodega.cantidadIngresada FROM bodega WHERE bodega.codBodega=codProductoIn AND bodega.habilitado=1);
+SET @cantidadD=(SELECT detalle.cantidad FROM detalle WHERE detalle.codCarrito=codCarritoIn);
 
 SET @residuo=0;
-IF cantidadIn>@cantidadD THEN
-SET @residuo=cantidadIn-@cantidadD;
-END IF ;
 
-IF (cantidadIn>0 AND @residuo<=@cantidadP AND @cantidadP>0 AND cantidadIn>@cantidadD) THEN
-UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE codCarrito=codCarritoIn;
-SET respuesta=1;
 
-ELSEIF (cantidadIn>0   AND cantidadIn<@cantidadD) THEN
-UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE  codCarrito=codCarritoIn;
-SET respuesta=1;
 
-ELSE 
-SET respuesta=0;
-END IF ;
+
+    IF  cantidadIn>@cantidadD AND @cantidadP>0 THEN 
+		SET @residuo=cantidadIn-@cantidadD;
+        IF @residuo between 0 and @cantidadP THEN
+        UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE  codCarrito=codCarritoIn;
+		SET respuesta=1;
+        ELSE 
+		SET respuesta=0;
+         END IF;
+        
+	ELSEIF cantidadIn<@cantidadD  AND @cantidadP>=0 THEN 
+		UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE  codCarrito=codCarritoIn;
+		SET respuesta=1;
+    ELSE 
+		SET respuesta=0;
+    END IF ;
+
+
+
+
 
 
 END$$
 
 DELIMITER ;
-;
 
-
-DROP PROCEDURE IF EXISTS proc_agregarRepetidoDetalleFacturatgr_updateDetalleProducto;
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarRepetidoDetalleFactura`(IN `cantidadIn` INT, IN `codProductoIn` INT, IN `v_totalIn` DECIMAL(6,2), IN `codFacturaIn` INT, IN `codCarritoIn` INT, OUT `respuesta` INT)
-BEGIN 
-SET @cantidadP=(SELECT cantidadIngresada FROM bodega WHERE codBodega=codProductoIn);
-SET @cantidadD=(SELECT cantidad FROM detalle WHERE codCarrito=codCarritoIn);
-
-SET @residuo=0;
-IF cantidadIn>@cantidadD THEN
-SET @residuo=cantidadIn-@cantidadD;
-END IF ;
-
-IF (cantidadIn>0 AND @residuo<=@cantidadP AND @cantidadP>0 AND cantidadIn>@cantidadD) THEN
-
-UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE codCarrito=codCarritoIn;
-SET respuesta=1;
-ELSE 
-SET respuesta=0;
-END IF ;
-
-
-END$$
-ALTER TABLE `farmacia`.`detalle` 
-ADD COLUMN `codBodega` INT NULL AFTER `codFactura`;
-
-ALTER TABLE `farmacia`.`detalle` 
-DROP FOREIGN KEY `fk_Detalle_Producto`;
-ALTER TABLE `farmacia`.`detalle` 
-DROP COLUMN `codProducto`,
-CHANGE COLUMN `codBodega` `codBodega` INT NULL DEFAULT NULL AFTER `cantidad`,
-ADD INDEX `fk_Detalle_Factura_idx` (`codBodega` ASC) VISIBLE,
-DROP INDEX `fk_Detalle_Producto_idx` ;
-;
-ALTER TABLE `farmacia`.`detalle` 
-ADD CONSTRAINT `fk_Detalle_Factura`
-  FOREIGN KEY (`codBodega`)
-  REFERENCES `farmacia`.`bodega` (`codBodega`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE;
-  
-  
-  USE `farmacia`;
+-- -----------------------------------------------------
+-- procedure proc_agregarBodega
+-- -----------------------------------------------------
 
 DELIMITER $$
-
 USE `farmacia`$$
-DROP TRIGGER IF EXISTS `farmacia`.`tgr_updateProductoBodega` $$
-DELIMITER ;
-
-
-CREATE VIEW 
-vista_productos AS 
-SELECT codProducto,
-nombreProducto,
-precioCompra,
-precioVenta,
-cantidad,
-unidadMedida,
-presentacion,
-marca,
-fechaRegistro,
-observaciones,
-formaFarmaceutica,
-nombreCategoria,
-nombreEmpresa
- FROM Producto,Categoria,Proveedor
-WHERE Producto.codCategoria=Categoria.codCategoria 
-AND Producto.codProveedor=Proveedor.codProveedor AND Producto.disposicion=1;
-
-
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarBodega`(IN cantidadIngresadaIn int,IN fechaCaducidadIn date, IN codProductoIn int,OUT respuesta char)
 BEGIN
 
@@ -340,7 +338,7 @@ fechaCaducidadIn,
 date_sub( fechaCaducidadIn, INTERVAL 90 DAY),
 codProductoIn) AS tmp
 WHERE NOT EXISTS (
-    SELECT fechaCaducidad,codProducto FROM  bodega WHERE fechaCaducidad = fechaCaducidadIn AND codProducto=codProductoIn
+    SELECT fechaCaducidad,codProducto FROM  bodega WHERE fechaCaducidad = fechaCaducidadIn AND codProducto=codProductoIn AND habilitado=1
 ) LIMIT 1;
 
 
@@ -361,4 +359,283 @@ WHERE NOT EXISTS(SELECT * FROM bodega WHERE bodega.codProducto=codProductoIn AND
 UPDATE bodega SET bodega.codigoBarra = LPAD(CONVERT(@@identity,CHAR),13,'0') 
          WHERE bodega.codBodega = @@identity;
 SET respuesta='1';
-END
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure proc_agregarNuevoDetalleFactura
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `farmacia`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarNuevoDetalleFactura`(IN `cantidadIn` INT, IN `codProductoIn` INT, IN `v_totalIn` DECIMAL(6,2), IN `codFacturaIn` INT, OUT `respuesta` INT)
+BEGIN 
+SET @cantidadP=(SELECT cantidadIngresada FROM bodega WHERE codBodega=codProductoIn);
+SET @valor=(SELECT  total FROM factura WHERE codFactura=codFacturaIn);
+
+IF (cantidadIn>0 AND cantidadIn<=@cantidadP) THEN
+INSERT INTO detalle( cantidad, codBodega, v_total, codFactura) VALUES (cantidadIn,codProductoIn,v_totalIn,codFacturaIn);
+UPDATE factura SET total=(@valor+v_totalIn) WHERE codFactura=codFacturaIn;
+SET respuesta=1;
+ELSE 
+SET respuesta=0;
+END IF ;
+
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure proc_agregarRepetidoDetalleFactura
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `farmacia`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_agregarRepetidoDetalleFactura`(IN `cantidadIn` INT, IN `codProductoIn` INT, IN `v_totalIn` DECIMAL(6,2), IN `codFacturaIn` INT, IN `codCarritoIn` INT, OUT `respuesta` INT)
+BEGIN 
+SET @cantidadP=(SELECT cantidadIn FROM bodega WHERE codBodega=codProductoIn AND habilitado=1);
+SET @cantidadD=(SELECT cantidad FROM detalle WHERE codCarrito=codCarritoIn);
+
+SET @residuo=0;
+IF cantidadIn>@cantidadD THEN
+SET @residuo=cantidadIn-@cantidadD;
+END IF ;
+
+IF (cantidadIn>0 AND @residuo<=@cantidadP AND @cantidadP>0 AND cantidadIn>@cantidadD) THEN
+
+UPDATE detalle SET v_total=v_totalIn,cantidad=cantidadIn WHERE codCarrito=codCarritoIn;
+SET respuesta=1;
+ELSE 
+SET respuesta=0;
+END IF ;
+
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure proc_eliminarBodega
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `farmacia`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_eliminarBodega`(IN codBodegaIn int, OUT respuesta char)
+BEGIN
+DELETE FROM `farmacia`.`bodega`
+WHERE bodega.codBodega=codBodegaIn;
+SET respuesta='1';
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure proc_eliminarProductoBodega
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `farmacia`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_eliminarProductoBodega`(IN codBodegaIn int,OUT respuesta char)
+BEGIN
+
+IF  EXISTS (SELECT * FROM view_cantidadbodega WHERE codBodega=codBodegaIn ) THEN
+UPDATE `farmacia`.`bodega`
+SET `habilitado` = 0
+WHERE `codBodega` = codBodegaIn;
+ELSE 
+DELETE FROM `farmacia`.`bodega`
+WHERE  codBodega=codBodegaIn;
+END IF;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_alertaproductocaduca`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_alertaproductocaduca`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_alertaproductocaduca` AS select count(`b`.`codBodega`) AS `info` from (`farmacia`.`bodega` `b` join `farmacia`.`producto` `p`) where ((`b`.`codProducto` = `p`.`codProducto`) and (`p`.`disposicion` = 1) and (`b`.`cantidadIngresada` > 0) and (`b`.`fechaCuandoCaduca` <= cast(now() as date)) and (`b`.`habilitado` = 1));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_alertaproductoscaducos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_alertaproductoscaducos`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_alertaproductoscaducos` AS select `b`.`codBodega` AS `codBodega`,`b`.`fechaCaducidad` AS `fechaCaducidad`,`b`.`fechaCuandoCaduca` AS `fechaCuandoCaduca`,`b`.`cantidadIngresada` AS `cantidadIngresada`,`p`.`nombreProducto` AS `nombreProducto`,`p`.`formaFarmaceutica` AS `formaFarmaceutica`,`p`.`presentacion` AS `presentacion`,`p`.`unidadMedida` AS `unidadMedida` from (`farmacia`.`bodega` `b` join `farmacia`.`producto` `p`) where ((`b`.`codProducto` = `p`.`codProducto`) and (`p`.`disposicion` = 1) and (`b`.`cantidadIngresada` > 0) and (`b`.`fechaCuandoCaduca` <= cast(now() as date)) and (`b`.`habilitado` = 1));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_bodegafecha`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_bodegafecha`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_bodegafecha` AS select `farmacia`.`bodega`.`fechaCaducidad` AS `fechaCaducidad`,`farmacia`.`bodega`.`codProducto` AS `codProducto` from `farmacia`.`bodega` where (`farmacia`.`bodega`.`habilitado` = 1);
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_bodegasearchid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_bodegasearchid`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_bodegasearchid` AS select `farmacia`.`bodega`.`codBodega` AS `codBodega`,`farmacia`.`bodega`.`cantidadIngresada` AS `cantidadIngresada`,`farmacia`.`bodega`.`fechaCaducidad` AS `fechaCaducidad`,`farmacia`.`bodega`.`codigoBarra` AS `codigoBarra`,`farmacia`.`bodega`.`codProducto` AS `codProducto`,`farmacia`.`bodega`.`habilitado` AS `habilitado` from `farmacia`.`bodega` where (`farmacia`.`bodega`.`habilitado` = 1);
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_cantidadbodega`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_cantidadbodega`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_cantidadbodega` AS select `farmacia`.`bodega`.`codBodega` AS `codBodega`,`farmacia`.`bodega`.`codigoBarra` AS `codigoBarra`,`farmacia`.`bodega`.`cantidadIngresada` AS `cantidadIngresada`,`farmacia`.`bodega`.`fechaIngreso` AS `fechaIngreso`,`farmacia`.`bodega`.`fechaCaducidad` AS `fechaCaducidad`,`farmacia`.`bodega`.`fechaCuandoCaduca` AS `fechaCuandoCaduca`,`farmacia`.`bodega`.`codProducto` AS `codProducto` from `farmacia`.`bodega` where ((`farmacia`.`bodega`.`cantidadIngresada` > 0) and (`farmacia`.`bodega`.`habilitado` = 1));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_cantidadproductoid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_cantidadproductoid`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_cantidadproductoid` AS select `farmacia`.`bodega`.`cantidadIngresada` AS `cantidadIngresada`,`farmacia`.`bodega`.`codBodega` AS `codBodega` from (`farmacia`.`bodega` join `farmacia`.`producto`) where ((`farmacia`.`producto`.`codProducto` = `farmacia`.`bodega`.`codProducto`) and (`farmacia`.`producto`.`disposicion` = 1) and (`farmacia`.`bodega`.`habilitado` = 1));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_listardetallesid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_listardetallesid`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_listardetallesid` AS select `farmacia`.`detalle`.`codCarrito` AS `codCarrito`,`farmacia`.`detalle`.`cantidad` AS `cantidadD`,`farmacia`.`producto`.`nombreProducto` AS `nombreProducto`,`farmacia`.`detalle`.`v_total` AS `v_total`,`farmacia`.`producto`.`precioVenta` AS `precioVenta`,`farmacia`.`detalle`.`codFactura` AS `codFactura` from ((`farmacia`.`detalle` join `farmacia`.`producto`) join `farmacia`.`bodega`) where ((`farmacia`.`detalle`.`codBodega` = `farmacia`.`bodega`.`codBodega`) and (`farmacia`.`bodega`.`codProducto` = `farmacia`.`producto`.`codProducto`) and (`farmacia`.`bodega`.`habilitado` = 1));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_productoporcodigo`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_productoporcodigo`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_productoporcodigo` AS select `farmacia`.`bodega`.`codBodega` AS `codBodega`,`farmacia`.`producto`.`nombreProducto` AS `nombreProducto`,`farmacia`.`producto`.`precioVenta` AS `precioVenta` from (`farmacia`.`bodega` join `farmacia`.`producto`) where ((`farmacia`.`producto`.`codProducto` = `farmacia`.`bodega`.`codProducto`) and (`farmacia`.`producto`.`disposicion` = 1) and (`farmacia`.`bodega`.`cantidadIngresada` > 0) and (`farmacia`.`bodega`.`habilitado` = 1));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_searchdetalleid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_searchdetalleid`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_searchdetalleid` AS select `farmacia`.`detalle`.`codCarrito` AS `codCarrito`,`farmacia`.`detalle`.`cantidad` AS `cantidad`,`farmacia`.`detalle`.`codBodega` AS `codBodega`,`farmacia`.`detalle`.`v_total` AS `v_total`,`farmacia`.`detalle`.`codFactura` AS `codFactura`,`farmacia`.`producto`.`codProducto` AS `codProducto` from ((`farmacia`.`detalle` join `farmacia`.`producto`) join `farmacia`.`bodega`) where ((`farmacia`.`detalle`.`codBodega` = `farmacia`.`bodega`.`codBodega`) and (`farmacia`.`bodega`.`codProducto` = `farmacia`.`producto`.`codProducto`));
+
+-- -----------------------------------------------------
+-- View `farmacia`.`view_searchproductoid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`view_searchproductoid`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`view_searchproductoid` AS select `farmacia`.`producto`.`codProducto` AS `codProducto`,`farmacia`.`producto`.`nombreProducto` AS `nombreProducto`,`farmacia`.`producto`.`precioCompra` AS `precioCompra`,`farmacia`.`producto`.`precioVenta` AS `precioVenta`,`farmacia`.`producto`.`cantidad` AS `cantidad`,`farmacia`.`producto`.`unidadMedida` AS `unidadMedida`,`farmacia`.`producto`.`presentacion` AS `presentacion`,`farmacia`.`producto`.`marca` AS `marca`,`farmacia`.`producto`.`fechaRegistro` AS `fechaRegistro`,`farmacia`.`producto`.`observaciones` AS `observaciones`,`farmacia`.`producto`.`formaFarmaceutica` AS `formaFarmaceutica`,`farmacia`.`producto`.`codCategoria` AS `codCategoria`,`farmacia`.`producto`.`codProveedor` AS `codProveedor` from `farmacia`.`producto` where (`farmacia`.`producto`.`disposicion` = 1);
+
+-- -----------------------------------------------------
+-- View `farmacia`.`vista_productos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `farmacia`.`vista_productos`;
+USE `farmacia`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `farmacia`.`vista_productos` AS select `farmacia`.`producto`.`codProducto` AS `codProducto`,`farmacia`.`producto`.`nombreProducto` AS `nombreProducto`,`farmacia`.`producto`.`precioCompra` AS `precioCompra`,`farmacia`.`producto`.`precioVenta` AS `precioVenta`,`farmacia`.`producto`.`cantidad` AS `cantidad`,`farmacia`.`producto`.`unidadMedida` AS `unidadMedida`,`farmacia`.`producto`.`presentacion` AS `presentacion`,`farmacia`.`producto`.`marca` AS `marca`,`farmacia`.`producto`.`fechaRegistro` AS `fechaRegistro`,`farmacia`.`producto`.`observaciones` AS `observaciones`,`farmacia`.`producto`.`formaFarmaceutica` AS `formaFarmaceutica`,`farmacia`.`categoria`.`nombreCategoria` AS `nombreCategoria`,`farmacia`.`proveedor`.`nombreEmpresa` AS `nombreEmpresa` from ((`farmacia`.`producto` join `farmacia`.`categoria`) join `farmacia`.`proveedor`) where ((`farmacia`.`producto`.`codCategoria` = `farmacia`.`categoria`.`codCategoria`) and (`farmacia`.`producto`.`codProveedor` = `farmacia`.`proveedor`.`codProveedor`) and (`farmacia`.`producto`.`disposicion` = 1));
+USE `farmacia`;
+
+DELIMITER $$
+USE `farmacia`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `farmacia`.`bodega_insertBodegaAProducto`
+AFTER INSERT ON `farmacia`.`bodega`
+FOR EACH ROW
+BEGIN
+
+UPDATE producto SET producto.cantidad=producto.cantidad+NEW.cantidadIngresada WHERE  producto.codProducto=NEW.codProducto;
+END$$
+
+USE `farmacia`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `farmacia`.`tgr_actualizarBodega`
+AFTER UPDATE ON `farmacia`.`bodega`
+FOR EACH ROW
+BEGIN
+IF (NEW.cantidadIngresada>OLD.cantidadIngresada) THEN 
+SET @cantidad=NEW.cantidadIngresada-OLD.cantidadIngresada;
+UPDATE `farmacia`.`producto` SET producto.cantidad=producto.cantidad+@cantidad WHERE producto.codProducto =NEW.codProducto;
+ELSEIF (NEW.cantidadIngresada<OLD.cantidadIngresada) THEN
+SET @cantidad=OLD.cantidadIngresada-NEW.cantidadIngresada;
+UPDATE `farmacia`.`producto` SET producto.cantidad=producto.cantidad-@cantidad WHERE producto.codProducto =NEW.codProducto;
+END IF;
+END$$
+
+USE `farmacia`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `farmacia`.`tgr_despuesEliminarBodega`
+AFTER DELETE ON `farmacia`.`bodega`
+FOR EACH ROW
+BEGIN
+UPDATE `farmacia`.`producto`
+SET producto.cantidad =producto.cantidad-OLD.cantidadIngresada
+WHERE producto.codProducto =OLD.codProducto;
+END$$
+
+USE `farmacia`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `farmacia`.`tgr_eliminarDetalle`
+AFTER DELETE ON `farmacia`.`detalle`
+FOR EACH ROW
+BEGIN
+
+UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada+OLD.cantidad WHERE  bodega.codBodega=OLD.codBodega;
+
+UPDATE factura SET 
+factura.total=factura.total-OLD.v_total WHERE
+factura.codFactura=OLD.codFactura;
+
+SET @cantidad= (SELECT factura.total FROM factura WHERE factura.codFactura=OLD.codFactura);
+IF @cantidad=0 THEN 
+DELETE FROM factura WHERE factura.codFactura=OLD.codFactura;
+END IF;
+END$$
+
+USE `farmacia`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `farmacia`.`tgr_updateDetalleProducto`
+AFTER UPDATE ON `farmacia`.`detalle`
+FOR EACH ROW
+BEGIN
+/* cuando agregamos cantidad al detalle
+*/
+ IF NEW.cantidad>OLD.cantidad AND OLD.cantidad>0  THEN
+set @cantidad =NEW.cantidad-OLD.cantidad;
+set @valor=NEW.v_total-OLD.v_total;
+UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada-@cantidad WHERE bodega.codBodega=NEW.codBodega;
+
+ UPDATE factura SET 
+factura.total=factura.total+@valor WHERE
+factura.codFactura=NEW.codFactura;
+/* cuando quitamos cantidad al detalle
+*/
+ ELSEIF NEW.cantidad<OLD.cantidad AND NEW.cantidad>0 THEN
+ set @cantidad =OLD.cantidad-NEW.cantidad;
+ set @valor=OLD.v_total-NEW.v_total;
+ UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada+@cantidad WHERE bodega.codBodega=NEW.codBodega;
+
+UPDATE factura SET 
+factura.total=factura.total-@valor WHERE
+factura.codFactura=NEW.codFactura;
+ END IF;
+END$$
+
+USE `farmacia`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `farmacia`.`trigger_restarProducto`
+AFTER INSERT ON `farmacia`.`detalle`
+FOR EACH ROW
+BEGIN
+UPDATE bodega SET bodega.cantidadIngresada=bodega.cantidadIngresada-NEW.cantidad WHERE  bodega.codBodega=NEW.codBodega;
+
+
+END$$
+
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
