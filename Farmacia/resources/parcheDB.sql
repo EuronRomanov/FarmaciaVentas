@@ -636,6 +636,13 @@ END$$
 
 DELIMITER ;
 
+
+CREATE or replace  VIEW view_productosBodegasById AS 
+SELECT `bodega`.`codBodega`,
+    `bodega`.`cantidadIngresada`,
+    `bodega`.`fechaCaducidad`,
+    `bodega`.`codProducto`
+FROM `farmacia`.`bodega`;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
