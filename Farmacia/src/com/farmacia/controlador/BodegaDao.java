@@ -349,7 +349,7 @@ public class BodegaDao {
 		cmbBodega.removeAllItems();
 	      	 
 	      	 
-	      	String sql = "SELECT * FROM view_cantidadBodega WHERE codProducto =? ";
+	      	String sql = "SELECT * FROM view_productosBodegasById WHERE codProducto =? ";
 	      	 try{
 	      		DateTimeFormatter parser2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	             PreparedStatement ps = con.prepareStatement(sql);
@@ -359,7 +359,7 @@ public class BodegaDao {
 
 	             while(rs.next()){
 	             	
-	             	Bodega bodega=new Bodega(rs.getInt(1), rs.getInt(3),  LocalDate.parse(rs.getDate(5).toString(),parser2));
+	             	Bodega bodega=new Bodega(rs.getInt(1), rs.getInt(2),  LocalDate.parse(rs.getDate(3).toString(),parser2));
 	             	cmbBodega.addItem(bodega);
 	             }
 	             
