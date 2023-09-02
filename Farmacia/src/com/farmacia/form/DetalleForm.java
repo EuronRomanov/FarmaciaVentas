@@ -346,9 +346,11 @@ public class DetalleForm extends JFrame {
 		 btnDetalleAgregar.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
 		 		Producto p=(Producto)cmbProductos.getSelectedItem();
+		 		Bodega b=(Bodega)cmbBodega.getSelectedItem();
 		 		if (!controlFormato.hayEspaciosVacios(textDetalleCantidad.getText()) ) {
 		 		//	int codProducto=p.getCodProducto();
-		 			int codProducto=Integer.parseInt(textDetallecodBodega.getText());
+		 			//int codProducto=Integer.parseInt(textDetallecodBodega.getText());
+		 			int codProducto=b.getCodBodega();
 			 		int cantidad=Integer.parseInt(textDetalleCantidad.getText());
 			 		double valor=Double.valueOf(cantidad)*p.getPrecioVenta();
 			 		
@@ -357,8 +359,15 @@ public class DetalleForm extends JFrame {
 			 			ventaDao.agregarDetalle(new Detalle( cantidad,  codProducto, valor,  facturaId));
 					} else if(de!=null && Integer.parseInt(textDetalleCantidad.getText())!=0){
 						//int idc=new ProductoDao().searchCanitdadProductoId(codProducto);
+						Detalle detalle=new Detalle();
+						detalle.setCodCarrito( de.getCodCarrito());
+						detalle.setCantidad((cantidad+de.getCantidad()));
+						detalle.setCodProducto( codProducto);
+						detalle.setV_total((valor+de.getV_total()));
+						detalle.setCodFactura(facturaId);
 						
-						ventaDao.agregarDetalleExistente(new Detalle( de.getCodCarrito(),(cantidad+de.getCantidad()),  codProducto, (valor+de.getV_total()),  facturaId));
+						ventaDao.agregarDetalleExistente(detalle);
+						//ventaDao.agregarDetalleExistente(new Detalle( de.getCodCarrito(),(cantidad+de.getCantidad()),  codProducto, (valor+de.getV_total()),  facturaId));
 					}
 			 		
 			 		detalleDao.listarDetalleTable(facturaId, tblDetalles);
