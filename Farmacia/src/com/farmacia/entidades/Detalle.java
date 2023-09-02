@@ -100,6 +100,12 @@ public class Detalle {
 	public int getCodCodProductoBodega() {
 		return codCodProductoBodega;
 	}
+	@Override
+	public String toString() {
+		return "Detalle [codCarrito=" + codCarrito + ", cantidad=" + cantidad + ", codProducto=" + codProducto
+				+ ", v_total=" + v_total + ", codFactura=" + codFactura + ", producto=" + producto + ", precioVenta="
+				+ precioVenta + ", codCodProductoBodega=" + codCodProductoBodega + "]";
+	}
 	
     
 	
