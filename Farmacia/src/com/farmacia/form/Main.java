@@ -106,8 +106,8 @@ public class Main extends JFrame {
     private JPanel pnl_categoria = new JPanel();
     private JPanel pnl_proveedor = new JPanel();
     
-    JPanel pnl_ventas = new JPanel();
-	JPanel pnl_caja = new JPanel();
+    private JPanel pnl_ventas = new JPanel();
+    private JPanel pnl_caja = new JPanel();
     
     private CategoriaDao categoriaDao=new CategoriaDao();
     private ProveedorDao proveedorDao=new ProveedorDao();
@@ -234,8 +234,9 @@ public class Main extends JFrame {
 	private JScrollPane scrollPane_6;
 	private JTable tblProductosCaducados;
 	private JMenuItem mntmNewMenuItem_1;
+	private JButton btnVentasBuscar;
 	
-	
+	private BuscadorProductoForm buscadorProductoForm=new BuscadorProductoForm();
 	
 	
 	//LoginForm lo=new LoginForm();
@@ -298,6 +299,8 @@ public class Main extends JFrame {
 			//eliminarTab("Caja");
 			
 			//eliminarTab("Facturas");
+			
+			
 			}
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -422,6 +425,61 @@ public class Main extends JFrame {
 			      
 		   });
 		    //detalleForm.addWindowsListener(listener);
+		   
+		   
+		   buscadorProductoForm.addWindowListener(new WindowAdapter() {
+
+			   @Override
+				public void windowClosed(WindowEvent e) {
+					// TODO Auto-generated method stub
+					
+					System.out.println("se  close");
+					super.windowClosed(e);
+				}
+
+				@Override
+				public void windowClosing(WindowEvent e) {
+					// TODO Auto-generated method stub
+					
+					
+					System.out.println("se closing"+e.toString());
+					super.windowClosing(e);
+					
+				}
+
+				@Override
+				public void windowIconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+					//super.windowIconified(e);
+					System.out.println("se iconifica"+e.toString());
+				}
+
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+					//super.windowDeiconified(e);
+					System.out.println("se deicofinifica"+e.toString());
+				}
+
+				
+
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+					//super.windowDeactivated(e);
+					 String keyBuscadorProducto=buscadorProductoForm.getKey();
+					int cantidadBuscadorProducto=buscadorProductoForm.getCantidad();
+					if (!controlFormato.hayEspaciosVacios(keyBuscadorProducto) && cantidadBuscadorProducto>0 ) {
+						productoDao.agregarProductoProCodigo( keyBuscadorProducto, tblVentas,cantidadBuscadorProducto);
+					}
+					
+					//System.out.println("captando los valores antes que se cierre"+keyBuscadorProducto +" "+cantidadBuscadorProducto);
+					//System.out.println("se dsactiva"+e.toString());
+				}
+
+				
+			      
+		   });
 		    
 		JMenuItem mntmNewMenuItem = new JMenuItem("Cerrar sesión");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
@@ -1108,6 +1166,9 @@ public class Main extends JFrame {
 		/*
 		 * ---------------categorias------------
 		 */
+		
+		tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
+		pnl_ventas.setLayout(new BorderLayout(0, 0));
 	
 		pnl_ventas.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1116,8 +1177,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
-		pnl_ventas.setLayout(new BorderLayout(0, 0));
+		
 		
 		JPanel panel_4 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_4.getLayout();
@@ -1168,6 +1228,16 @@ public class Main extends JFrame {
 			}
 		});
 		panel_4.add(btnNewButton_1);
+		
+		btnVentasBuscar = new JButton("Buscar");
+		
+		btnVentasBuscar.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/lupa-icono.png")));
+		btnVentasBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscadorProductoForm.setVisible(true);
+			}
+		});
+		panel_4.add(btnVentasBuscar);
 		
 		JPanel panel_5 = new JPanel();
 		pnl_ventas.add(panel_5, BorderLayout.SOUTH);
@@ -2885,6 +2955,7 @@ public class Main extends JFrame {
 			
 			//tabPane_Vistas.addTab("Categoria", null, pnl_categoria, null);
 			//tabPane_Vistas.addTab("Facturas", null, pnl_factura, null);
+			tabPane_Vistas.addTab("Ventas", null, pnl_ventas, null);
 			GridBagLayout gbl_pnl_factura = new GridBagLayout();
 			gbl_pnl_factura.columnWidths = new int[]{70, 145, 0, 0, 138, 0, 0, 0, 0};
 			gbl_pnl_factura.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -3130,6 +3201,8 @@ public class Main extends JFrame {
 			pnl_factura.add(textField, gbc_textField);
 			textField.setColumns(10);
 			
+			
+			
 			btnFacturaBuscar = new JButton("Buscar");
 			GridBagConstraints gbc_btnFacturaBuscar = new GridBagConstraints();
 			gbc_btnFacturaBuscar.insets = new Insets(0, 0, 5, 0);
@@ -3245,9 +3318,11 @@ public class Main extends JFrame {
 			 });*/
 			
 			
-			
+		
 
 	}
+	
+
 	protected void limpiarCamposConsultaReportes() {
 		textCajaDesde.setDate(null);
 		textCajaHasta.setDate(null);

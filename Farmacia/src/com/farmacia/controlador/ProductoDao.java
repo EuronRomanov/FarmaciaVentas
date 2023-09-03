@@ -17,6 +17,8 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.text.DateFormatter;
 
 import com.farmacia.bd.ConexionBD;
@@ -324,6 +326,38 @@ public class ProductoDao {
 
     }
 
+    
+    
+    public void cargarDatosTblBuscadorProducto(JTable tblBuscadorProducto) {
+        List<Producto> ListarCl = this.ListarProducto();
+        modelo = (DefaultTableModel) tblBuscadorProducto.getModel();
+        
+        modelo.setRowCount(0);
+        
+        Object[] ob = new Object[6];
+        for (int i = 0; i < ListarCl.size(); i++) {
+            ob[0] = ListarCl.get(i).getCodProducto();
+            ob[1] = ListarCl.get(i).getPrecioVenta();
+            ob[2] = ListarCl.get(i).getCantidad();
+            ob[3] = ListarCl.get(i).getNombreProducto()+" "+
+                    ListarCl.get(i).getUnidadMedida()+ " "+
+            		ListarCl.get(i).getPresentacion()+ " "+
+            		ListarCl.get(i).getMarca();
+           
+            ob[4] = ListarCl.get(i).getFormaFarmaceutica();
+            ob[5] = ListarCl.get(i).getCategoria();
+            
+           
+            modelo.addRow(ob);
+           
+        }
+        
+        
+        tblBuscadorProducto.setModel(modelo);
+       
+        
+
+    }
 
 
 	public Producto searchProductoId(int key ) {
@@ -401,6 +435,9 @@ public class ProductoDao {
 	        
 	        
 		 if (!this.existeProducto(key, tblVentas)) {
+			 
+			 
+			 
 			  try{
 		            PreparedStatement ps = con.prepareStatement(sql);
 		            ps.setInt(1,  Integer.parseInt(key));
@@ -474,5 +511,76 @@ public class ProductoDao {
    			
    		}
       }
+
+
+
+	public void agregarProductoProCodigo(String key, JTable tblVentas, int cantidadIngresada) {
+		
+		 String sql = "select * from view_productoPorCodigo WHERE  codBodega=?";
+	        modelo = (DefaultTableModel) tblVentas.getModel();
+	       
+	        Object[] ob = new Object[5];
+		 if (!this.existeProducto(key, tblVentas, cantidadIngresada)) {
+			 int idc=searchCanitdadProductoId(Integer.parseInt(key));
+			 if (idc>=cantidadIngresada) {
+				 try{
+			            PreparedStatement ps = con.prepareStatement(sql);
+			            ps.setInt(1,  Integer.parseInt(key));
+			            
+			            ResultSet rs = ps.executeQuery();
+			            JButton button=new JButton("ELiminar");
+			            button.setName("btnEliminarVenta");
+			            button.setIcon(new ImageIcon(Main.class.getResource("/com/farmacia/icon/icon-delete.png")));
+			            while(rs.next()){
+			            	ob[0]=rs.getInt(1);
+			            	ob[1]= rs.getString(2);
+			            	 
+			            	
+			            	ob[2]=rs.getDouble(3);
+			            	 
+			            	ob[3]=cantidadIngresada;
+			            	
+			            	ob[4]=button;
+			            	
+			            	
+			               
+			            	 modelo.addRow(ob);
+			            	 
+			            }
+			            tblVentas.setDefaultRenderer(Object.class,new RenderTabla());
+			           
+			            tblVentas.setModel(modelo);
+			            tblVentas.setRowHeight(30);
+			        }catch(Exception e){
+			            e.printStackTrace();
+			        } 
+				} else {
+					 JOptionPane.showMessageDialog(null, "stock actual es de "+idc);
+				}
+		 }
+		
+	}
+	
+	
+	 private boolean existeProducto(String key,JTable tblVentas, int cantidadIngresada) {
+	    	boolean flag=false;
+	    	int valor=Integer.parseInt(key);
+	    	for (int i = 0; i < tblVentas.getRowCount(); i++) {
+	    	int j=Integer.parseInt(tblVentas.getValueAt(i, 0).toString());
+	    	if (valor==j) {
+	    	int idc=searchCanitdadProductoId(valor);
+	    	int cantidad=Integer.parseInt(tblVentas.getValueAt(i, 3).toString())+cantidadIngresada;
+	    	if (idc>=cantidad) {
+	    		tblVentas.setValueAt((cantidad), i, 3);
+			} else {
+				 JOptionPane.showMessageDialog(null, "stock actual es de "+idc);
+			}
+	    	
+	    	flag=true;
+	    	break;
+			}
+	    	}
+	    	return flag;
+	    }
     
 }
