@@ -19,7 +19,10 @@ public class ControlFormatos {
 	public boolean hayEspaciosVacios(String... espacios) {
 		boolean flag=false;
 		for (int i = 0; i < espacios.length; i++) {
-			if (espacios[i].length()<1) {
+			if (espacios[i]==null ) {
+				flag=true;
+				break;
+			}else if (espacios[i].isBlank()  ) {
 				flag=true;
 				break;
 			}
