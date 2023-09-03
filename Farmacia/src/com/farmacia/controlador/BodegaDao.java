@@ -368,4 +368,33 @@ public class BodegaDao {
 	         }
 		
 	}
+	
+	public void cargarProductosBodegasById(JTable tblBodega, int codProducto) {
+		 
+		modelo = (DefaultTableModel) tblBodega.getModel();
+        modelo.setRowCount(0);
+	      	 
+	      	 
+	      	String sql = "SELECT codBodega,concat( 'Cantidad= ',cantidadIngresada,'  Caduca= ',fechaCaducidad) as info FROM view_productosBodegasById WHERE cantidadIngresada>0 AND codProducto =? ";
+	      	 Object[] ob = new Object[2];
+	      	 try{
+	      		
+	             PreparedStatement ps = con.prepareStatement(sql);
+	             ps.setInt(1,  codProducto );
+	           
+	             ResultSet rs = ps.executeQuery();
+
+	             while(rs.next()){
+	            	 ob[0]=rs.getInt(1);
+		             ob[1]=rs.getString(2);
+		             modelo.addRow(ob);
+	             }
+	             
+	             
+	             tblBodega.setModel(modelo);
+	         }catch(Exception e){
+	             e.printStackTrace();
+	         }
+		
+	}
 }
