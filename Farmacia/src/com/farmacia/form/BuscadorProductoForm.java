@@ -340,9 +340,7 @@ public class BuscadorProductoForm extends JDialog {
 		return textBuscadorCodBodega;
 	}
 
-	public JButton getOkButton() {
-		return okButton;
-	}
+	
 
 	public String getKey() {
 		return key;

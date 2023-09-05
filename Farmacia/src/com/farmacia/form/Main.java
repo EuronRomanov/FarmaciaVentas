@@ -1,4 +1,4 @@
-package com.farmacia.form;
+ package com.farmacia.form;
 
 import java.awt.EventQueue;
 
@@ -471,6 +471,7 @@ public class Main extends JFrame {
 					int cantidadBuscadorProducto=buscadorProductoForm.getCantidad();
 					if (!controlFormato.hayEspaciosVacios(keyBuscadorProducto) && cantidadBuscadorProducto>0 ) {
 						productoDao.agregarProductoProCodigo( keyBuscadorProducto, tblVentas,cantidadBuscadorProducto);
+						textVentasCodProd.requestFocus();
 					}
 					
 					//System.out.println("captando los valores antes que se cierre"+keyBuscadorProducto +" "+cantidadBuscadorProducto);
@@ -1219,7 +1220,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if (	textVentasCodProd.getText().length()>10) {
-					productoDao.agregarProductoProCodigo(textVentasCodProd.getText(), tblVentas);
+					productoDao.agregarProductoProCodigo(textVentasCodProd.getText(), tblVentas,1);
 					textVentasCodProd.setText("");
 					ventaDao.totalizar(tblVentas, lblTotalpagar);
 					textVentasCodProd.requestFocus();
