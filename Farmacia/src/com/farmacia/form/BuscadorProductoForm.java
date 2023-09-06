@@ -292,6 +292,7 @@ public class BuscadorProductoForm extends JDialog {
 						if (!controlFormato.hayEspaciosVacios(textBuscadorCodBodega.getText(),textBuscadorCantidad.getText())) {
 							key=textBuscadorCodBodega.getText();
 							cantidad=Integer.parseInt(textBuscadorCantidad.getText());
+							
 							//System.out.println("Datos almacenados"+key + "  "+ cantidad);
 							cerrarVentana();
 						}else {
@@ -324,7 +325,7 @@ public class BuscadorProductoForm extends JDialog {
 		this.dispose();
 	}
 
-	private void limpiarCampos() {
+	public  void limpiarCampos() {
 		// TODO Auto-generated method stub
 		textBuscadorCodBodega.setText("");
 		textBuscadorPalabra.setText("");

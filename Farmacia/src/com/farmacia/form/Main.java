@@ -454,12 +454,7 @@ public class Main extends JFrame {
 					System.out.println("se iconifica"+e.toString());
 				}
 
-				@Override
-				public void windowDeiconified(WindowEvent e) {
-					// TODO Auto-generated method stub
-					//super.windowDeiconified(e);
-					System.out.println("se deicofinifica"+e.toString());
-				}
+				
 
 				
 
@@ -471,7 +466,10 @@ public class Main extends JFrame {
 					int cantidadBuscadorProducto=buscadorProductoForm.getCantidad();
 					if (!controlFormato.hayEspaciosVacios(keyBuscadorProducto) && cantidadBuscadorProducto>0 ) {
 						productoDao.agregarProductoProCodigo( keyBuscadorProducto, tblVentas,cantidadBuscadorProducto);
+						ventaDao.totalizar(tblVentas, lblTotalpagar);
+						buscadorProductoForm.limpiarCampos();
 						textVentasCodProd.requestFocus();
+						
 					}
 					
 					//System.out.println("captando los valores antes que se cierre"+keyBuscadorProducto +" "+cantidadBuscadorProducto);
@@ -1255,7 +1253,8 @@ public class Main extends JFrame {
 			if (!lblTotalpagar.getText().equalsIgnoreCase("0,00")) {
 				//pnlVentasLadoDerecho.setVisible(true);
 				mostrarComponentesLadoDerecho();
-				textVentasCodProd.setEditable(false);				
+				textVentasCodProd.setEditable(false);	
+				
 			}else {
 				textVentasCodProd.requestFocus();
 			}
