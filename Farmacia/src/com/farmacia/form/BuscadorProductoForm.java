@@ -329,7 +329,11 @@ public class BuscadorProductoForm extends JDialog {
 		// TODO Auto-generated method stub
 		textBuscadorCodBodega.setText("");
 		textBuscadorPalabra.setText("");
-		textBuscadorPalabra.setText("");
+		
+		textBuscadorCantidad.setText("");
+		DefaultTableModel modelo = (DefaultTableModel) tblBuscadorBodega.getModel();
+	        modelo.setRowCount(0);
+	        tblBuscadorBodega.setModel(modelo);
 		
 	}
 
