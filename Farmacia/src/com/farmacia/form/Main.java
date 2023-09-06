@@ -467,7 +467,7 @@ public class Main extends JFrame {
 					if (!controlFormato.hayEspaciosVacios(keyBuscadorProducto) && cantidadBuscadorProducto>0 ) {
 						productoDao.agregarProductoProCodigo( keyBuscadorProducto, tblVentas,cantidadBuscadorProducto);
 						ventaDao.totalizar(tblVentas, lblTotalpagar);
-						buscadorProductoForm.limpiarCampos();
+						
 						textVentasCodProd.requestFocus();
 						
 					}
