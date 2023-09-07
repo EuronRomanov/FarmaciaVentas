@@ -334,26 +334,14 @@ public class Main extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
+				actualizarTablaFacturas();
 				System.out.println("se  close");
 				super.windowClosed(e);
 			}
 
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				super.windowOpened(e);
-				System.out.println("se  open");
-			}
+			
 
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				actualizarTablaFacturas();
-				System.out.println("se closing"+e.toString());
-				//super.windowClosing(e);
-				
-			}
+			
 
 			@Override
 			public void windowIconified(WindowEvent e) {
@@ -405,13 +393,7 @@ public class Main extends JFrame {
 					System.out.println("se iconifica"+e.toString());
 				}
 
-				@Override
-				public void windowDeiconified(WindowEvent e) {
-					// TODO Auto-generated method stub
-					//super.windowDeiconified(e);
-					System.out.println("se deicofinifica"+e.toString());
-				}
-
+			
 				
 
 				@Override
@@ -445,13 +427,6 @@ public class Main extends JFrame {
 					System.out.println("se closing"+e.toString());
 					super.windowClosing(e);
 					
-				}
-
-				@Override
-				public void windowIconified(WindowEvent e) {
-					// TODO Auto-generated method stub
-					//super.windowIconified(e);
-					System.out.println("se iconifica"+e.toString());
 				}
 
 				
